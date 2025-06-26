@@ -16,34 +16,28 @@ from models.enums import (
 )
 
 # Type aliases for commonly used constraints
-AmountStr = Annotated[
-    str,
-    StringConstraints(pattern=r"^\d{0,12}(\.\d{1,2})?$")
-]
+AmountFloat = Annotated[float, Field(ge=0.0, le=999999999999.99)]
 
-CashOnHandStr = Annotated[
-    str,
-    StringConstraints(pattern=r"^\d{1,7}(\.\d{1,2})?$")
-]
+CashOnHandFloat = Annotated[float, Field(ge=0.0, le=9999999.99)]
 
 CaseIdStr = Annotated[
     str,
     StringConstraints(pattern=r"^[a-zA-Z0-9/.-]*$", max_length=64)
 ]
 
-AgeInt = Annotated[int, Field(ge=0, le=999)]
+AgeInt = Annotated[int, Field(ge=0, le=150)]
 
 
 class Income(BaseModel):
     """A single source of income for a person."""
-    amount: AmountStr
+    amount: AmountFloat
     type: IncomeType
     frequency: Frequency
 
 
 class Expense(BaseModel):
     """A single expense for a person."""
-    amount: AmountStr
+    amount: AmountFloat
     type: ExpenseType
     frequency: Frequency
 
@@ -82,7 +76,7 @@ class Household(BaseModel):
     )
 
     case_id: Optional[CaseIdStr] = Field(None, alias='caseId')
-    cash_on_hand: Optional[CashOnHandStr] = Field(None, alias='cashOnHand')
+    cash_on_hand: Optional[CashOnHandFloat] = Field(None, alias='cashOnHand')
     living_rental_type: Optional[LivingRentalType] = Field(None, alias='livingRentalType')
     living_renting: bool = Field(False, alias='livingRenting')
     living_owner: bool = Field(False, alias='livingOwner')
