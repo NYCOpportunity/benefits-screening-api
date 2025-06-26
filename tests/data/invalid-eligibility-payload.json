@@ -1,0 +1,56 @@
+[
+  {
+    "comment": "This payload has multiple validation errors for testing",
+    "household": [
+      {
+        "cashOnHand": "invalid_cash_amount",
+        "livingRentalType": "MarketRate",
+        "livingPreferNotToSay": false,
+        "livingRenting": false,
+        "livingOwner": false,
+        "livingStayingWithFriend": false,
+        "livingHotel": false,
+        "livingShelter": false,
+        "caseId": "case@with#invalid&characters"
+      }
+    ],
+    "person": [
+      {
+        "age": 1500,
+        "householdMemberType": "InvalidType",
+        "student": true,
+        "pregnant": true,
+        "studentFulltime": false,
+        "blind": false,
+        "disabled": false,
+        "veteran": false,
+        "unemployed": false,
+        "unemployedWorkedLast18Months": false,
+        "benefitsMedicaid": false,
+        "benefitsMedicaidDisability": false,
+        "livingOwnerOnDeed": true,
+        "livingRentalOnLease": true,
+        "incomes": [
+          {
+            "amount": "not_a_number",
+            "type": "InvalidIncomeType",
+            "frequency": "InvalidFrequency"
+          },
+          {
+            "amount": -230.50,
+            "type": "Wages",
+            "frequency": "Weekly"
+          }
+        ],
+        "expenses": [
+          {
+            "amount": -1000.0,
+            "type": "Rent",
+            "frequency": "Weekly"
+          }
+        ]
+      }
+    ],
+    "withholdPayload": "not_a_boolean"
+  }
+] 
