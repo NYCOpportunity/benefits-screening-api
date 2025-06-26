@@ -1,4 +1,4 @@
-[
+
   {
     "comment": "This payload has multiple validation errors for testing",
     "household": [
@@ -53,4 +53,3 @@
     ],
     "withholdPayload": "not_a_boolean"
   }
-] 
