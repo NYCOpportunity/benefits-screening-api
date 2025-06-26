@@ -2,7 +2,7 @@
   {
     "household": [
       {
-        "cashOnHand": "1000",
+        "cashOnHand": 1000.0,
         "livingRentalType": "MarketRate",
         "livingPreferNotToSay": false,
         "livingRenting": true,
@@ -30,19 +30,19 @@
         "livingRentalOnLease": true,
         "incomes": [
           {
-            "amount": "1500",
+            "amount": 1500.0,
             "type": "SelfEmployment",
             "frequency": "Weekly"
           },
           {
-            "amount": "230",
+            "amount": 230.0,
             "type": "Wages",
             "frequency": "Weekly"
           }
         ],
         "expenses": [
           {
-            "amount": "1000",
+            "amount": 1000.0,
             "type": "Rent",
             "frequency": "Weekly"
           }
