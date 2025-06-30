@@ -121,8 +121,7 @@ def test_amount_validation():
     
     # Test invalid amounts
     invalid_amounts = [
-        #NOTE: we shouldn't allow 3 decimal places, but for our purposes it shouldn't really matter
-        # 1000.999, 
+        1000.999, 
         -1000,             
         1000000000000000.99,
 
@@ -179,7 +178,7 @@ def test_cash_on_hand_validation():
     
     # Invalid cash amounts
     invalid_cash_amounts = [
-        # 1000.999,             # Three decimal places
+        1000.999,             # Three decimal places
         -1000,                # Negative number
     ]
     
