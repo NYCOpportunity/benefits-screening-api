@@ -50,7 +50,7 @@ def test_head_of_household_validation():
     
     try:
         EligibilityRequest(**test_data)
-        assert False, "Should have failed - no head of household"
+        raise AssertionError("Should have failed - no head of household")
     except ValueError as e:
         assert "HeadOfHousehold" in str(e)
     
@@ -62,7 +62,7 @@ def test_head_of_household_validation():
     
     try:
         EligibilityRequest(**test_data)
-        assert False, "Should have failed - multiple heads of household"
+        raise AssertionError("Should have failed - multiple heads of household")
     except ValueError as e:
         assert "HeadOfHousehold" in str(e)
 
@@ -84,7 +84,7 @@ def test_living_situation_validation():
     
     try:
         EligibilityRequest(**test_data)
-        assert False, "Should have failed - rental type without renting"
+        raise AssertionError("Should have failed - rental type without renting")
     except ValueError as e:
         assert "livingRenting must be true" in str(e)
 
@@ -117,7 +117,7 @@ def test_amount_validation():
             print(f"✅ Valid amount: '{amount}' -> {income.amount}")
         except ValidationError as e:
             print(f"❌ Unexpectedly failed for valid amount '{amount}': {e}")
-            assert False, f"Valid amount '{amount}' should not fail validation"
+            raise AssertionError(f"Valid amount '{amount}' should not fail validation")
     
     # Test invalid amounts
     invalid_amounts = [
@@ -136,7 +136,7 @@ def test_amount_validation():
                 frequency=Frequency.MONTHLY
             )
             print(f"❌ Invalid amount '{amount}' unexpectedly passed validation")
-            assert False, f"Invalid amount '{amount}' should fail validation"
+            raise AssertionError(f"Invalid amount '{amount}' should fail validation")
         except ValidationError:
             print(f"✅ Invalid amount correctly rejected: '{amount}'")
 
@@ -175,7 +175,7 @@ def test_cash_on_hand_validation():
             print(f"✅ Valid cash amount: '{amount}' -> {household.cash_on_hand}")
         except ValidationError as e:
             print(f"❌ Unexpectedly failed for valid cash amount '{amount}': {e}")
-            assert False, f"Valid cash amount '{amount}' should not fail validation"
+            raise AssertionError(f"Valid cash amount '{amount}' should not fail validation")
     
     # Invalid cash amounts
     invalid_cash_amounts = [
@@ -192,7 +192,7 @@ def test_cash_on_hand_validation():
             from validation.schemas import Household
             household = Household(**test_data)
             print(f"❌ Invalid cash amount '{amount}' unexpectedly passed validation")
-            assert False, f"Invalid cash amount '{amount}' should fail validation"
+            raise AssertionError(f"Invalid cash amount '{amount}' should fail validation")
         except ValidationError:
             print(f"✅ Invalid cash amount correctly rejected: '{amount}'")
 
@@ -233,7 +233,7 @@ def test_case_id_validation():
             print(f"✅ Valid case ID: '{case_id}' -> {household.case_id}")
         except ValidationError as e:
             print(f"❌ Unexpectedly failed for valid case ID '{case_id}': {e}")
-            assert False, f"Valid case ID '{case_id}' should not fail validation"
+            raise AssertionError(f"Valid case ID '{case_id}' should not fail validation")
     
     # Invalid case IDs
     invalid_case_ids = [
@@ -253,7 +253,7 @@ def test_case_id_validation():
             from validation.schemas import Household
             household = Household(**test_data)
             print(f"❌ Invalid case ID '{case_id}' unexpectedly passed validation")
-            assert False, f"Invalid case ID '{case_id}' should fail validation"
+            raise AssertionError(f"Invalid case ID '{case_id}' should fail validation")
         except ValidationError:
             print(f"✅ Invalid case ID correctly rejected: '{case_id}'")
 
