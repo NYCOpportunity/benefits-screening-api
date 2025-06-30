@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from .schemas import EligibilityRequest
 
 
-# main func that the lambda will call
+# func that the lambda will call
 def validate_request(request: Dict) -> Tuple[bool, Union[str, List[str]]]:
     """    
     Args:
@@ -32,12 +32,12 @@ def validate_request(request: Dict) -> Tuple[bool, Union[str, List[str]]]:
 
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    # note: jsonFile will come from the AWS gateway as a JSONn
-    jsonFile = 'tests/data/eligibility-program-test-payload.json'
-    with open(jsonFile, 'r') as f:
-        data = json.load(f)
-    is_valid, result = validate_request(data)
-    print(is_valid)
-    print(result)
+#     # note: jsonFile will come from the AWS gateway as a JSONn
+#     jsonFile = 'tests/data/eligibility-program-test-payload.json'
+#     with open(jsonFile, 'r') as f:
+#         data = json.load(f)
+#     is_valid, result = validate_request(data)
+#     print(is_valid)
+#     print(result)

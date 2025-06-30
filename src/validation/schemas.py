@@ -4,8 +4,9 @@ Defines the Pydantic models (schemas) for validating API request payloads.
 For parsing, validating, and type-casting incoming JSON data. 
 """
 from typing import Annotated, List, Optional
+from decimal import Decimal
 
-from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator, field_validator, AfterValidator
 
 from models.enums import (
     ExpenseType,
@@ -15,8 +16,23 @@ from models.enums import (
     LivingRentalType,
 )
 
+
+def validate_amount_decimals(v: float) -> float:
+    """Ensure amount has no more than 2 decimal places."""
+    if isinstance(v, (int, float)):
+        # Convert to Decimal to check decimal places
+        decimal_value = Decimal(str(v))
+        if decimal_value.as_tuple().exponent < -2:
+            # alternatively, we could just round to 2 decimals. 
+            raise ValueError('Amount cannot have more than 2 decimal places')
+        
+
+    return v
+
+
 # Type aliases for commonly used constraints
-AmountFloat = Annotated[float, Field(ge=0.0, le=999999999999.99)]
+AmountFloat = Annotated[float, Field(ge=0.0, le=999999999999.99), AfterValidator(validate_amount_decimals)]
+
 
 CashOnHandFloat = Annotated[float, Field(ge=0.0, le=9999999.99)]
 
@@ -31,15 +47,15 @@ AgeInt = Annotated[int, Field(ge=0, le=150)]
 class Income(BaseModel):
     """A single source of income for a person."""
     amount: AmountFloat
-    type: IncomeType
-    frequency: Frequency
+    type: Optional[IncomeType] = None
+    frequency: Optional[Frequency] = None
 
 
 class Expense(BaseModel):
     """A single expense for a person."""
     amount: AmountFloat
-    type: ExpenseType
-    frequency: Frequency
+    type: Optional[ExpenseType] = None
+    frequency: Optional[Frequency] = None
 
 
 class Person(BaseModel):
@@ -49,23 +65,23 @@ class Person(BaseModel):
         str_strip_whitespace=True
     )
 
-    age: AgeInt
-    student: bool = False
-    student_fulltime: bool = Field(False, alias='studentFulltime')
-    pregnant: bool = False
-    unemployed: bool = False
-    unemployed_worked_last_18_months: bool = Field(False, alias='unemployedWorkedLast18Months')
-    blind: bool = False
-    disabled: bool = False
-    veteran: bool = False
-    benefits_medicaid: bool = Field(False, alias='benefitsMedicaid')
-    benefits_medicaid_disability: bool = Field(False, alias='benefitsMedicaidDisability')
-    living_owner_on_deed: bool = Field(False, alias='livingOwnerOnDeed')
-    living_rental_on_lease: bool = Field(False, alias='livingRentalOnLease')
+    age: AgeInt  # Required field
+    student: Optional[bool] = False
+    student_fulltime: Optional[bool] = Field(False, alias='studentFulltime')
+    pregnant: Optional[bool] = False
+    unemployed: Optional[bool] = False
+    unemployed_worked_last_18_months: Optional[bool] = Field(False, alias='unemployedWorkedLast18Months')
+    blind: Optional[bool] = False
+    disabled: Optional[bool] = False
+    veteran: Optional[bool] = False
+    benefits_medicaid: Optional[bool] = Field(False, alias='benefitsMedicaid')
+    benefits_medicaid_disability: Optional[bool] = Field(False, alias='benefitsMedicaidDisability')
+    living_owner_on_deed: Optional[bool] = Field(False, alias='livingOwnerOnDeed')
+    living_rental_on_lease: Optional[bool] = Field(False, alias='livingRentalOnLease')
 
-    incomes: List[Income] = []
-    expenses: List[Expense] = []
-    household_member_type: HouseholdMemberType = Field(..., alias='householdMemberType')
+    incomes: Optional[List[Income]] = []
+    expenses: Optional[List[Expense]] = []
+    household_member_type: Optional[HouseholdMemberType] = Field(None, alias='householdMemberType')
 
 
 class Household(BaseModel):
@@ -78,12 +94,23 @@ class Household(BaseModel):
     case_id: Optional[CaseIdStr] = Field(None, alias='caseId')
     cash_on_hand: Optional[CashOnHandFloat] = Field(None, alias='cashOnHand')
     living_rental_type: Optional[LivingRentalType] = Field(None, alias='livingRentalType')
-    living_renting: bool = Field(False, alias='livingRenting')
-    living_owner: bool = Field(False, alias='livingOwner')
-    living_staying_with_friend: bool = Field(False, alias='livingStayingWithFriend')
-    living_hotel: bool = Field(False, alias='livingHotel')
-    living_shelter: bool = Field(False, alias='livingShelter')
-    living_prefer_not_to_say: bool = Field(False, alias='livingPreferNotToSay')
+    living_renting: Optional[bool] = Field(False, alias='livingRenting')
+    living_owner: Optional[bool] = Field(False, alias='livingOwner')
+    living_staying_with_friend: Optional[bool] = Field(False, alias='livingStayingWithFriend')
+    living_hotel: Optional[bool] = Field(False, alias='livingHotel')
+    living_shelter: Optional[bool] = Field(False, alias='livingShelter')
+    living_prefer_not_to_say: Optional[bool] = Field(False, alias='livingPreferNotToSay')
+
+    @field_validator('cash_on_hand')
+    @classmethod
+    def validate_cash_on_hand_decimals(cls, v):
+        """Ensure cash_on_hand has no more than 2 decimal places."""
+        if v is not None and isinstance(v, (int, float)):
+            # Convert to Decimal to check decimal places
+            decimal_value = Decimal(str(v))
+            if decimal_value.as_tuple().exponent < -2:
+                raise ValueError('Cash on hand cannot have more than 2 decimal places')
+        return v
 
 
 class EligibilityRequest(BaseModel):
@@ -93,9 +120,9 @@ class EligibilityRequest(BaseModel):
     """
     model_config = ConfigDict(populate_by_name=True)
 
-    withhold_payload: bool = Field(False, alias='withholdPayload')
+    withhold_payload: Optional[bool] = Field(False, alias='withholdPayload')
     household: List[Household] = Field(..., min_length=1, max_length=1)
-    person: List[Person] = Field(..., min_length=1)
+    person: List[Person] = Field(..., min_length=1, max_length=8)
 
 
     @model_validator(mode='after')
