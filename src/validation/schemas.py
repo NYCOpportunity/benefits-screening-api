@@ -47,15 +47,15 @@ AgeInt = Annotated[int, Field(ge=0, le=150)]
 class Income(BaseModel):
     """A single source of income for a person."""
     amount: AmountFloat
-    type: Optional[IncomeType] = None
-    frequency: Optional[Frequency] = None
+    type: IncomeType
+    frequency: Frequency
 
 
 class Expense(BaseModel):
     """A single expense for a person."""
     amount: AmountFloat
-    type: Optional[ExpenseType] = None
-    frequency: Optional[Frequency] = None
+    type: ExpenseType
+    frequency: Frequency
 
 
 class Person(BaseModel):
