@@ -1,0 +1,53 @@
+
+  {
+    "household": [
+      {
+        "cashOnHand": 1000.0,
+        "livingRentalType": "MarketRate",
+        "livingPreferNotToSay": false,
+        "livingRenting": true,
+        "livingOwner": false,
+        "livingStayingWithFriend": false,
+        "livingHotel": false,
+        "livingShelter": false
+      }
+    ],
+    "person": [
+      {
+        "age": 23,
+        "householdMemberType": "HeadOfHousehold",
+        "student": true,
+        "pregnant": true,
+        "studentFulltime": false,
+        "blind": false,
+        "disabled": false,
+        "veteran": false,
+        "unemployed": false,
+        "unemployedWorkedLast18Months": false,
+        "benefitsMedicaid": false,
+        "benefitsMedicaidDisability": false,
+        "livingOwnerOnDeed": false,
+        "livingRentalOnLease": true,
+        "incomes": [
+          {
+            "amount": 1500.0,
+            "type": "SelfEmployment",
+            "frequency": "Weekly"
+          },
+          {
+            "amount": 230.0,
+            "type": "Wages",
+            "frequency": "Weekly"
+          }
+        ],
+        "expenses": [
+          {
+            "amount": 1000.0,
+            "type": "Rent",
+            "frequency": "Weekly"
+          }
+        ]
+      }
+    ],
+    "withholdPayload": true
+  }
