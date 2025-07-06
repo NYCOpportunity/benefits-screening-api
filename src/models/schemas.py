@@ -112,7 +112,9 @@ class Household(BaseModel):
                 raise ValueError('Cash on hand cannot have more than 2 decimal places')
         return v
 
-
+'''
+MAIN SCHEMA
+'''
 class EligibilityRequest(BaseModel):
     """
     The main schema for eligibility screening requests.
@@ -123,7 +125,7 @@ class EligibilityRequest(BaseModel):
     withhold_payload: Optional[bool] = Field(False, alias='withholdPayload')
     household: List[Household] = Field(..., min_length=1, max_length=1)
     person: List[Person] = Field(..., min_length=1, max_length=8)
-
+    
 
     @model_validator(mode='after')
     def validate_head_of_household_rule(self):
