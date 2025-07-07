@@ -1,8 +1,5 @@
-"""Example (placeholder) eligibility rule.
-
-This rule is *not* intended to be used in production.  It always returns
-False but demonstrates the recommended structure.  Replace this with real
-rules as program requirements are defined.
+"""
+Example (placeholder) eligibility rule to show the structure of inheritance
 """
 
 from __future__ import annotations
@@ -17,6 +14,8 @@ class PlaceholderSnapRule(BaseRule):
     program = BenefitProgram.SNAP
     description = "Demonstration placeholder for SNAP eligibility. Always False."
 
+
+    # This takes an EligibilityRequest and returns true/false if person is eligible. 
     @classmethod
     def evaluate(cls, request):
         # TODO: implement SNAP eligibility logic

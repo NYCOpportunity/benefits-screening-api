@@ -7,9 +7,12 @@ Each rule must implement the `evaluate` method which returns `True` if the
 `EligibilityRequest` satisfies the rule (meaning the household/persons are
 eligible for the corresponding benefit program) and `False` otherwise.
 
+The `EligibilityRequest` is just the validated information sent from the user questionaire.
+
 Sub-classes should set the `program` attribute to the `BenefitProgram` value
 that they correspond to.  A short human-readable `description` can also be set
-for documentation and debugging purposes.
+for documentation and debugging purposes. 
+(This can be modified for future to be compatible with Swagger documentation).
 """
 
 from abc import ABC, abstractmethod
@@ -30,9 +33,8 @@ class BaseRule(ABC):
 
     @classmethod
     @abstractmethod
-    def evaluate(cls, request: EligibilityRequest) -> bool:  # pragma: no cover
+    def evaluate(cls, request: EligibilityRequest) -> bool: 
         """Return *True* if *request* is eligible for *program*.
 
-        Concrete subclasses **must** implement this method.
         """
         raise NotImplementedError 
