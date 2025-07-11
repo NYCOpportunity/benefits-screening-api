@@ -7,18 +7,6 @@ Define fixed-value enums (income types, frequencies, etc.)
 from enum import Enum
 
 
-class BenefitProgram(str, Enum):
-    """Enumerates the benefit programs supported by the rules engine.
-
-    As new programs are added to the application, simply extend this Enum
-    and create a corresponding Rule implementation inside *src/rules/*.
-    """
-
-    SNAP = "SNAP"  # Supplemental Nutrition Assistance Program
-    WIC = "WIC"  # Women, Infants, and Children
-    TANF = "TANF"  # Temporary Assistance for Needy Families
-    MEDICAID = "Medicaid"
-    # TODO: add additional programs here as requirements expand 
 
 
 class LivingRentalType(str, Enum):

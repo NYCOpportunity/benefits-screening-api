@@ -26,3 +26,6 @@ def register_rule(rule_cls: Type[BaseRule]) -> Type[BaseRule]:
 def get_rules() -> Sequence[Type[BaseRule]]:
     """Return an immutable sequence of all registered rule classes."""
     return tuple(_rules) 
+
+def get_rule_codes() -> Sequence[str]:
+    return tuple(rule.program for rule in _rules)

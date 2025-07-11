@@ -18,15 +18,15 @@ for documentation and debugging purposes.
 from abc import ABC, abstractmethod
 from typing import ClassVar
 
-from ..models.schemas import EligibilityRequest
-from ..models.enums import BenefitProgram
+from src.models.schemas import EligibilityRequest
 
 
 class BaseRule(ABC):
     """Abstract base class for all eligibility rules."""
 
-    #: The benefit program that this rule determines eligibility for.
-    program: ClassVar[BenefitProgram]
+    #: The program code ex S2R037
+    program: ClassVar[str]
+
 
     #: Optional human-readable description shown when debugging.
     description: ClassVar[str] = ""
