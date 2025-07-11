@@ -4,9 +4,8 @@ Example (placeholder) eligibility rule to show the structure of inheritance
 
 from __future__ import annotations
 
-from ..base_rule import BaseRule
-from ...models.enums import BenefitProgram
-from ..registry import register_rule
+from src.rules.base_rule import BaseRule
+from src.rules.registry import register_rule
 
 
 @register_rule

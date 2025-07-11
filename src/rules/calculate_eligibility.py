@@ -1,10 +1,9 @@
 from typing import List
-from ..models.schemas import EligibilityRequest
-from .registry import get_rules
-from ..models.enums import BenefitProgram
+from src.models.schemas import EligibilityRequest
+from src.rules.registry import get_rules
 
 
-def calculate_eligibility(eligibility_request: EligibilityRequest) -> List[BenefitProgram]:
+def calculate_eligibility(eligibility_request: EligibilityRequest) -> List[str]:
     """Return a list of benefit programs the *eligibility_request* qualifies for.
 
     The function iterates through all registered rules and evaluates them
@@ -12,7 +11,7 @@ def calculate_eligibility(eligibility_request: EligibilityRequest) -> List[Benef
     its corresponding rule evaluates to *True*.
     """
 
-    eligible_programs: List[BenefitProgram] = []
+    eligible_programs: List[str] = [] # returns the program codes
 
     for rule_cls in get_rules():
         try:
@@ -24,12 +23,4 @@ def calculate_eligibility(eligibility_request: EligibilityRequest) -> List[Benef
             print(f"[WARN] Rule '{rule_cls.__name__}' raised an exception during evaluation: {exc}")
 
     return eligible_programs
-
-
-# NOTE: Individual rule modules are imported elsewhere (see their own files) and
-# register themselves with the registry via the @register_rule decorator.  Make
-# sure to import new rule modules in `src/rules/__init__.py` or another import
-# path executed at runtime so they are available during evaluation.
-
-
 
