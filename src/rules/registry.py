@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from typing import List, Sequence, Type
 
-from .base_rule import BaseRule
+from src.rules.base_rule import BaseRule
 
 
 # Internal list of rule *classes* (not instances) so we don't repeatedly

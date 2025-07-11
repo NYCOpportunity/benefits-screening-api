@@ -11,7 +11,7 @@ def calculate_eligibility(eligibility_request: EligibilityRequest) -> List[str]:
     its corresponding rule evaluates to *True*.
     """
 
-    eligible_programs: List[str] = [] # returns the program codes
+    eligible_programs: List[str] = []
 
     for rule_cls in get_rules():
         try:
