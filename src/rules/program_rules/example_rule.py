@@ -14,7 +14,7 @@ class PlaceholderSnapRule(BaseRule):
     description = "Demonstration placeholder for SNAP eligibility. Always False."
 
 
-    # This takes an EligibilityRequest and returns true/false if person is eligible. 
+    # This takes an AggregateEligibilityRequest and returns true/false if person is eligible. 
     @classmethod
     def evaluate(cls, request):
         # TODO: implement SNAP eligibility logic

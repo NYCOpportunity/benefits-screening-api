@@ -1,8 +1,9 @@
 # control the main flow. this will bring together all components of the application.
 
-from validation.validate_request import validate_request
-from rules.calculate_eligibility import calculate_eligibility
+from src.validation.validate_request import validate_request
+from src.rules.calculate_eligibility import calculate_eligibility
 import json
+from src.models.schemas import AggregateEligibilityRequest
 
 def main():
     '''
@@ -27,7 +28,11 @@ def main():
     '''
     STEP 2: Calculate which programs the user is eligible for
     '''
-    eligibility_programs = calculate_eligibility(eligibility_request)
+    aggregate_eligibility_request = AggregateEligibilityRequest.from_eligibility_request(eligibility_request)
+    eligibility_programs = calculate_eligibility(aggregate_eligibility_request)
+    
+    print(f"\nEligible programs: {eligibility_programs}")
+    print(f"Total programs eligible: {len(eligibility_programs)}")
     
     
 
