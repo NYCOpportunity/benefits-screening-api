@@ -7,6 +7,8 @@ Define fixed-value enums (income types, frequencies, etc.)
 from enum import Enum
 
 
+
+
 class LivingRentalType(str, Enum):
     """Corresponds to `livingRentalTypeValues`"""
     NYCHA = "NYCHA"

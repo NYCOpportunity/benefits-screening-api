@@ -10,15 +10,10 @@ This test suite validates:
 All string fields automatically strip whitespace due to str_strip_whitespace=True.
 """
 import json
-from pathlib import Path
-import sys
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-SRC_PATH = PROJECT_ROOT / 'src'
-sys.path.insert(0, str(SRC_PATH))
 
-from validation.schemas import EligibilityRequest, Income
-from models.enums import IncomeType, Frequency
+from src.models.schemas import EligibilityRequest, Income
+from src.models.enums import IncomeType, Frequency
 from pydantic import ValidationError
 
 
@@ -169,7 +164,7 @@ def test_cash_on_hand_validation():
                 **base_household_data,
                 "cashOnHand": amount
             }
-            from validation.schemas import Household
+            from src.models.schemas import Household
             household = Household(**test_data)
             print(f"✅ Valid cash amount: '{amount}' -> {household.cash_on_hand}")
         except ValidationError as e:
@@ -188,7 +183,7 @@ def test_cash_on_hand_validation():
                 **base_household_data,
                 "cashOnHand": amount
             }
-            from validation.schemas import Household
+            from src.models.schemas import Household
             household = Household(**test_data)
             print(f"❌ Invalid cash amount '{amount}' unexpectedly passed validation")
             raise AssertionError(f"Invalid cash amount '{amount}' should fail validation")
@@ -227,7 +222,7 @@ def test_case_id_validation():
                 **base_household_data,
                 "caseId": case_id
             }
-            from validation.schemas import Household
+            from src.models.schemas import Household
             household = Household(**test_data)
             print(f"✅ Valid case ID: '{case_id}' -> {household.case_id}")
         except ValidationError as e:
@@ -249,7 +244,7 @@ def test_case_id_validation():
                 **base_household_data,
                 "caseId": case_id
             }
-            from validation.schemas import Household
+            from src.models.schemas import Household
             household = Household(**test_data)
             print(f"❌ Invalid case ID '{case_id}' unexpectedly passed validation")
             raise AssertionError(f"Invalid case ID '{case_id}' should fail validation")
