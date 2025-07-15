@@ -1,5 +1,15 @@
 # control the main flow. this will bring together all components of the application.
 
+# Ensure the project root is on `sys.path` **before** importing other modules when
+# this file is executed directly (e.g., `python src/main.py`).
+import sys
+from pathlib import Path
+
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(_PROJECT_ROOT))
+
+# Ensure absolute imports via the top-level `src` package
 from src.validation.validate_request import validate_request
 from src.rules.calculate_eligibility import calculate_eligibility
 import json
