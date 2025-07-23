@@ -1,5 +1,5 @@
 """
-Child/Dependent Care Program eligibility rule (S2R001)
+Child and Dependent Care Tax Credit eligibility rule (S2R001)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class ChildDependentCareRule(BaseRule):
+class ChildDependentCareTaxCredit(BaseRule):
     program = "S2R001"
-    description = "Child/Dependent Care Program - Assistance with child or dependent care expenses"
+    description = "Child and Dependent Care Tax Credit (DCA/IRS) - Assistance with child or dependent care expenses"
 
     @classmethod
     def evaluate(cls, request) -> bool:

@@ -1,5 +1,5 @@
 """
-Child care voucher program eligibility rule (S2R040)
+Child Care Voucher program eligibility rule (S2R040)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class ChildCareVoucherRule(BaseRule):
+class ChildCareVoucher(BaseRule):
     program = "S2R040"
-    description = "Child Care Voucher - Financial assistance for child care expenses"
+    description = "Child Care Voucher (ACS) - Financial assistance for child care expenses"
 
     @classmethod
     def evaluate(cls, request) -> bool:

@@ -10,9 +10,9 @@ from src.models.enums import LivingRentalType
 
 
 @register_rule
-class LifelinePhoneRule(BaseRule):
+class Lifeline(BaseRule):
     program = "S2R043"
-    description = "Lifeline - Discounted phone service for low-income households"
+    description = "Lifeline (MOCTO) - Discounted phone service for low-income households"
 
     @classmethod
     def evaluate(cls, request) -> bool:

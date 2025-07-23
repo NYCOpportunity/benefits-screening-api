@@ -1,5 +1,5 @@
 """
-Senior center program eligibility rule (S2R027)
+Commodity Supplemental Food Program eligibility rule (S2R027)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class SeniorCenterRule(BaseRule):
+class CommoditySupplementalFoodProgram(BaseRule):
     program = "S2R027"
-    description = "Senior Centers - Social and recreational programs for seniors"
+    description = "Commodity Supplemental Food Program (CSFP) (NYS DOH) - Food assistance for seniors"
 
     @classmethod
     def evaluate(cls, request) -> bool:

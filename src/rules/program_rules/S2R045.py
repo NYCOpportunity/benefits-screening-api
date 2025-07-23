@@ -1,5 +1,5 @@
 """
-NYC Free Tax Prep eligibility rule (S2R045)
+Financial Empowerment Centers eligibility rule (S2R045)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class FreeTaxPrepRule(BaseRule):
+class FinancialEmpowermentCenters(BaseRule):
     program = "S2R045"
-    description = "NYC Free Tax Prep - Free tax preparation services"
+    description = "Financial Empowerment Centers (DCWP) - Free financial counseling and tax preparation services"
 
     @classmethod
     def evaluate(cls, request) -> bool:

@@ -1,5 +1,5 @@
 """
-NYC housing lottery eligibility rule (S2R055)
+NYC Housing Connect eligibility rule (S2R055)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class HousingLotteryRule(BaseRule):
+class NYCHousingConnect(BaseRule):
     program = "S2R055"
-    description = "NYC Housing Lottery - Affordable housing opportunities"
+    description = "NYC Housing Connect (HPD) - Affordable housing lottery and application portal"
 
     @classmethod
     def evaluate(cls, request) -> bool:

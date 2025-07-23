@@ -1,5 +1,5 @@
 """
-Unemployment insurance eligibility rule (S2R021)
+New York State Unemployment Insurance eligibility rule (S2R021)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class UnemploymentInsuranceRule(BaseRule):
+class NewYorkStateUnemploymentInsurance(BaseRule):
     program = "S2R021"
-    description = "Unemployment Insurance - Financial assistance for those who lost their job"
+    description = "New York State Unemployment Insurance (NYS Department of Labor) - Financial assistance for those who lost their job"
 
     @classmethod
     def evaluate(cls, request) -> bool:

@@ -1,5 +1,5 @@
 """
-Cooling assistance program eligibility rule (S2R033)
+Cooling Assistance Benefit eligibility rule (S2R033)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class CoolingAssistanceRule(BaseRule):
+class CoolingAssistanceBenefit(BaseRule):
     program = "S2R033"
-    description = "Cooling Assistance - Help with cooling costs for vulnerable households"
+    description = "Cooling Assistance Benefit (HRA) - Help with cooling costs for vulnerable households"
 
     @classmethod
     def evaluate(cls, request) -> bool:

@@ -1,5 +1,5 @@
 """
-Universal eligibility program (S2R011)
+Qualified Health Plans eligibility rule (S2R011)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class UniversalEligibilityRule(BaseRule):
+class QualifiedHealthPlans(BaseRule):
     program = "S2R011"
-    description = "Universal program - all households may be eligible"
+    description = "Qualified Health Plans (NY State of Health) - Healthcare marketplace plans"
 
     @classmethod
     def evaluate(cls, request) -> bool:

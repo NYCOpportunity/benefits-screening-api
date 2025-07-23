@@ -1,5 +1,5 @@
 """
-Universal NYC benefit information rule (S2R056)
+Community Food Connection eligibility rule (S2R056)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class UniversalBenefitInfoRule(BaseRule):
+class CommunityFoodConnection(BaseRule):
     program = "S2R056"
-    description = "NYC Benefit Information - General information about available benefits"
+    description = "Community Food Connection (CFC) (HRA) - Food assistance and community resources"
 
     @classmethod
     def evaluate(cls, request) -> bool:

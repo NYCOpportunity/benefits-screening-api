@@ -1,5 +1,5 @@
 """
-Veteran homeowner exemption rule (S2R018)
+Veterans' Property Tax Exemption rule (S2R018)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class VeteranHomeownerExemptionRule(BaseRule):
+class VeteransPropertyTaxExemption(BaseRule):
     program = "S2R018"
-    description = "Veteran Homeowner Exemption - Property tax relief for veterans"
+    description = "Veterans' Property Tax Exemption (DOF) - Property tax exemption for veteran homeowners"
 
     @classmethod
     def evaluate(cls, request) -> bool:

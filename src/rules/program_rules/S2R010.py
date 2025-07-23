@@ -1,5 +1,5 @@
 """
-Two-tiered income eligibility program (S2R010)
+Cash Assistance eligibility rule (S2R010)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class TwoTieredIncomeRule(BaseRule):
+class CashAssistance(BaseRule):
     program = "S2R010"
-    description = "Two-tiered income assistance program with higher limits for children and pregnant individuals"
+    description = "Cash Assistance (HRA) - Financial assistance program with income-based eligibility"
 
     @classmethod
     def evaluate(cls, request) -> bool:

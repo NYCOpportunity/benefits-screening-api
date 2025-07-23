@@ -1,5 +1,5 @@
 """
-Pregnancy assistance program eligibility rule (S2R038)
+Medicaid for Pregnant Women eligibility rule (S2R038)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class PregnancyAssistanceRule(BaseRule):
+class MedicaidPregnantWomen(BaseRule):
     program = "S2R038"
-    description = "Pregnancy Assistance - Support services for pregnant women"
+    description = "Medicaid for Pregnant Women (HRA) - Healthcare coverage for pregnant women"
 
     @classmethod
     def evaluate(cls, request) -> bool:

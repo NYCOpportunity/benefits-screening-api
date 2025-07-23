@@ -1,5 +1,5 @@
 """
-Rental Assistance eligibility rule (S2R005)
+Disability Rent Increase Exemption eligibility rule (S2R005)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import HouseholdMemberType, LivingRentalType, IncomeType
 
 
 @register_rule
-class RentalAssistanceRule(BaseRule):
+class DisabilityRentIncreaseExemption(BaseRule):
     program = "S2R005"
-    description = "Rental Assistance for specific housing types with income requirements"
+    description = "Disability Rent Increase Exemption (DRIE) (DOF) - Rent increase exemption for disabled tenants"
 
     @classmethod
     def evaluate(cls, request) -> bool:

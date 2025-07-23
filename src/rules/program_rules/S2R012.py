@@ -1,5 +1,5 @@
 """
-STAR property tax relief program eligibility rule (S2R012)
+School Tax Relief program eligibility rule (S2R012)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class STARRule(BaseRule):
+class SchoolTaxRelief(BaseRule):
     program = "S2R012"
-    description = "STAR - Property tax relief for homeowners"
+    description = "School Tax Relief (STAR) (DOF) - Property tax relief for homeowners"
 
     @classmethod
     def evaluate(cls, request) -> bool:

@@ -1,5 +1,5 @@
 """
-Medicaid-related program eligibility rule (S2R037)
+Home Care Services Program eligibility rule (S2R037)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class MedicaidRelatedRule(BaseRule):
+class HomeCareServicesProgram(BaseRule):
     program = "S2R037"
-    description = "Medicaid-related program for NYC residents with existing Medicaid benefits"
+    description = "Home Care Services Program (HRA) - In-home care services for individuals with Medicaid"
 
     @classmethod
     def evaluate(cls, request) -> bool:

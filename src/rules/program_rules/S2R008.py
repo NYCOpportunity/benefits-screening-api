@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class HeadStartRule(BaseRule):
+class HeadStart(BaseRule):
     program = "S2R008"
-    description = "Head Start - Free early childhood education for children aged 3-4"
+    description = "Head Start (DOE) - Free early childhood education for children aged 3-4"
 
     @classmethod
     def evaluate(cls, request) -> bool:

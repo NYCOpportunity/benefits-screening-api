@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class PreKForAllRule(BaseRule):
+class PreKForAll(BaseRule):
     program = "S2R016"
-    description = "Pre-K for All - Free pre-kindergarten for 4-year-olds"
+    description = "Pre-K for All (Pre-K) (DOE) - Free pre-kindergarten for 4-year-olds"
 
     @classmethod
     def evaluate(cls, request) -> bool:

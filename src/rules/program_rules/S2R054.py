@@ -1,5 +1,5 @@
 """
-NYCHA internet service eligibility rule (S2R054)
+Big Apple Connect eligibility rule (S2R054)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import LivingRentalType
 
 
 @register_rule
-class NYCHAInternetRule(BaseRule):
+class BigAppleConnect(BaseRule):
     program = "S2R054"
-    description = "NYCHA Connected - Free or low-cost internet for NYCHA residents"
+    description = "Big Apple Connect (NYCHA) - Free internet service for NYCHA residents"
 
     @classmethod
     def evaluate(cls, request) -> bool:

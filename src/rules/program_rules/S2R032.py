@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class IDNYCRule(BaseRule):
+class IDNYC(BaseRule):
     program = "S2R032"
-    description = "IDNYC - Free municipal ID card for NYC residents"
+    description = "IDNYC (HRA) - Free municipal ID card for NYC residents"
 
     @classmethod
     def evaluate(cls, request) -> bool:

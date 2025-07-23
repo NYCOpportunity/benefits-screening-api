@@ -1,5 +1,5 @@
 """
-Child Health Plus eligibility rule (S2R023)
+Summer Meals eligibility rule (S2R023)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class ChildHealthPlusRule(BaseRule):
+class SummerMeals(BaseRule):
     program = "S2R023"
-    description = "Child Health Plus - Low-cost health insurance for children"
+    description = "Summer Meals (DOE) - Free meals for children during summer months"
 
     @classmethod
     def evaluate(cls, request) -> bool:

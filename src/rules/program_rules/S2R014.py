@@ -1,5 +1,5 @@
 """
-Senior citizen homeowner exemption rule (S2R014)
+Senior Citizen Homeowners' Exemption rule (S2R014)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class SeniorHomeownerExemptionRule(BaseRule):
+class SeniorCitizenHomeownersExemption(BaseRule):
     program = "S2R014"
-    description = "Senior Citizen Homeowner Exemption - Property tax relief for seniors"
+    description = "Senior Citizen Homeowners' Exemption (SCHE) (DOF) - Property tax exemption for senior homeowners"
 
     @classmethod
     def evaluate(cls, request) -> bool:

@@ -1,5 +1,5 @@
 """
-Heating assistance program eligibility rule (S2R019)
+Home Energy Assistance Program eligibility rule (S2R019)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class HeatingAssistanceRule(BaseRule):
+class HomeEnergyAssistanceProgram(BaseRule):
     program = "S2R019"
-    description = "Heating Assistance - Help with heating costs for vulnerable households"
+    description = "Home Energy Assistance Program (HEAP) (HRA) - Help with heating costs for vulnerable households"
 
     @classmethod
     def evaluate(cls, request) -> bool:

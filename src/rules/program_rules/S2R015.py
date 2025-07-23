@@ -1,5 +1,5 @@
 """
-Senior Citizen Rent Increase Exemption (SCRIE) eligibility rule (S2R015)
+Senior Citizen Rent Increase Exemption eligibility rule (S2R015)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import HouseholdMemberType, LivingRentalType
 
 
 @register_rule
-class SCRIERule(BaseRule):
+class SeniorCitizenRentIncreaseExemption(BaseRule):
     program = "S2R015"
-    description = "SCRIE - Senior Citizen Rent Increase Exemption for eligible rental types"
+    description = "Senior Citizen Rent Increase Exemption (SCRIE) (DOF) - Rent increase exemption for eligible seniors"
 
     @classmethod
     def evaluate(cls, request) -> bool:

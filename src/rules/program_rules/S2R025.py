@@ -1,5 +1,5 @@
 """
-Senior unemployed assistance program eligibility rule (S2R025)
+Older Adult Employment Program eligibility rule (S2R025)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class SeniorUnemployedAssistanceRule(BaseRule):
+class OlderAdultEmploymentProgram(BaseRule):
     program = "S2R025"
-    description = "Assistance program for unemployed seniors aged 55+"
+    description = "Older Adult Employment Program (DFTA) - Employment assistance for seniors aged 55+"
 
     @classmethod
     def evaluate(cls, request) -> bool:

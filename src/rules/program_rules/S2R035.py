@@ -1,5 +1,5 @@
 """
-NYC public housing eligibility rule (S2R035)
+Public Housing eligibility rule (S2R035)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import HouseholdMemberType
 
 
 @register_rule
-class PublicHousingRule(BaseRule):
+class PublicHousing(BaseRule):
     program = "S2R035"
-    description = "NYC Public Housing - Affordable housing for low and moderate income residents"
+    description = "Public Housing (NYCHA) - Affordable housing for low and moderate income residents"
 
     @classmethod
     def evaluate(cls, request) -> bool:

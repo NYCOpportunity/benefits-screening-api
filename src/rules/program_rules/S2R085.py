@@ -1,5 +1,5 @@
 """
-NYC program for 3-year-olds eligibility rule (S2R085)
+3-K for all eligibility rule (S2R085)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class ThreeYearOldProgramRule(BaseRule):
+class ThreeKForAll(BaseRule):
     program = "S2R085"
-    description = "NYC program for households with 3-year-old children"
+    description = "3-K for all (DOE) - Universal pre-kindergarten program for 3-year-old children"
 
     @classmethod
     def evaluate(cls, request) -> bool:

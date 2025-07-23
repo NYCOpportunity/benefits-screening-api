@@ -1,5 +1,5 @@
 """
-NYC financial assistance program eligibility rule (S2R039)
+NYC Free Tax Prep eligibility rule (S2R039)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import HouseholdMemberType
 
 
 @register_rule
-class FinancialAssistanceRule(BaseRule):
+class NYCFreeTaxPrep(BaseRule):
     program = "S2R039"
-    description = "NYC Financial Assistance - Income support for eligible households"
+    description = "NYC Free Tax Prep (DCA) - Free tax preparation services for low-income households"
 
     @classmethod
     def evaluate(cls, request) -> bool:

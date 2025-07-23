@@ -1,5 +1,5 @@
 """
-Fair Fares NYC discount MetroCard program eligibility rule (S2R034)
+Fair Fares eligibility rule (S2R034)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class FairFaresRule(BaseRule):
+class FairFares(BaseRule):
     program = "S2R034"
-    description = "Fair Fares NYC - Half-price MetroCards for low-income New Yorkers"
+    description = "Fair Fares (HRA) - Half-price MetroCards for low-income New Yorkers"
 
     @classmethod
     def evaluate(cls, request) -> bool:

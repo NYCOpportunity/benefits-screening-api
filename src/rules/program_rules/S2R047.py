@@ -1,5 +1,5 @@
 """
-Access-A-Ride paratransit service eligibility rule (S2R047)
+NYC NY Connects eligibility rule (S2R047)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import IncomeType
 
 
 @register_rule
-class AccessARideRule(BaseRule):
+class NYCNYConnects(BaseRule):
     program = "S2R047"
-    description = "Access-A-Ride - Paratransit service for people with disabilities"
+    description = "NYC NY Connects (DFTA) - Information and assistance services for older adults and people with disabilities"
 
     @classmethod
     def evaluate(cls, request) -> bool:

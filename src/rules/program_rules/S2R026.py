@@ -1,5 +1,5 @@
 """
-Adult education program eligibility rule (S2R026)
+Workforce1 eligibility rule (S2R026)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class AdultEducationRule(BaseRule):
+class Workforce1(BaseRule):
     program = "S2R026"
-    description = "Adult Education - Educational programs for adults"
+    description = "Workforce1 (SBS) - Job training and employment services for adults"
 
     @classmethod
     def evaluate(cls, request) -> bool:

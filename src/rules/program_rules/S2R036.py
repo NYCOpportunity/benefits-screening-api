@@ -1,5 +1,5 @@
 """
-Youth workforce development program eligibility rule (S2R036)
+Train & Earn eligibility rule (S2R036)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import HouseholdMemberType
 
 
 @register_rule
-class YouthWorkforceRule(BaseRule):
+class TrainEarn(BaseRule):
     program = "S2R036"
-    description = "Youth Workforce Development - Job training for unemployed youth not in school"
+    description = "Train & Earn (DYCD) - Job training for unemployed youth not in school"
 
     @classmethod
     def evaluate(cls, request) -> bool:

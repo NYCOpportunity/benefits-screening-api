@@ -1,5 +1,5 @@
 """
-School breakfast and lunch program eligibility rule (S2R009)
+Comprehensive After School System of NYC eligibility rule (S2R009)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class SchoolMealsRule(BaseRule):
+class ComprehensiveAfterSchoolSystem(BaseRule):
     program = "S2R009"
-    description = "School Breakfast and Lunch - Free meals for NYC public school students"
+    description = "Comprehensive After School System of NYC (COMPASS NYC) (DYCD) - After school programs for students"
 
     @classmethod
     def evaluate(cls, request) -> bool:

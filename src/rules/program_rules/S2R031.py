@@ -9,7 +9,7 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class NYCCareRule(BaseRule):
+class NYCCare(BaseRule):
     program = "S2R031"
     description = "NYC Care - Low-cost healthcare for those without insurance"
 

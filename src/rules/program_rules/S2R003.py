@@ -1,5 +1,5 @@
 """
-Child Care Benefits eligibility rule (S2R003)
+Infants & Toddlers eligibility rule (S2R003)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import HouseholdMemberType, IncomeType
 
 
 @register_rule
-class ChildCareBenefitsRule(BaseRule):
+class InfantsToddlers(BaseRule):
     program = "S2R003"
-    description = "Child Care Benefits for children under 3 years old"
+    description = "Infants & Toddlers (DOE) - Early intervention services for children under 3 years old"
 
     @classmethod
     def evaluate(cls, request) -> bool:

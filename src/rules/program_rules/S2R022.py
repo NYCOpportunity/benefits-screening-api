@@ -1,5 +1,5 @@
 """
-WIC (Women, Infants, and Children) program eligibility rule (S2R022)
+Women, Infants and Children program eligibility rule (S2R022)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class WICRule(BaseRule):
+class WomenInfantsChildren(BaseRule):
     program = "S2R022"
-    description = "WIC - Nutrition assistance for pregnant women and young children"
+    description = "Women, Infants and Children (WIC) (NYS DOH) - Nutrition assistance for pregnant women and young children"
 
     @classmethod
     def evaluate(cls, request) -> bool:

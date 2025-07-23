@@ -1,5 +1,5 @@
 """
-Prenatal care assistance program eligibility rule (S2R029)
+Nurse-Family Partnership eligibility rule (S2R029)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class PrenatalCareRule(BaseRule):
+class NurseFamilyPartnership(BaseRule):
     program = "S2R029"
-    description = "Prenatal Care Assistance - Healthcare for pregnant women"
+    description = "Nurse-Family Partnership (DOHMH) - Prenatal and postnatal support for first-time mothers"
 
     @classmethod
     def evaluate(cls, request) -> bool:

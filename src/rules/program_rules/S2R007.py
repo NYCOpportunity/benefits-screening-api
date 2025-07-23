@@ -1,5 +1,5 @@
 """
-SNAP (Supplemental Nutrition Assistance Program) eligibility rule (S2R007)
+Supplemental Nutrition Assistance Program eligibility rule (S2R007)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import IncomeType, HouseholdMemberType
 
 
 @register_rule
-class SNAPRule(BaseRule):
+class SupplementalNutritionAssistanceProgram(BaseRule):
     program = "S2R007"
-    description = "SNAP - Supplemental Nutrition Assistance Program (Food Stamps)"
+    description = "Supplemental Nutrition Assistance Program (SNAP/Food Stamps) (HRA) - Food assistance program"
 
     @classmethod
     def evaluate(cls, request) -> bool:

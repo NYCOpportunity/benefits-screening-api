@@ -1,5 +1,5 @@
 """
-NYCHA resident employment program eligibility rule (S2R024)
+NYCHA Resident Economic Empowerment & Sustainability eligibility rule (S2R024)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import LivingRentalType
 
 
 @register_rule
-class NYCHAResidentEmploymentRule(BaseRule):
+class NYCHAResidentEconomicEmpowermentSustainability(BaseRule):
     program = "S2R024"
-    description = "NYCHA Resident Employment Program - Job training for NYCHA residents"
+    description = "NYCHA Resident Economic Empowerment & Sustainability (REES) (NYCHA) - Economic empowerment programs for NYCHA residents"
 
     @classmethod
     def evaluate(cls, request) -> bool:

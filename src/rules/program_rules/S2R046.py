@@ -1,5 +1,5 @@
 """
-NYC library card eligibility rule (S2R046)
+COVID-19 Vaccines eligibility rule (S2R046)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class LibraryCardRule(BaseRule):
+class COVID19Vaccines(BaseRule):
     program = "S2R046"
-    description = "NYC Library Card - Free library services and resources"
+    description = "COVID-19 Vaccines (DOHMH) - Free COVID-19 vaccines and boosters for all ages"
 
     @classmethod
     def evaluate(cls, request) -> bool:

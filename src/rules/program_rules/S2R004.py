@@ -10,9 +10,9 @@ from src.models.enums import HouseholdMemberType
 
 
 @register_rule
-class ChildTaxCreditRule(BaseRule):
+class ChildTaxCredit(BaseRule):
     program = "S2R004"
-    description = "Child Tax Credit for households with children under 17"
+    description = "Child Tax Credit (DCA/IRS) - Tax credit for households with children under 17"
 
     @classmethod
     def evaluate(cls, request) -> bool:

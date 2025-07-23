@@ -1,5 +1,5 @@
 """
-Earned Income Tax Credit (EITC) eligibility rule (S2R006)
+Earned Income Tax Credit eligibility rule (S2R006)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import HouseholdMemberType
 
 
 @register_rule
-class EITCRule(BaseRule):
+class EarnedIncomeTaxCredit(BaseRule):
     program = "S2R006"
-    description = "Earned Income Tax Credit based on marital status, children, and income"
+    description = "Earned Income Tax Credit (EITC) (DCA/IRS) - Tax credit based on marital status, children, and income"
 
     @classmethod
     def evaluate(cls, request) -> bool:

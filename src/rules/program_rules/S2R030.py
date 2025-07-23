@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class SummerYouthEmploymentRule(BaseRule):
+class SummerYouthEmploymentProgram(BaseRule):
     program = "S2R030"
-    description = "Summer Youth Employment Program - Summer jobs for youth"
+    description = "Summer Youth Employment Program (SYEP) (DYCD) - Summer employment opportunities for youth"
 
     @classmethod
     def evaluate(cls, request) -> bool:

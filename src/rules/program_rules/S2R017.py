@@ -1,5 +1,5 @@
 """
-Disability/blind homeowner exemption rule (S2R017)
+Disabled Homeowners' Exemption rule (S2R017)
 """
 
 from __future__ import annotations
@@ -10,9 +10,9 @@ from src.models.enums import IncomeType
 
 
 @register_rule
-class DisabilityHomeownerExemptionRule(BaseRule):
+class DisabledHomeownersExemption(BaseRule):
     program = "S2R017"
-    description = "Disability/Blind Homeowner Exemption - Property tax relief for disabled/blind homeowners"
+    description = "Disabled Homeowners' Exemption (DHE) (DOF) - Property tax exemption for disabled homeowners"
 
     @classmethod
     def evaluate(cls, request) -> bool:

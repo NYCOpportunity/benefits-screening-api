@@ -1,5 +1,5 @@
 """
-NYC housing program eligibility rule (S2R013)
+Section 8 Housing eligibility rule (S2R013)
 """
 
 from __future__ import annotations
@@ -9,9 +9,9 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class HousingProgramRule(BaseRule):
+class Section8Housing(BaseRule):
     program = "S2R013"
-    description = "NYC Housing Program - Affordable housing assistance"
+    description = "Section 8 Housing (NYCHA) - Housing assistance voucher program"
 
     @classmethod
     def evaluate(cls, request) -> bool:

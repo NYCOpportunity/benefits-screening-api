@@ -9,7 +9,7 @@ from src.rules.registry import register_rule
 
 
 @register_rule
-class ACPRule(BaseRule):
+class AffordableConnectivityProgram(BaseRule):
     program = "S2R053"
     description = "Affordable Connectivity Program - Internet service discount (Program closed as of Feb 8, 2024)"
 
