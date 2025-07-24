@@ -1,8 +1,19 @@
 # control the main flow. this will bring together all components of the application.
 
-from validation.validate_request import validate_request
-from rules.calculate_eligibility import calculate_eligibility
+# Ensure the project root is on `sys.path` **before** importing other modules when
+# this file is executed directly (e.g., `python src/main.py`).
+import sys
+from pathlib import Path
+
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(_PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(_PROJECT_ROOT))
+
+# Ensure absolute imports via the top-level `src` package
+from src.validation.validate_request import validate_request
+from src.rules.calculate_eligibility import calculate_eligibility
 import json
+from src.models.schemas import AggregateEligibilityRequest
 
 def main():
     '''
@@ -27,7 +38,11 @@ def main():
     '''
     STEP 2: Calculate which programs the user is eligible for
     '''
-    eligibility_programs = calculate_eligibility(eligibility_request)
+    aggregate_eligibility_request = AggregateEligibilityRequest.from_eligibility_request(eligibility_request)
+    eligibility_programs = calculate_eligibility(aggregate_eligibility_request)
+    
+    print(f"\nEligible programs: {eligibility_programs}")
+    print(f"Total programs eligible: {len(eligibility_programs)}")
     
     
 

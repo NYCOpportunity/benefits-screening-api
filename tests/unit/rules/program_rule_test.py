@@ -8,10 +8,10 @@ def test_all_program_rules():
     eligibility_request = sample_eligibility_rule()
     all_rules = get_rules()
 
-    expected_outcomes = {
-        # Program Code: Expected Result for sample_eligibility_rule
-        "S2R037": False,  # From PlaceholderSnapRule
-    }
+    # Dynamically include all registered programs with a default expected
+    # outcome of False.  Override specific programs below when their expected
+    # result differs. (This can eventually be moved to a json/yaml in the test data folder)
+    expected_outcomes = {rule.program: False for rule in all_rules}
 
     # Ensure at least one rule is registered to confirm discovery is working
     assert len(all_rules) > 0, "No rules were found in the registry."

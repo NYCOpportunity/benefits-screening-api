@@ -1,9 +1,9 @@
 from typing import List
-from src.models.schemas import EligibilityRequest
+from src.models.schemas import AggregateEligibilityRequest
 from src.rules.registry import get_rules
 
 
-def calculate_eligibility(eligibility_request: EligibilityRequest) -> List[str]:
+def calculate_eligibility(aggregate_eligibility_request: AggregateEligibilityRequest) -> List[str]:
     """Return a list of benefit programs the *eligibility_request* qualifies for.
 
     The function iterates through all registered rules and evaluates them
@@ -15,7 +15,7 @@ def calculate_eligibility(eligibility_request: EligibilityRequest) -> List[str]:
 
     for rule_cls in get_rules():
         try:
-            if rule_cls.evaluate(eligibility_request):
+            if rule_cls.evaluate(aggregate_eligibility_request):
                 eligible_programs.append(rule_cls.program)
         except Exception as exc:  # pragma: no cover
             # Optionally log the exception here.  For now we fail closed (i.e. not eligible)
