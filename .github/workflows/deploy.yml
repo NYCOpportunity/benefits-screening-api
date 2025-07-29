@@ -63,8 +63,16 @@ jobs:
     - name: Debug AWS credentials
       run: |
         echo "Checking if AWS credentials are available..."
-        echo "AWS_ACCESS_KEY_ID length: ${#AWS_ACCESS_KEY_ID}"
-        echo "AWS_SECRET_ACCESS_KEY length: ${#AWS_SECRET_ACCESS_KEY}"
+        if [ -z "$AWS_ACCESS_KEY_ID" ]; then
+          echo "ERROR: AWS_ACCESS_KEY_ID is empty or not set!"
+        else
+          echo "AWS_ACCESS_KEY_ID is set (length: ${#AWS_ACCESS_KEY_ID})"
+        fi
+        if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+          echo "ERROR: AWS_SECRET_ACCESS_KEY is empty or not set!"
+        else
+          echo "AWS_SECRET_ACCESS_KEY is set (length: ${#AWS_SECRET_ACCESS_KEY})"
+        fi
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -162,8 +170,16 @@ jobs:
     - name: Debug AWS credentials
       run: |
         echo "Checking if AWS credentials are available..."
-        echo "AWS_ACCESS_KEY_ID length: ${#AWS_ACCESS_KEY_ID}"
-        echo "AWS_SECRET_ACCESS_KEY length: ${#AWS_SECRET_ACCESS_KEY}"
+        if [ -z "$AWS_ACCESS_KEY_ID" ]; then
+          echo "ERROR: AWS_ACCESS_KEY_ID is empty or not set!"
+        else
+          echo "AWS_ACCESS_KEY_ID is set (length: ${#AWS_ACCESS_KEY_ID})"
+        fi
+        if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+          echo "ERROR: AWS_SECRET_ACCESS_KEY is empty or not set!"
+        else
+          echo "AWS_SECRET_ACCESS_KEY is set (length: ${#AWS_SECRET_ACCESS_KEY})"
+        fi
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
