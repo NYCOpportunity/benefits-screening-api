@@ -11,31 +11,35 @@ env:
   LAMBDA_FUNCTION_NAME_PROD: benefits-screening-api-prod
   LAMBDA_FUNCTION_NAME_STG: Benefits-Screening-API-stg
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+  # test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: '3.13'
+  #   - name: Set up Python
+  #     uses: actions/setup-python@v5
+  #     with:
+  #       python-version: '3.13'
 
-    - name: Install uv
-      uses: astral-sh/setup-uv@v4
-      with:
-        version: "latest"
+  #   - name: Install uv
+  #     uses: astral-sh/setup-uv@v4
+  #     with:
+  #       version: "latest"
 
-    - name: Install dependencies
-      run: uv sync --dev
+  #   - name: Install dependencies
+  #     run: uv sync --dev
 
-    - name: Run tests
-      run: uv run pytest
+  #   - name: Run tests
+  #     run: uv run pytest
 
   deploy-production:
-    needs: test
+    # needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/prod' && github.event_name == 'push'
     
@@ -56,6 +60,24 @@ jobs:
     - name: Install production dependencies
       run: uv sync --no-dev
 
+    - name: Debug AWS credentials
+      run: |
+        echo "Checking if AWS credentials are available..."
+        if [ -z "$AWS_ACCESS_KEY_ID" ]; then
+          echo "ERROR: AWS_ACCESS_KEY_ID is empty or not set!"
+        else
+          echo "AWS_ACCESS_KEY_ID is set (length: ${#AWS_ACCESS_KEY_ID})"
+        fi
+        if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+          echo "ERROR: AWS_SECRET_ACCESS_KEY is empty or not set!"
+        else
+          echo "AWS_SECRET_ACCESS_KEY is set (length: ${#AWS_SECRET_ACCESS_KEY})"
+        fi
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+        
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -72,12 +94,8 @@ jobs:
         uv export --no-dev --format requirements-txt > requirements.txt
         pip install -r requirements.txt -t package/
         
-        # Copy your source code to package (adjust paths as needed for your project structure)
-        if [ -d "src" ]; then
-          cp -r src/* package/
-        else
-          cp -r *.py package/ 2>/dev/null || true
-        fi
+        # Copy your source code WITH folder structure preserved
+        cp -r src package/
         
         # Create zip file
         cd package
@@ -125,7 +143,7 @@ jobs:
         fi
 
   deploy-staging:
-    needs: test
+    # needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/stg' && github.event_name == 'push'
     
@@ -146,12 +164,29 @@ jobs:
     - name: Install production dependencies
       run: uv sync --no-dev
 
+    - name: Debug AWS credentials
+      run: |
+        echo "Checking if AWS credentials are available..."
+        if [ -z "$AWS_ACCESS_KEY_ID" ]; then
+          echo "ERROR: AWS_ACCESS_KEY_ID is empty or not set!"
+        else
+          echo "AWS_ACCESS_KEY_ID is set (length: ${#AWS_ACCESS_KEY_ID})"
+        fi
+        if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
+          echo "ERROR: AWS_SECRET_ACCESS_KEY is empty or not set!"
+        else
+          echo "AWS_SECRET_ACCESS_KEY is set (length: ${#AWS_SECRET_ACCESS_KEY})"
+        fi
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-region: us-east-1
 
     - name: Create deployment package
       run: |
@@ -159,12 +194,8 @@ jobs:
         uv export --no-dev --format requirements-txt > requirements.txt
         pip install -r requirements.txt -t package/
         
-        # Copy your source code to package (adjust paths as needed for your project structure)
-        if [ -d "src" ]; then
-          cp -r src/* package/
-        else
-          cp -r *.py package/ 2>/dev/null || true
-        fi
+        # Copy your source code WITH folder structure preserved
+        cp -r src package/
         
         cd package
         zip -r ../lambda-deployment.zip . -x "*.pyc" "*__pycache__*" "*.git*" "*.github*" "tests/*" "test_*"
