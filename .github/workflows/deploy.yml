@@ -9,7 +9,7 @@ on:
 env:
   AWS_REGION: us-east-1
   LAMBDA_FUNCTION_NAME_PROD: benefits-screening-api-prod
-  LAMBDA_FUNCTION_NAME_STG: benefits-screening-api-stg
+  LAMBDA_FUNCTION_NAME_STG: Benefits-Screening-API-stg
 
 jobs:
   test:
@@ -173,13 +173,13 @@ jobs:
     - name: Deploy to Staging Lambda
       run: |
         aws lambda update-function-code \
-          --function-name benefits-screening-api-stg \
+          --function-name Benefits-Screening-API-stg \
           --zip-file fileb://lambda-deployment.zip
 
     - name: Update Staging Lambda configuration
       run: |
         aws lambda update-function-configuration \
-          --function-name benefits-screening-api-stg \
+          --function-name Benefits-Screening-API-stg \
           --handler src.main.lambda_handler \
           --environment Variables="{
             ENVIRONMENT=staging,
@@ -192,12 +192,12 @@ jobs:
     - name: Wait for function update
       run: |
         aws lambda wait function-updated \
-          --function-name benefits-screening-api-stg
+          --function-name Benefits-Screening-API-stg
 
     - name: Test Staging Lambda function
       run: |
         aws lambda invoke \
-          --function-name benefits-screening-api-stg \
+          --function-name Benefits-Screening-API-stg \
           --payload '{"test": true}' \
           --cli-binary-format raw-in-base64-out \
           response.json
