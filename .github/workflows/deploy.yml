@@ -8,7 +8,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  LAMBDA_FUNCTION_NAME_PROD: benefits-screening-api
+  LAMBDA_FUNCTION_NAME_PROD: benefits-screening-api-prod
   LAMBDA_FUNCTION_NAME_STG: benefits-screening-api-stg
 
 jobs:
@@ -34,19 +34,10 @@ jobs:
     - name: Run tests
       run: uv run pytest
 
-    - name: Run linting (optional)
-      run: |
-        if uv run which ruff >/dev/null 2>&1; then
-          uv run ruff check .
-        else
-          echo "Ruff not installed, skipping linting"
-        fi
-      continue-on-error: true
-
   deploy-production:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/prod' && github.event_name == 'push'
     
     steps:
     - name: Checkout code
@@ -103,6 +94,7 @@ jobs:
       run: |
         aws lambda update-function-configuration \
           --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }} \
+          --handler src.main.lambda_handler \
           --environment Variables="{
             ENVIRONMENT=production,
             LOG_LEVEL=INFO
@@ -135,7 +127,7 @@ jobs:
   deploy-staging:
     needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    if: github.ref == 'refs/heads/stg' && github.event_name == 'push'
     
     steps:
     - name: Checkout code
@@ -188,6 +180,7 @@ jobs:
       run: |
         aws lambda update-function-configuration \
           --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }} \
+          --handler src.main.lambda_handler \
           --environment Variables="{
             ENVIRONMENT=staging,
             LOG_LEVEL=DEBUG
