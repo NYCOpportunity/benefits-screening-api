@@ -61,7 +61,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-region: us-east-1
 
     - name: Create deployment package
       run: |
@@ -87,13 +87,13 @@ jobs:
     - name: Deploy to Production Lambda
       run: |
         aws lambda update-function-code \
-          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }} \
+          --function-name benefits-screening-api-prod \
           --zip-file fileb://lambda-deployment.zip
 
     - name: Update Production Lambda configuration
       run: |
         aws lambda update-function-configuration \
-          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }} \
+          --function-name benefits-screening-api-prod \
           --handler src.main.lambda_handler \
           --environment Variables="{
             ENVIRONMENT=production,
@@ -106,12 +106,12 @@ jobs:
     - name: Wait for function update
       run: |
         aws lambda wait function-updated \
-          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }}
+          --function-name benefits-screening-api-prod
 
     - name: Test Production Lambda function
       run: |
         aws lambda invoke \
-          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }} \
+          --function-name benefits-screening-api-prod \
           --payload '{"test": true}' \
           --cli-binary-format raw-in-base64-out \
           response.json
@@ -173,13 +173,13 @@ jobs:
     - name: Deploy to Staging Lambda
       run: |
         aws lambda update-function-code \
-          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }} \
+          --function-name benefits-screening-api-stg \
           --zip-file fileb://lambda-deployment.zip
 
     - name: Update Staging Lambda configuration
       run: |
         aws lambda update-function-configuration \
-          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }} \
+          --function-name benefits-screening-api-stg \
           --handler src.main.lambda_handler \
           --environment Variables="{
             ENVIRONMENT=staging,
@@ -192,12 +192,12 @@ jobs:
     - name: Wait for function update
       run: |
         aws lambda wait function-updated \
-          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }}
+          --function-name benefits-screening-api-stg
 
     - name: Test Staging Lambda function
       run: |
         aws lambda invoke \
-          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }} \
+          --function-name benefits-screening-api-stg \
           --payload '{"test": true}' \
           --cli-binary-format raw-in-base64-out \
           response.json
