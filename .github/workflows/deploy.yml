@@ -112,7 +112,7 @@ jobs:
       run: |
         aws lambda update-function-configuration \
           --function-name benefits-screening-api-prod \
-          --handler src.main.lambda_handler \
+          --handler src.main.main \
           --environment Variables="{
             ENVIRONMENT=production,
             LOG_LEVEL=INFO
@@ -211,7 +211,7 @@ jobs:
       run: |
         aws lambda update-function-configuration \
           --function-name Benefits-Screening-API-stg \
-          --handler src.main.lambda_handler \
+          --handler src.main.main \
           --environment Variables="{
             ENVIRONMENT=staging,
             LOG_LEVEL=DEBUG
