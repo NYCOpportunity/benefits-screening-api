@@ -18,7 +18,7 @@ for documentation and debugging purposes.
 from abc import ABC, abstractmethod
 from typing import ClassVar
 
-from src.models.schemas import EligibilityRequest
+from src.models.schemas import AggregateEligibilityRequest
 
 
 class BaseRule(ABC):
@@ -33,7 +33,7 @@ class BaseRule(ABC):
 
     @classmethod
     @abstractmethod
-    def evaluate(cls, request: EligibilityRequest) -> bool: 
+    def evaluate(cls, request: AggregateEligibilityRequest) -> bool: 
         """Return *True* if *request* is eligible for *program*.
 
         """

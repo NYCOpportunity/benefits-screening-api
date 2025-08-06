@@ -1,7 +1,7 @@
 from typing import Dict, Tuple, Union, List
 from pydantic import ValidationError
 
-from ..models.schemas import EligibilityRequest
+from src.models.schemas import EligibilityRequest
 
 
 # func that the lambda will call
