@@ -59,11 +59,12 @@ def main(event, context):
             })
         }
     except Exception as e:
+        print("internal server error:", e)
         return {
             'statusCode': 500,
             'headers': {'Content-Type': 'application/json'},
             'body': json.dumps({
                 'success': False,
-                'errors': [f'Internal server error: {str(e)}']
+                'errors': [f'Internal server error']
             })
         }

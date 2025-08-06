@@ -447,7 +447,6 @@ def _compute_expenses(persons: List[Person]) -> Dict[str, object]:
 
 def compute_aggregates(request: EligibilityRequest) -> Dict[str, object]:
 
-    household = request.household[0]
     persons = request.person
     
     result: Dict[str, object] = {}
