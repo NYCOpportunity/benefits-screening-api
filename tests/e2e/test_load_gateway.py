@@ -5,25 +5,35 @@ import concurrent.futures
 from pathlib import Path
 from typing import Dict, List, Optional
 import random
+import argparse
 
 
 class TestLoadGateway:
     GATEWAY_URL = "GATEWAY_URL_REMOVED"
     NUM_REQUESTS = 100
     MAX_WORKERS = 10
+    
+    def __init__(self, use_legacy_drools: bool = False):
+        self.use_legacy_drools = use_legacy_drools
+        self.payload_dir = "legacy-drools-payloads" if use_legacy_drools else "payloads"
 
     def load_test_payload(self, filename: str) -> Dict:
-        test_data_path = Path(__file__).parent.parent / "data" / "payloads"/ filename
+        test_data_path = Path(__file__).parent.parent / "data" / self.payload_dir / filename
         with open(test_data_path, 'r') as f:
             return json.load(f)
     
     def get_all_payload_files(self) -> List[Path]:
-        data_dir = Path(__file__).parent.parent / "data" / "payloads"
+        data_dir = Path(__file__).parent.parent / "data" / self.payload_dir
         payload_files = []
         
-        payload_files.extend(data_dir.glob("eligibility-program-test-payload.json"))
-        payload_files.extend(data_dir.glob("invalid-eligibility-payload.json"))
-        payload_files.extend(data_dir.glob("converted-payload-*.json"))
+        if self.use_legacy_drools:
+            # For legacy drools, get all drools-payload-*.json files
+            payload_files.extend(data_dir.glob("drools-payload-*.json"))
+        else:
+            # For regular payloads, use the existing pattern
+            payload_files.extend(data_dir.glob("eligibility-program-test-payload.json"))
+            payload_files.extend(data_dir.glob("invalid-eligibility-payload.json"))
+            payload_files.extend(data_dir.glob("converted-payload-*.json"))
         
         return sorted(payload_files)
     
@@ -138,12 +148,26 @@ class TestLoadGateway:
                 print(f"  ... and {len(failed_requests) - 5} more failed requests")
 
     def test_load_valid_payload(self):
-        payload = self.load_test_payload("eligibility-program-test-payload.json")
-        self.run_load_test(payload, "Valid Payload Load Test")
+        if self.use_legacy_drools:
+            # Use the first drools payload as the "valid" test
+            payload_files = self.get_all_payload_files()
+            if payload_files:
+                with open(payload_files[0], 'r') as f:
+                    payload = json.load(f)
+                self.run_load_test(payload, f"Legacy Drools Payload Load Test ({payload_files[0].name})")
+            else:
+                print("No legacy drools payloads found!")
+        else:
+            payload = self.load_test_payload("eligibility-program-test-payload.json")
+            self.run_load_test(payload, "Valid Payload Load Test")
 
     def test_load_invalid_payload(self):
-        payload = self.load_test_payload("invalid-eligibility-payload.json")
-        self.run_load_test(payload, "Invalid Payload Load Test")
+        if self.use_legacy_drools:
+            # Skip invalid payload test for legacy drools or use a different one
+            print("Skipping invalid payload test for legacy drools mode")
+        else:
+            payload = self.load_test_payload("invalid-eligibility-payload.json")
+            self.run_load_test(payload, "Invalid Payload Load Test")
 
     def test_load_both_payloads(self):
         print("\n" + "="*60)
@@ -167,7 +191,8 @@ class TestLoadGateway:
             return
         
         print(f"\n{'='*60}")
-        print(f"LOAD TEST WITH ALL PAYLOADS")
+        mode_text = "LEGACY DROOLS" if self.use_legacy_drools else "CONVERTED"
+        print(f"LOAD TEST WITH ALL {mode_text} PAYLOADS")
         print(f"{'='*60}")
         print(f"Found {len(all_payloads)} payload files")
         print(f"Sending {self.NUM_REQUESTS} total requests")
@@ -263,7 +288,8 @@ class TestLoadGateway:
             return
         
         print(f"\n{'='*60}")
-        print(f"SEQUENTIAL LOAD TEST - ALL PAYLOADS")
+        mode_text = "LEGACY DROOLS" if self.use_legacy_drools else "CONVERTED"
+        print(f"SEQUENTIAL LOAD TEST - ALL {mode_text} PAYLOADS")
         print(f"{'='*60}")
         print(f"Testing {len(all_payloads)} different payloads")
         print(f"Each payload will be sent multiple times\n")
@@ -300,5 +326,50 @@ class TestLoadGateway:
 
 
 if __name__ == "__main__":
-    tester = TestLoadGateway()
-    tester.run_load_test_all_payloads()
+    parser = argparse.ArgumentParser(description='Run load tests on the API Gateway')
+    parser.add_argument(
+        '--legacy-drools', 
+        action='store_true',
+        help='Use legacy Drools format payloads from legacy-drools-payloads directory'
+    )
+    parser.add_argument(
+        '--sequential',
+        action='store_true',
+        help='Run sequential tests for each payload instead of mixed load test'
+    )
+    parser.add_argument(
+        '--num-requests',
+        type=int,
+        default=100,
+        help='Number of total requests to send (default: 100)'
+    )
+    parser.add_argument(
+        '--workers',
+        type=int,
+        default=10,
+        help='Number of concurrent workers (default: 10)'
+    )
+    
+    args = parser.parse_args()
+    
+    # Create tester with legacy drools flag
+    tester = TestLoadGateway(use_legacy_drools=args.legacy_drools)
+    
+    # Override settings if provided
+    if args.num_requests:
+        tester.NUM_REQUESTS = args.num_requests
+    if args.workers:
+        tester.MAX_WORKERS = args.workers
+    
+    # Print configuration
+    print(f"\nLoad Test Configuration:")
+    print(f"  Mode: {'Legacy Drools' if args.legacy_drools else 'Converted Payloads'}")
+    print(f"  Requests: {tester.NUM_REQUESTS}")
+    print(f"  Workers: {tester.MAX_WORKERS}")
+    print(f"  Test Type: {'Sequential' if args.sequential else 'Mixed'}")
+    
+    # Run the appropriate test
+    if args.sequential:
+        tester.test_load_all_payloads_sequential()
+    else:
+        tester.run_load_test_all_payloads()
