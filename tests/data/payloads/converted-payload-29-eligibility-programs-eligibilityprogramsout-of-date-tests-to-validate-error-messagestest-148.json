@@ -1,0 +1,16 @@
+{
+  "household": [
+    {
+      "cashOnHand": 50000.0,
+      "livingRentalType": "RentControlled",
+      "livingPreferNotToSay": false,
+      "livingRenting": true,
+      "livingOwner": false,
+      "livingStayingWithFriend": false,
+      "livingHotel": false,
+      "livingShelter": false
+    }
+  ],
+  "person": [],
+  "withholdPayload": true
+}

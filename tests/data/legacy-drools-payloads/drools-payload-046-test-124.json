@@ -1,0 +1,161 @@
+{
+  "commands": [
+    {
+      "insert": {
+        "object": {
+          "accessnyc.request.Household": {
+            "zip": "11201",
+            "city": "NYC",
+            "members": "1",
+            "cashOnHand": "50000",
+            "livingRentalType": "RentControlled",
+            "livingRenting": "true",
+            "livingOwner": "false",
+            "livingStayingWithFriend": "false",
+            "livingHotel": "false",
+            "livingShelter": "false",
+            "livingPreferNotToSay": "false"
+          }
+        }
+      }
+    },
+    {
+      "insert": {
+        "object": {
+          "accessnyc.request.Person": {
+            "age": "35",
+            "applicant": "false",
+            "incomes": [
+              {
+                "amount": "324",
+                "type": "Wages",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "250",
+                "type": "Alimony",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "500",
+                "type": "SSI",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "900",
+                "type": "DeferredComp",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "900",
+                "type": "Rental",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "900",
+                "type": "SSDisability",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "100",
+                "type": "SelfEmployment",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "900",
+                "type": "SSDependent",
+                "frequency": "yearly"
+              },
+              {
+                "amount": "900",
+                "type": "CashAssistance",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "Veteran",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "ChildSupport",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "SSSurvivor",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "SSRetirement",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "NYSDisability",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "Pension",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "WorkersComp",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "Alimony",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "boarder",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "Gifts",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "90",
+                "type": "Investment",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "190",
+                "type": "Unemployment",
+                "frequency": "weekly"
+              }
+            ],
+            "expenses": [
+              {
+                "amount": "50",
+                "type": "Medical",
+                "frequency": "weekly"
+              }
+            ],
+            "student": "false",
+            "studentFulltime": "false",
+            "pregnant": "false",
+            "unemployed": "false",
+            "unemployedWorkedLast18Months": "false",
+            "blind": "false",
+            "disabled": "false",
+            "veteran": "true",
+            "benefitsMedicaid": "false",
+            "benefitsMedicaidDisability": "false",
+            "headOfHousehold": "false",
+            "headOfHouseholdRelation": "Spouse",
+            "livingOwnerOnDeed": "false",
+            "livingRentalOnLease": "true"
+          }
+        }
+      }
+    }
+  ]
+}

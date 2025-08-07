@@ -2,25 +2,36 @@ import json
 from src.validation.validate_request import validate_request
 from src.rules.calculate_eligibility import calculate_eligibility
 from src.models.schemas import AggregateEligibilityRequest
+from src.utils.drools_converter import convert_drools_to_api_format
 
-
+# aws gateway handler
 def main(event, context):
-    """
-    AWS Lambda handler for benefits screening API.
-    
-    Args:
-        event: API Gateway event containing the request body
-        context: Lambda context object
-    
-    Returns:
-        dict: API Gateway response format
-    """
     try:
         # Parse request body
         if isinstance(event.get('body'), str):
             request_data = json.loads(event['body'])
         else:
             request_data = event.get('body', {})
+        
+        '''
+        implementation note: this is a quick fix so that no frontend changes are needed. 
+
+        #ensures backwards compatability between the legacy Drools format and the new API format. 
+        '''
+
+        if 'commands' in request_data:
+            converted_data = convert_drools_to_api_format(request_data)
+            if converted_data:
+                request_data = converted_data
+            else:
+                return {
+                    'statusCode': 400,
+                    'headers': {'Content-Type': 'application/json'},
+                    'body': json.dumps({
+                        'success': False,
+                        'errors': ['Failed to convert Drools format payload']
+                    })
+                }
         
         # Validate the request
         is_valid, eligibility_request, error_messages = validate_request(request_data)

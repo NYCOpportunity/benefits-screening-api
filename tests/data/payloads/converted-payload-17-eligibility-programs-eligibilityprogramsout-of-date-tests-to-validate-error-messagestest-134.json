@@ -1,0 +1,97 @@
+{
+  "household": [
+    {
+      "cashOnHand": 50000.0,
+      "livingRentalType": "RentControlled",
+      "livingPreferNotToSay": false,
+      "livingRenting": true,
+      "livingOwner": false,
+      "livingStayingWithFriend": false,
+      "livingHotel": false,
+      "livingShelter": false
+    }
+  ],
+  "person": [
+    {
+      "age": 35,
+      "householdMemberType": "HouseholdMember",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": true,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": true,
+      "incomes": [
+        {
+          "amount": 324.0,
+          "type": "Wage",
+          "frequency": "Monthly"
+        }
+      ],
+      "expenses": [
+        {
+          "amount": 550.0,
+          "type": "Ren",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 50.0,
+          "type": "Medica",
+          "frequency": "Weekly"
+        },
+        {
+          "amount": 50.0,
+          "type": "Cool",
+          "frequency": "Biweekly"
+        },
+        {
+          "amount": 1550.0,
+          "type": "Insurance",
+          "frequency": "Yearly"
+        },
+        {
+          "amount": 50.0,
+          "type": "Child",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 150.0,
+          "type": "Child Support",
+          "frequency": "Weekly"
+        },
+        {
+          "amount": 550.0,
+          "type": "Dependent",
+          "frequency": "Yearly"
+        },
+        {
+          "amount": 100.0,
+          "type": "Heat",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 1550.0,
+          "type": "home",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 100.0,
+          "type": "Utility",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 50.0,
+          "type": "phone",
+          "frequency": "Monthly"
+        }
+      ]
+    }
+  ],
+  "withholdPayload": true
+}

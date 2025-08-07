@@ -1,0 +1,147 @@
+{
+  "household": [
+    {
+      "cashOnHand": 50000.0,
+      "livingRentalType": "RentControlled",
+      "livingPreferNotToSay": false,
+      "livingRenting": true,
+      "livingOwner": false,
+      "livingStayingWithFriend": false,
+      "livingHotel": false,
+      "livingShelter": false
+    }
+  ],
+  "person": [
+    {
+      "age": 35,
+      "householdMemberType": "HouseholdMember",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": true,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": true,
+      "incomes": [
+        {
+          "amount": 324.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 250.0,
+          "type": "Alimony",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 500.0,
+          "type": "SSI",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 900.0,
+          "type": "DeferredComp",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 900.0,
+          "type": "Rental",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 900.0,
+          "type": "SSDisability",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 100.0,
+          "type": "SelfEmployment",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 900.0,
+          "type": "SSDependent",
+          "frequency": "Yearly"
+        },
+        {
+          "amount": 900.0,
+          "type": "CashAssistance",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "Veteran",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "ChildSupport",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "SSSurvivor",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "SSRetirement",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "NYSDisability",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "Pension",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "WorkersComp",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "Alimony",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "boarder",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "Gifts",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 90.0,
+          "type": "Investment",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 190.0,
+          "type": "Unemployment",
+          "frequency": "Weekly"
+        }
+      ],
+      "expenses": [
+        {
+          "amount": 50.0,
+          "type": "Medical",
+          "frequency": "Weekly"
+        }
+      ]
+    }
+  ],
+  "withholdPayload": true
+}

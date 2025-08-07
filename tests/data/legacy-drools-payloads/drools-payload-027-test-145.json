@@ -1,0 +1,15 @@
+{
+  "commands": [
+    {
+      "insert": {
+        "object": {
+          "accessnyc.request.Person": {
+            "incomes": {
+              "amount": ""
+            }
+          }
+        }
+      }
+    }
+  ]
+}
