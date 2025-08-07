@@ -6,7 +6,7 @@ on:
 
 env:
   AWS_REGION: us-east-1
-  LAMBDA_FUNCTION_NAME_PROD: benefits-screening-api-prod # TODO: change to new prod name 
+  LAMBDA_FUNCTION_NAME_PROD: benefits-screening-api-prod # TODO: change to new prod name once it's created
   LAMBDA_FUNCTION_NAME_STG: Benefits-Screening-API-stg
 
 permissions:
