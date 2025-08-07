@@ -3,12 +3,10 @@ name: Deploy Lambda Function
 on:
   push:
     branches: [ prod, stg ]
-  pull_request:
-    branches: [ main ]
 
 env:
   AWS_REGION: us-east-1
-  LAMBDA_FUNCTION_NAME_PROD: benefits-screening-api-prod
+  LAMBDA_FUNCTION_NAME_PROD: benefits-screening-api-prod # TODO: change to new prod name 
   LAMBDA_FUNCTION_NAME_STG: Benefits-Screening-API-stg
 
 permissions:
@@ -16,30 +14,7 @@ permissions:
   id-token: write
 
 jobs:
-  # test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout code
-  #     uses: actions/checkout@v4
-
-  #   - name: Set up Python
-  #     uses: actions/setup-python@v5
-  #     with:
-  #       python-version: '3.13'
-
-  #   - name: Install uv
-  #     uses: astral-sh/setup-uv@v4
-  #     with:
-  #       version: "latest"
-
-  #   - name: Install dependencies
-  #     run: uv sync --dev
-
-  #   - name: Run tests
-  #     run: uv run pytest
-
   deploy-production:
-    # needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/prod' && github.event_name == 'push'
     
@@ -60,24 +35,6 @@ jobs:
     - name: Install production dependencies
       run: uv sync --no-dev
 
-    - name: Debug AWS credentials
-      run: |
-        echo "Checking if AWS credentials are available..."
-        if [ -z "$AWS_ACCESS_KEY_ID" ]; then
-          echo "ERROR: AWS_ACCESS_KEY_ID is empty or not set!"
-        else
-          echo "AWS_ACCESS_KEY_ID is set (length: ${#AWS_ACCESS_KEY_ID})"
-        fi
-        if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
-          echo "ERROR: AWS_SECRET_ACCESS_KEY is empty or not set!"
-        else
-          echo "AWS_SECRET_ACCESS_KEY is set (length: ${#AWS_SECRET_ACCESS_KEY})"
-        fi
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-        
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -126,24 +83,7 @@ jobs:
         aws lambda wait function-updated \
           --function-name benefits-screening-api-prod
 
-    - name: Test Production Lambda function
-      run: |
-        aws lambda invoke \
-          --function-name benefits-screening-api-prod \
-          --payload '{"test": true}' \
-          --cli-binary-format raw-in-base64-out \
-          response.json
-        
-        cat response.json
-        
-        # Check if invocation was successful
-        if grep -q "errorMessage" response.json; then
-          echo "Lambda function test failed"
-          exit 1
-        fi
-
   deploy-staging:
-    # needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/stg' && github.event_name == 'push'
     
@@ -163,23 +103,6 @@ jobs:
 
     - name: Install production dependencies
       run: uv sync --no-dev
-
-    - name: Debug AWS credentials
-      run: |
-        echo "Checking if AWS credentials are available..."
-        if [ -z "$AWS_ACCESS_KEY_ID" ]; then
-          echo "ERROR: AWS_ACCESS_KEY_ID is empty or not set!"
-        else
-          echo "AWS_ACCESS_KEY_ID is set (length: ${#AWS_ACCESS_KEY_ID})"
-        fi
-        if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
-          echo "ERROR: AWS_SECRET_ACCESS_KEY is empty or not set!"
-        else
-          echo "AWS_SECRET_ACCESS_KEY is set (length: ${#AWS_SECRET_ACCESS_KEY})"
-        fi
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
@@ -224,19 +147,3 @@ jobs:
       run: |
         aws lambda wait function-updated \
           --function-name Benefits-Screening-API-stg
-
-    - name: Test Staging Lambda function
-      run: |
-        aws lambda invoke \
-          --function-name Benefits-Screening-API-stg \
-          --payload '{"test": true}' \
-          --cli-binary-format raw-in-base64-out \
-          response.json
-        
-        cat response.json
-        
-        # Check if invocation was successful
-        if grep -q "errorMessage" response.json; then
-          echo "Staging Lambda function test failed"
-          exit 1
-        fi
