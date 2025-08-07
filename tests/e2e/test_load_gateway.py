@@ -6,16 +6,28 @@ from pathlib import Path
 from typing import Dict, List, Optional
 import random
 import argparse
+import os
+from dotenv import load_dotenv
 
+
+# Load environment variables from .env file
+load_dotenv()
 
 class TestLoadGateway:
-    GATEWAY_URL = "GATEWAY_URL_REMOVED"
-    NUM_REQUESTS = 100
-    MAX_WORKERS = 10
+    # Get configuration from environment variables (required)
+    GATEWAY_URL = os.getenv('GATEWAY_URL')
+    NUM_REQUESTS = int(os.getenv('NUM_REQUESTS', '100'))
+    MAX_WORKERS = int(os.getenv('MAX_WORKERS', '10'))
     
     def __init__(self, use_legacy_drools: bool = False):
         self.use_legacy_drools = use_legacy_drools
         self.payload_dir = "legacy-drools-payloads" if use_legacy_drools else "payloads"
+        
+        # Validate that GATEWAY_URL is set
+        if not self.GATEWAY_URL:
+            print("\n❌ ERROR: GATEWAY_URL not found in environment variables.")
+            print("Please create a .env file with: GATEWAY_URL=<your-api-gateway-url>")
+            exit(1)
 
     def load_test_payload(self, filename: str) -> Dict:
         test_data_path = Path(__file__).parent.parent / "data" / self.payload_dir / filename
@@ -363,6 +375,7 @@ if __name__ == "__main__":
     
     # Print configuration
     print(f"\nLoad Test Configuration:")
+    print(f"  Gateway URL: {tester.GATEWAY_URL[:50]}..." if len(tester.GATEWAY_URL) > 50 else f"  Gateway URL: {tester.GATEWAY_URL}")
     print(f"  Mode: {'Legacy Drools' if args.legacy_drools else 'Converted Payloads'}")
     print(f"  Requests: {tester.NUM_REQUESTS}")
     print(f"  Workers: {tester.MAX_WORKERS}")
