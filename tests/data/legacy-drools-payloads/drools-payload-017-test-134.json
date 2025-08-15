@@ -1,0 +1,111 @@
+{
+  "commands": [
+    {
+      "insert": {
+        "object": {
+          "accessnyc.request.Household": {
+            "zip": "11201",
+            "city": "NYC",
+            "members": "1",
+            "cashOnHand": "50000",
+            "livingRentalType": "RentControlled",
+            "livingRenting": "true",
+            "livingOwner": "false",
+            "livingStayingWithFriend": "false",
+            "livingHotel": "false",
+            "livingShelter": "false",
+            "livingPreferNotToSay": "false"
+          }
+        }
+      }
+    },
+    {
+      "insert": {
+        "object": {
+          "accessnyc.request.Person": {
+            "age": "35",
+            "applicant": "false",
+            "incomes": [
+              {
+                "amount": "324",
+                "type": "Wage",
+                "frequency": "monthly"
+              }
+            ],
+            "expenses": [
+              {
+                "amount": "550",
+                "type": "Ren",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "50",
+                "type": "Medica",
+                "frequency": "weekly"
+              },
+              {
+                "amount": "50",
+                "type": "Cool",
+                "frequency": "biweekly"
+              },
+              {
+                "amount": "1550",
+                "type": "Insurance",
+                "frequency": "yearly"
+              },
+              {
+                "amount": "50",
+                "type": "Child",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "150",
+                "type": "Child Support",
+                "frequency": "weekly"
+              },
+              {
+                "amount": "550",
+                "type": "Dependent",
+                "frequency": "yearly"
+              },
+              {
+                "amount": "100",
+                "type": "Heat",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "1550",
+                "type": "home",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "100",
+                "type": "Utility",
+                "frequency": "monthly"
+              },
+              {
+                "amount": "50",
+                "type": "phone",
+                "frequency": "monthly"
+              }
+            ],
+            "student": "false",
+            "studentFulltime": "false",
+            "pregnant": "false",
+            "unemployed": "false",
+            "unemployedWorkedLast18Months": "false",
+            "blind": "false",
+            "disabled": "false",
+            "veteran": "true",
+            "benefitsMedicaid": "false",
+            "benefitsMedicaidDisability": "false",
+            "headOfHousehold": "false",
+            "headOfHouseholdRelation": "Spouse",
+            "livingOwnerOnDeed": "false",
+            "livingRentalOnLease": "true"
+          }
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "commands": [
+    {
+      "insert": {
+        "object": {
+          "accessnyc.request.Household": {
+            "zip": "11201",
+            "city": "NYC",
+            "members": "1",
+            "cashOnHand": "50000",
+            "livingRentalType": "RentControlled",
+            "livingRenting": "true",
+            "livingOwner": "false",
+            "livingStayingWithFriend": "false",
+            "livingHotel": "false",
+            "livingShelter": "false",
+            "livingPreferNotToSay": "false"
+          }
+        }
+      }
+    },
+    {
+      "insert": {
+        "object": {
+          "accessnyc.request.Person": {
+            "age": "35",
+            "applicant": "false",
+            "incomes": [
+              {
+                "amount": "324",
+                "type": "Wages",
+                "frequency": "biannual"
+              }
+            ],
+            "expenses": [
+              {
+                "amount": "50",
+                "type": "Medical",
+                "frequency": "weekly"
+              }
+            ],
+            "student": "false",
+            "studentFulltime": "false",
+            "pregnant": "false",
+            "unemployed": "false",
+            "unemployedWorkedLast18Months": "false",
+            "blind": "false",
+            "disabled": "false",
+            "veteran": "true",
+            "benefitsMedicaid": "false",
+            "benefitsMedicaidDisability": "false",
+            "headOfHousehold": "false",
+            "headOfHouseholdRelation": "Spouse",
+            "livingOwnerOnDeed": "false",
+            "livingRentalOnLease": "true"
+          }
+        }
+      }
+    }
+  ]
+}

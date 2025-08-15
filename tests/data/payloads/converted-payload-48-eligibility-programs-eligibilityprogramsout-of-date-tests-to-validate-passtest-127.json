@@ -1,0 +1,66 @@
+{
+  "household": [
+    {
+      "cashOnHand": 50000.0,
+      "livingRentalType": "RentControlled",
+      "livingPreferNotToSay": false,
+      "livingRenting": true,
+      "livingOwner": false,
+      "livingStayingWithFriend": false,
+      "livingHotel": false,
+      "livingShelter": false
+    }
+  ],
+  "person": [
+    {
+      "age": 35,
+      "householdMemberType": "HouseholdMember",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": true,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": true,
+      "incomes": [
+        {
+          "amount": 50.0,
+          "type": "Gifts",
+          "frequency": "Monthly"
+        },
+        {
+          "amount": 200.0,
+          "type": "Wages",
+          "frequency": "Weekly"
+        },
+        {
+          "amount": 1500.0,
+          "type": "boarder",
+          "frequency": "Yearly"
+        },
+        {
+          "amount": 324.0,
+          "type": "Rental",
+          "frequency": "Biweekly"
+        },
+        {
+          "amount": 600.0,
+          "type": "Wages",
+          "frequency": "Semimonthly"
+        }
+      ],
+      "expenses": [
+        {
+          "amount": 50.0,
+          "type": "Medical"
+        }
+      ]
+    }
+  ],
+  "withholdPayload": true
+}

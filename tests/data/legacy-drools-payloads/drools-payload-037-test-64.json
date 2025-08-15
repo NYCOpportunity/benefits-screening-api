@@ -1,0 +1,30 @@
+{
+  "commands": [
+    {
+      "insert": {
+        "object": {
+          "accessnyc.request.Household": {
+            "zip": "11201",
+            "city": "NYC",
+            "members": "1",
+            "cashOnHand": "50000",
+            "livingRentalType": "RentControlled",
+            "livingRenting": "true",
+            "livingOwner": "false",
+            "livingStayingWithFriend": "false",
+            "livingHotel": "false",
+            "livingShelter": "false",
+            "livingPreferNotToSay": "false"
+          }
+        }
+      }
+    },
+    {
+      "insert": {
+        "object": {
+          "accessnyc.request.Person": {}
+        }
+      }
+    }
+  ]
+}
