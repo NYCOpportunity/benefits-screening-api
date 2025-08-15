@@ -1,12 +1,8 @@
 '''
-This replatforms original src/api/validationSchemas/constants.js
-
 Define fixed-value enums (income types, frequencies, etc.)
 '''
 
 from enum import Enum
-
-
 
 
 class LivingRentalType(str, Enum):

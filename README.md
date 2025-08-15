@@ -1,6 +1,62 @@
 # Benefits Screening API
 
-WIP - refactor of the Benefits Screening API and rules code in Python
+Refactor of the Benefits Screening API and rules code in Python
+
+## File Map
+
+```
+benefits-screening-api/
+├── src/
+│   ├── models/
+│   │   ├── enums.py                           # Fixed-value enums (income types, etc.)
+│   │   └── schemas.py                         # Schemas for AggregateEligibilityRequest
+│   ├── rules/
+│   │   ├── program_rules/                     # Individual program rule implementations
+│   │   ├── aggregate_eligibility_helper.py    # Funcs for AggregateEligibilityRequest
+│   │   ├── base_rule.py                       # Parent class for program_rules
+│   │   ├── calculate_eligibility.py           # Main eligibility calculation logic
+│   │   └── registry.py                        # Auto-registers all rules
+│   ├── utils/
+│   │   └── drools_converter.py                # Backwards compatibility for Drools JSON
+│   ├── validation/
+│   │   └── validate_request.py                # Validates JSON format
+│   └── main.py                                # Application entry point
+├── tests/
+│   ├── data/
+│   │   ├── legacy-drools-payloads/            # Legacy Drools JSON test files
+│   │   └── payloads/                          # Expected JSON payload test files
+│   ├── e2e/
+│   │   └── test_load_gateway.py               # E2E, load & performance tests
+│   ├── integration/                           # Integration test suite
+│   ├── unit/
+│   │   ├── rules/                             # Program rule unit tests
+│   │   └── validations/                       # Request validation tests
+│   └── utils/                                 # Test utilities
+├── pyproject.toml                             # Python project configuration
+├── pytest.ini                                 # PyTest configuration
+├── README.md                                  # Project documentation
+└── uv.lock                                    # Dependency lock file
+```
+
+## Flow Diagram 
+
+```
+┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
+│  Receive JSON   │───▶│ validate_request│───▶│ calculate_      │───▶│   get_rules()   │───▶│ Evaluate Rules  │───▶│   Return 200    │
+│    Payload      │    │   (validate_    │    │  eligibility    │    │  (registry.py)  │    │ (program_rules/)│    │ Eligible Program│
+│   (main.py)     │    │   request.py)   │    │ (calculate_     │    │                 │    │                 │    │      List       │
+└─────────┬───────┘    └─────────────────┘    │ eligibility.py) │    └─────────────────┘    └─────────────────┘    └─────────────────┘
+          │  ▲                                └─────────────────┘
+          │  │  (if legacy
+          ▼  │   Drools JSON format)
+┌─────────────────┐
+│ convert_drools_ │
+│  to_api_format  │
+│   (drools_      │
+│  converter.py)  │
+└─────────────────┘
+
+```
 
 ## Setup Instructions
 
@@ -20,7 +76,13 @@ WIP - refactor of the Benefits Screening API and rules code in Python
    source .venv/bin/activate
    ```
 
-4. **Run the application:**
+4. **Set  `.env` file by copying `.env.example`:**
+
+```bash
+GATEWAY_URL=your-api-gateway-url
+```
+
+5. **Run the application:**
    ```bash
    uv run python src/main.py
    ```
@@ -32,6 +94,18 @@ Run tests using uv with PyTest:
 uv run pytest tests/
 ```
 
+### E2E Load Tests
+
+**Basic load test:**
+```bash
+uv run tests/e2e/test_load_gateway.py
+```
+**Available (optional) flags:**
+- `--legacy-drools`: Use legacy format payloads vs converted payloads
+- `--sequential`: Test each payload separately vs mixed load test
+- `--num-requests N`: Total requests to send
+- `--workers N`: Concurrent threads
+
 ## Deployment
 
 Automated deployment via branch merges:
@@ -41,7 +115,6 @@ Automated deployment via branch merges:
 
 **Workflow:** Feature branch → PR → `stg` → test → `prod`
 
-> ⚠️ Always test in staging before production deployment
 
 ## How to add a rule
 1. Create a new file under [`program_rules`](src/rules/program_rules) titled as the program code, and modify the program and description to match the new rule. I recommend just duplicating an existing file and renaming it. 
@@ -50,4 +123,12 @@ Automated deployment via branch merges:
 
 
 ## TODO
-- Thoroughly test the program rules with different JSONs and expected values 
+- Integrating with ACCESS NYC
+- Integrating and testing with authorization
+- Switching the API gateway so it uses the existing URL
+- Integrating with the database
+- Testing correctness of the rules and correcting errors
+   - Run the Drools JSON with existing API, and then with this API using e2e test. Check for discrepancies in results. 
+   - Can maybe even just swap the AWS Gateway Link and run e2e test
+- Adding the bulk submission API endpoint (which takes in a CSV)
+
