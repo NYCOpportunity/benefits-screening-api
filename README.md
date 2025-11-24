@@ -64,7 +64,7 @@ benefits-screening-api/
    ```bash
    curl -LsSf https://astral.sh/uv/install.sh | sh
    ```
-   **Note:** Can also install it with pip: `pip install uv`
+   **Note:** Can also install it with pip: `pip install uv` or brew: `brew install uv`
 
 2. **Install dependencies and create virtual environment:**
    ```bash
