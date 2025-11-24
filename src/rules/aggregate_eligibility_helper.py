@@ -15,8 +15,8 @@ from src.models.enums import (
 
 # Frequency conversion constants
 FREQUENCY_TO_MONTHLY = {
-    Frequency.WEEKLY: 4.3333333333333,
-    Frequency.BIWEEKLY: 2.166666666667,
+    Frequency.WEEKLY: 52/12,
+    Frequency.BIWEEKLY: 26/12,
     Frequency.SEMIMONTHLY: 2.0,
     Frequency.MONTHLY: 1.0,
     Frequency.YEARLY: 1.0 / 12.0,
