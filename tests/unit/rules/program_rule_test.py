@@ -1,17 +1,21 @@
 # Import rule modules to ensure they are registered
 from tests.data.sample_eligibility_rule import sample_eligibility_rule
 from src.rules.registry import get_rules
+from src.models.schemas import AggregateEligibilityRequest
 
 
 def test_all_program_rules():
 
     eligibility_request = sample_eligibility_rule()
+    aggregate_eligibility_request = AggregateEligibilityRequest.from_eligibility_request(eligibility_request)
     all_rules = get_rules()
 
     # Dynamically include all registered programs with a default expected
     # outcome of False.  Override specific programs below when their expected
     # result differs. (This can eventually be moved to a json/yaml in the test data folder)
     expected_outcomes = {rule.program: False for rule in all_rules}
+    for key in ["S2R011", "S2R026", "S2R030", "S2R032", "S2R045", "S2R046", "S2R055", "S2R056"]:
+        expected_outcomes[key] = True
 
     # Ensure at least one rule is registered to confirm discovery is working
     assert len(all_rules) > 0, "No rules were found in the registry."
@@ -28,7 +32,7 @@ def test_all_program_rules():
     for rule in all_rules:
         program_code = rule.program
         expected_result = expected_outcomes[program_code]
-        actual_result = rule.evaluate(eligibility_request)
+        actual_result = rule.evaluate(aggregate_eligibility_request)
 
         assert actual_result == expected_result, (
             f"Rule '{program_code}' failed for sample data. "
