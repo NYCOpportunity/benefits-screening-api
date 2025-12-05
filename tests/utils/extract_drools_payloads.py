@@ -8,7 +8,7 @@ class DroolsPayloadExtractor:
     
     def __init__(self, postman_file_path: str):
         self.postman_file_path = Path(postman_file_path)
-        self.output_dir = Path(__file__).parent.parent / "data" / "legacy-drools-payloads"
+        self.output_dir = Path(__file__).parent.parent / "data" / "legacy_drools_payloads"
         
     def load_postman_collection(self) -> Dict:
         with open(self.postman_file_path, 'r') as f:
@@ -59,26 +59,21 @@ class DroolsPayloadExtractor:
     
     def sanitize_filename(self, name: str) -> str:
         """Create a safe filename from the test name."""
-        # Remove the parent path parts, keep only the test name
-        if '/' in name:
-            name = name.split('/')[-1]
-        
-        # Remove special characters and clean up
-        name = re.sub(r'[^\w\s-]', '', name)
-        name = re.sub(r'[-\s]+', '-', name)
-        return name.lower()[:100]
+        name = re.sub(r'[^\w\s/-]', '', name)
+        name = re.sub(r'[-\s]+', '_', name)
+        return name
     
     def save_payloads(self, payloads: List[Dict]) -> List[str]:
         """Save extracted Drools payloads to individual JSON files."""
         saved_files = []
         
-        # Ensure output directory exists
-        self.output_dir.mkdir(parents=True, exist_ok=True)
-        
         for i, payload_info in enumerate(payloads, 1):
             sanitized_name = self.sanitize_filename(payload_info['name'])
-            filename = f"drools-payload-{i:03d}-{sanitized_name}.json"
+            filename = f"{sanitized_name}.json"
             filepath = self.output_dir / filename
+
+            # Ensure output directory exists
+            filepath.parent.mkdir(parents=True, exist_ok=True)
             
             with open(filepath, 'w') as f:
                 json.dump(payload_info['payload'], f, indent=2)
@@ -102,8 +97,8 @@ class DroolsPayloadExtractor:
         
         if found_payloads:
             print("\nPayload details:")
-            for i, payload_info in enumerate(found_payloads, 1):
-                print(f"{i}. {payload_info['name']}")
+            for payload_info in found_payloads:
+                print(f"{payload_info['name']}")
                 commands_count = len(payload_info['payload'].get('commands', []))
                 print(f"   - Commands: {commands_count}")
             
@@ -128,7 +123,7 @@ class DroolsPayloadExtractor:
 
 def main():
     """Main function to run the extraction."""
-    postman_file = Path(__file__).parent.parent / "data" / "_drools-postman.json"
+    postman_file = Path(__file__).parent.parent / "data" / "_drools_engine_testing_postman_collection.json"
     
     if not postman_file.exists():
         print(f"Error: Postman collection not found at {postman_file}")
