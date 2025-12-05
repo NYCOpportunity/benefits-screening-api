@@ -21,7 +21,7 @@ class TestLoadGateway:
     
     def __init__(self, use_legacy_drools: bool = False):
         self.use_legacy_drools = use_legacy_drools
-        self.payload_dir = "legacy-drools-payloads" if use_legacy_drools else "payloads"
+        self.payload_dir = "legacy_drools_payloads" if use_legacy_drools else "payloads"
         
         # Validate that GATEWAY_URL is set
         if not self.GATEWAY_URL:
@@ -39,8 +39,8 @@ class TestLoadGateway:
         payload_files = []
         
         if self.use_legacy_drools:
-            # For legacy drools, get all drools-payload-*.json files
-            payload_files.extend(data_dir.glob("drools-payload-*.json"))
+            # For legacy drools, get all legacy_drools_payloads-*.json files
+            payload_files.extend(data_dir.glob("legacy_drools_payloads-*.json"))
         else:
             # For regular payloads, use the existing pattern
             payload_files.extend(data_dir.glob("eligibility-program-test-payload.json"))
@@ -342,7 +342,7 @@ if __name__ == "__main__":
     parser.add_argument(
         '--legacy-drools', 
         action='store_true',
-        help='Use legacy Drools format payloads from legacy-drools-payloads directory'
+        help='Use legacy Drools format payloads from legacy_drools_payloads directory'
     )
     parser.add_argument(
         '--sequential',
