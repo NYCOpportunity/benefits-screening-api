@@ -8,7 +8,7 @@ class PostmanPayloadConverter:
     
     def __init__(self, postman_file_path: str):
         self.postman_file_path = Path(postman_file_path)
-        self.data_dir = Path(__file__).parent.parent / "data"
+        self.data_dir = Path(__file__).parent.parent / "data" / "payloads"
         
     def load_postman_collection(self) -> Dict:
         with open(self.postman_file_path, 'r') as f:
@@ -37,7 +37,7 @@ class PostmanPayloadConverter:
             if cash is not None:
                 household['cashOnHand'] = cash
         
-        if 'livingRentalType' in old_household:
+        if old_household.get('livingRentalType'):
             household['livingRentalType'] = old_household['livingRentalType']
         
         boolean_fields = [
@@ -60,8 +60,8 @@ class PostmanPayloadConverter:
                 person['age'] = int(age)
         
         if 'applicant' in old_person or 'headOfHousehold' in old_person:
-            is_hoh = old_person.get('applicant') == 'true' or old_person.get('headOfHousehold') == 'true'
-            person['householdMemberType'] = 'HeadOfHousehold' if is_hoh else 'HouseholdMember'
+            is_hoh = old_person.get('applicant') == True or old_person.get('headOfHousehold') == True
+            person['householdMemberType'] = 'HeadOfHousehold' if is_hoh else old_person["headOfHouseholdRelation"]
         
         boolean_fields = [
             'student', 'pregnant', 'studentFulltime', 'blind', 'disabled',
@@ -186,17 +186,20 @@ class PostmanPayloadConverter:
         return found_payloads
     
     def sanitize_filename(self, name: str) -> str:
-        name = re.sub(r'[^\w\s-]', '', name)
-        name = re.sub(r'[-\s]+', '-', name)
-        return name.lower()[:100]
+        name = re.sub(r'[^\w\s/-]', '', name)
+        name = re.sub(r'[-\s]+', '_', name)
+        return name
     
     def save_payloads(self, payloads: List[Dict]) -> List[str]:
         saved_files = []
         
         for i, payload_info in enumerate(payloads, 1):
             sanitized_name = self.sanitize_filename(payload_info['name'])
-            filename = f"converted-payload-{i:02d}-{sanitized_name}.json"
+            filename = f"{sanitized_name}.json"
             filepath = self.data_dir / filename
+
+            # Ensure output directory exists
+            filepath.parent.mkdir(parents=True, exist_ok=True)
             
             with open(filepath, 'w') as f:
                 json.dump(payload_info['payload'], f, indent=2)
@@ -219,15 +222,15 @@ class PostmanPayloadConverter:
         
         if found_payloads:
             print("\nConverted payload details:")
-            for i, payload_info in enumerate(found_payloads, 1):
-                print(f"{i}. {payload_info['name']}")
+            for payload_info in found_payloads:
+                print(f"{payload_info['name']}")
                 household_count = len(payload_info['payload'].get('household', []))
                 person_count = len(payload_info['payload'].get('person', []))
                 print(f"   - Household members: {household_count}")
                 print(f"   - Person members: {person_count}")
             
             print("\nSample of first converted payload:")
-            print(json.dumps(found_payloads[0]['payload'], indent=2)[:500] + "...")
+            print(json.dumps(found_payloads[0]['payload'], indent=2))
             
             print("\nSaving converted payloads to data directory...")
             saved_files = self.save_payloads(found_payloads)
@@ -249,7 +252,7 @@ class PostmanPayloadConverter:
 
 
 def main():
-    postman_file = Path(__file__).parent.parent / "data" / "Benefit Eligibility API Tests Copy.postman_collection.json"
+    postman_file = Path(__file__).parent.parent / "data" / "_drools_engine_testing_postman_collection.json"
     
     if not postman_file.exists():
         print(f"Error: Postman collection not found at {postman_file}")
