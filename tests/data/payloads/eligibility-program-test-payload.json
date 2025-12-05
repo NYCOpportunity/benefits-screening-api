@@ -2,6 +2,7 @@
   {
     "household": [
       {
+        "caseId": "Valid-Case-ID-001.v1/",
         "cashOnHand": 1000.0,
         "livingRentalType": "MarketRate",
         "livingPreferNotToSay": false,

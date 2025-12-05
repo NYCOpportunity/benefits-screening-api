@@ -1,0 +1,99 @@
+{
+  "household": [
+    {
+      "livingPreferNotToSay": true,
+      "livingRenting": false,
+      "livingOwner": false,
+      "livingStayingWithFriend": false,
+      "livingHotel": false,
+      "livingShelter": false
+    }
+  ],
+  "person": [
+    {
+      "age": 23,
+      "householdMemberType": "HeadOfHousehold",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 46004.0,
+          "type": "Wages",
+          "frequency": "Yearly"
+        },
+        {
+          "amount": 10000.0,
+          "type": "Investment",
+          "frequency": "Yearly"
+        }
+      ]
+    },
+    {
+      "age": 24,
+      "householdMemberType": "Spouse",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 10000.0,
+          "type": "Wages",
+          "frequency": "Yearly"
+        },
+        {
+          "amount": 1600.0,
+          "type": "Investment",
+          "frequency": "Yearly"
+        }
+      ]
+    },
+    {
+      "age": 23,
+      "householdMemberType": "Child",
+      "student": true,
+      "pregnant": false,
+      "studentFulltime": true,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 200000.0,
+          "type": "Wages",
+          "frequency": "Yearly"
+        },
+        {
+          "amount": 4900.0,
+          "type": "Investment",
+          "frequency": "Yearly"
+        }
+      ]
+    }
+  ],
+  "withholdPayload": true
+}

@@ -1,0 +1,71 @@
+{
+  "household": [
+    {
+      "livingPreferNotToSay": true,
+      "livingRenting": false,
+      "livingOwner": false,
+      "livingStayingWithFriend": false,
+      "livingHotel": false,
+      "livingShelter": false
+    }
+  ],
+  "person": [
+    {
+      "age": 66,
+      "householdMemberType": "HeadOfHousehold",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 20000.0,
+          "type": "Wages",
+          "frequency": "Yearly"
+        },
+        {
+          "amount": 5000.0,
+          "type": "Investment",
+          "frequency": "Yearly"
+        }
+      ]
+    },
+    {
+      "age": 25,
+      "householdMemberType": "Spouse",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 5512.0,
+          "type": "Wages",
+          "frequency": "Yearly"
+        },
+        {
+          "amount": 5200.0,
+          "type": "Investment",
+          "frequency": "Yearly"
+        }
+      ]
+    }
+  ],
+  "withholdPayload": true
+}

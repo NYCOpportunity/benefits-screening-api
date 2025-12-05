@@ -1,0 +1,79 @@
+{
+    "household": [
+        {
+            "caseId": "caseId01",
+            "cashOnHand": "0",
+            "livingRenting": true,
+            "livingOwner": false,
+            "livingStayingWithFriend": false,
+            "livingHotel": false,
+            "livingShelter": false,
+            "livingPreferNotToSay": false
+        }
+    ],
+    "person": [
+        {
+            "age": 30,
+            "student": false,
+            "studentFulltime": false,
+            "pregnant": false,
+            "unemployed": false,
+            "unemployedWorkedLast18Months": false,
+            "blind": true,
+            "disabled": false,
+            "veteran": true,
+            "benefitsMedicaid": false,
+            "benefitsMedicaidDisability": false,
+            "householdMemberType": "HeadOfHousehold",
+            "livingOwnerOnDeed": false,
+            "livingRentalOnLease": true,
+            "incomes": [
+                {
+                    "amount": "4442",
+                    "frequency": "Monthly",
+                    "type": "Gifts"
+                }
+            ]
+        },
+        {
+            "age": 30,
+            "student": false,
+            "studentFulltime": false,
+            "pregnant": false,
+            "unemployed": false,
+            "unemployedWorkedLast18Months": false,
+            "blind": false,
+            "disabled": false,
+            "veteran": true,
+            "benefitsMedicaid": false,
+            "benefitsMedicaidDisability": false,
+            "householdMemberType": "SisterBrother",
+            "livingOwnerOnDeed": false,
+            "livingRentalOnLease": true,
+            "incomes": [
+                {
+                    "amount": "1",
+                    "frequency": "Monthly",
+                    "type": "Gifts"
+                }
+            ]
+        },
+        {
+            "age": 30,
+            "student": false,
+            "studentFulltime": false,
+            "pregnant": false,
+            "unemployed": false,
+            "unemployedWorkedLast18Months": false,
+            "blind": false,
+            "disabled": false,
+            "veteran": true,
+            "benefitsMedicaid": false,
+            "benefitsMedicaidDisability": false,
+            "householdMemberType": "SisterBrother",
+            "livingOwnerOnDeed": false,
+            "livingRentalOnLease": true,
+            "incomes": []
+        }
+    ]
+}
