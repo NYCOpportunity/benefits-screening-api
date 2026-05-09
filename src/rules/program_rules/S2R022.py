@@ -23,6 +23,17 @@ class WomenInfantsChildren(BaseRule):
         7: 90003,
         8: 100178,
     }
+    PREGNANT_OR_INFANT_MEDICAID_THRESHOLDS = {
+        1: 35591,
+        2: 48258,
+        3: 60924,
+        4: 73590,
+        5: 86257,
+        6: 98923,
+        7: 111590,
+        8: 124256,
+    }
+    PREGNANT_OR_INFANT_MEDICAID_ADDITIONAL_PERSON = 12667
 
     @classmethod
     def evaluate(cls, request) -> bool:
@@ -32,6 +43,8 @@ class WomenInfantsChildren(BaseRule):
         2. At least one person who is pregnant or under age 5
         3. Household income below thresholds based on household size, or reported
            Medicaid, Disability Medicaid, or Cash Assistance
+        4. Computed Medicaid adjunctive income eligibility for pregnant people
+           or infants
         """
         persons = request.person
         household_size = len(persons)
@@ -48,6 +61,9 @@ class WomenInfantsChildren(BaseRule):
         if cls._has_categorical_benefit(request, persons):
             return True
 
+        if cls._has_computed_medicaid_adjunctive_eligibility(request, persons):
+            return True
+
         threshold = cls.INCOME_THRESHOLDS.get(household_size)
         return threshold is not None and request.income_household_total_yearly <= threshold
 
@@ -59,4 +75,27 @@ class WomenInfantsChildren(BaseRule):
                 for p in persons
             )
             or request.income_household_has_cash_assistance
+        )
+
+    @classmethod
+    def _has_computed_medicaid_adjunctive_eligibility(cls, request, persons) -> bool:
+        has_pregnant_or_infant = any(p.pregnant or p.age < 1 for p in persons)
+        if not has_pregnant_or_infant:
+            return False
+
+        medicaid_size = request.members_plus_pregnant
+        threshold = cls._pregnant_or_infant_medicaid_threshold(medicaid_size)
+        return request.income_household_total_yearly <= threshold
+
+    @classmethod
+    def _pregnant_or_infant_medicaid_threshold(cls, household_size: int) -> int:
+        if household_size <= 8:
+            return cls.PREGNANT_OR_INFANT_MEDICAID_THRESHOLDS.get(
+                household_size, 0
+            )
+
+        return (
+            cls.PREGNANT_OR_INFANT_MEDICAID_THRESHOLDS[8]
+            + (household_size - 8)
+            * cls.PREGNANT_OR_INFANT_MEDICAID_ADDITIONAL_PERSON
         )

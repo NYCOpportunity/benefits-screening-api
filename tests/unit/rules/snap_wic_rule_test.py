@@ -9,6 +9,16 @@ from src.rules.program_rules.S2R022 import WomenInfantsChildren
 from src.validation.validate_request import validate_request
 
 
+WIC_COMPUTED_MEDICAID_OVERRIDES = {
+    Path("tests/data/payloads/S2R022_WIC/false/false_1_member_pregnant.json"),
+    Path("tests/data/payloads/S2R022_WIC/false/false_4_members.json"),
+    Path("tests/data/payloads/S2R022_WIC/false/false_5_members.json"),
+    Path("tests/data/payloads/S2R022_WIC/false/false_6_members.json"),
+    Path("tests/data/payloads/S2R022_WIC/false/false_7_members.json"),
+    Path("tests/data/payloads/S2R022_WIC/false/false_8_members.json"),
+}
+
+
 @pytest.mark.parametrize(
     "payload_path",
     sorted(Path("tests/data/payloads/S2R007_SNAP").glob("*/*.json")),
@@ -25,7 +35,10 @@ def test_snap_generated_fixture_corpus(payload_path):
     sorted(Path("tests/data/payloads/S2R022_WIC").glob("*/*.json")),
 )
 def test_wic_generated_fixture_corpus(payload_path):
-    expected = payload_path.parent.name == "true"
+    expected = (
+        payload_path.parent.name == "true"
+        or payload_path in WIC_COMPUTED_MEDICAID_OVERRIDES
+    )
     request = _aggregate_request_from_payload_path(payload_path)
 
     assert WomenInfantsChildren.evaluate(request) is expected
@@ -122,10 +135,10 @@ def test_snap_unearned_income_uses_public_drools_gross_threshold(
         (28_954, False),
     ],
 )
-def test_wic_single_pregnant_adult_uses_public_drools_threshold(
+def test_wic_single_child_uses_public_drools_threshold(
     income, expected
 ):
-    request = _aggregate_request([_person(age=30, income=income, pregnant=True)])
+    request = _aggregate_request([_person(age=4, income=income)])
 
     assert WomenInfantsChildren.evaluate(request) is expected
 
@@ -179,6 +192,34 @@ def test_wic_for_child_household_with_cash_assistance_income():
     )
 
     assert WomenInfantsChildren.evaluate(request)
+
+
+def test_wic_for_pregnant_adult_with_computed_medicaid_eligibility():
+    request = _aggregate_request([_person(age=30, income=40_000, pregnant=True)])
+
+    assert WomenInfantsChildren.evaluate(request)
+
+
+def test_wic_for_infant_household_with_computed_medicaid_eligibility():
+    request = _aggregate_request(
+        [
+            _person(age=30, income=45_000),
+            _person(age=0, household_member_type="Child"),
+        ]
+    )
+
+    assert WomenInfantsChildren.evaluate(request)
+
+
+def test_wic_computed_medicaid_does_not_include_toddler_above_child_limit():
+    request = _aggregate_request(
+        [
+            _person(age=30, income=40_000),
+            _person(age=2, household_member_type="Child"),
+        ]
+    )
+
+    assert not WomenInfantsChildren.evaluate(request)
 
 
 def _aggregate_request(persons):
