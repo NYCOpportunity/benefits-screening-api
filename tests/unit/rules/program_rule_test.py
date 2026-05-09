@@ -1,13 +1,11 @@
 # Import rule modules to ensure they are registered
 from tests.data.sample_eligibility_rule import sample_eligibility_rule
 from src.rules.registry import get_rules
-from src.models.schemas import AggregateEligibilityRequest
 
 
 def test_all_program_rules():
 
-    eligibility_request = sample_eligibility_rule()
-    aggregate_eligibility_request = AggregateEligibilityRequest.from_eligibility_request(eligibility_request)
+    aggregate_eligibility_request = sample_eligibility_rule()
     all_rules = get_rules()
 
     # Dynamically include all registered programs with a default expected

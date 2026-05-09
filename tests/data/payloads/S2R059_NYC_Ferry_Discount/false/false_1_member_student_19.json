@@ -12,7 +12,7 @@
   "person": [
     {
       "age": 19,
-      "householdMemberType": "Other",
+      "householdMemberType": "HeadOfHousehold",
       "student": true,
       "pregnant": false,
       "studentFulltime": false,
