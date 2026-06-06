@@ -25,7 +25,7 @@ def test_child_health_plus_for_child_above_medicaid_threshold():
 def test_child_health_plus_false_at_medicaid_threshold():
     request = _aggregate_request(
         [
-            _person(age=35, income=31_478),
+            _person(age=35, income=33_326),
             _person(age=5, household_member_type="Child"),
         ]
     )
@@ -46,19 +46,19 @@ def test_essential_plan_for_adult_in_income_range():
 
 
 def test_essential_plan_false_at_lower_income_bound():
-    request = _aggregate_request([_person(age=35, income=21_597)])
+    request = _aggregate_request([_person(age=35, income=22_025)])
 
     assert not EssentialPlan.evaluate(request)
 
 
 def test_essential_plan_true_at_upper_income_bound():
-    request = _aggregate_request([_person(age=35, income=39_125)])
+    request = _aggregate_request([_person(age=35, income=39_900)])
 
     assert EssentialPlan.evaluate(request)
 
 
 def test_essential_plan_false_above_upper_income_bound():
-    request = _aggregate_request([_person(age=35, income=39_125.01)])
+    request = _aggregate_request([_person(age=35, income=39_900.01)])
 
     assert not EssentialPlan.evaluate(request)
 
