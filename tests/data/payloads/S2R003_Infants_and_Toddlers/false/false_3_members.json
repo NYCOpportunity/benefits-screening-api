@@ -35,7 +35,7 @@
     },
     {
       "age": 2,
-      "householdMemberType": "Other",
+      "householdMemberType": "StepChild",
       "student": false,
       "pregnant": false,
       "studentFulltime": false,

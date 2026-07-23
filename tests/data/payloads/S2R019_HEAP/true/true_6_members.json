@@ -11,7 +11,7 @@
   ],
   "person": [
     {
-      "age": 60,
+      "age": 30,
       "householdMemberType": "HeadOfHousehold",
       "student": false,
       "pregnant": false,
@@ -27,8 +27,54 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 8811.0,
-          "type": "Wages",
+          "amount": 8813.0,
+          "type": "Gifts",
+          "frequency": "Monthly"
+        }
+      ]
+    },
+    {
+      "age": 30,
+      "householdMemberType": "Other",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Rental",
+          "frequency": "Monthly"
+        }
+      ]
+    },
+    {
+      "age": 30,
+      "householdMemberType": "Other",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Investment",
           "frequency": "Monthly"
         }
       ]
@@ -86,99 +132,7 @@
       "pregnant": false,
       "studentFulltime": false,
       "blind": false,
-      "disabled": false,
-      "veteran": false,
-      "unemployed": false,
-      "unemployedWorkedLast18Months": false,
-      "benefitsMedicaid": false,
-      "benefitsMedicaidDisability": false,
-      "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
-    },
-    {
-      "age": 30,
-      "householdMemberType": "Other",
-      "student": false,
-      "pregnant": false,
-      "studentFulltime": false,
-      "blind": false,
-      "disabled": false,
-      "veteran": false,
-      "unemployed": false,
-      "unemployedWorkedLast18Months": false,
-      "benefitsMedicaid": false,
-      "benefitsMedicaidDisability": false,
-      "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
-    },
-    {
-      "age": 30,
-      "householdMemberType": "Other",
-      "student": false,
-      "pregnant": false,
-      "studentFulltime": false,
-      "blind": false,
-      "disabled": false,
-      "veteran": false,
-      "unemployed": false,
-      "unemployedWorkedLast18Months": false,
-      "benefitsMedicaid": false,
-      "benefitsMedicaidDisability": false,
-      "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
-    },
-    {
-      "age": 40,
-      "householdMemberType": "Other",
-      "student": false,
-      "pregnant": false,
-      "studentFulltime": false,
-      "blind": false,
-      "disabled": false,
-      "veteran": false,
-      "unemployed": false,
-      "unemployedWorkedLast18Months": false,
-      "benefitsMedicaid": false,
-      "benefitsMedicaidDisability": false,
-      "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
-    },
-    {
-      "age": 50,
-      "householdMemberType": "Other",
-      "student": false,
-      "pregnant": false,
-      "studentFulltime": false,
-      "blind": false,
-      "disabled": false,
+      "disabled": true,
       "veteran": false,
       "unemployed": false,
       "unemployedWorkedLast18Months": false,

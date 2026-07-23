@@ -50,7 +50,7 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 10000000000000.0,
+          "amount": 100000000000.0,
           "type": "Wages",
           "frequency": "Monthly"
         }
@@ -73,7 +73,7 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 1e+17,
+          "amount": 100000000000.0,
           "type": "Wages",
           "frequency": "Monthly"
         }

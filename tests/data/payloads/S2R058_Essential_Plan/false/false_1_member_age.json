@@ -1,6 +1,7 @@
 {
   "household": [
     {
+      "cashOnHand": 0.0,
       "livingPreferNotToSay": true,
       "livingRenting": false,
       "livingOwner": false,
@@ -11,7 +12,7 @@
   ],
   "person": [
     {
-      "age": 60,
+      "age": 65,
       "householdMemberType": "HeadOfHousehold",
       "student": false,
       "pregnant": false,
@@ -27,9 +28,9 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 3322.0,
+          "amount": 31920.0,
           "type": "Wages",
-          "frequency": "Monthly"
+          "frequency": "Yearly"
         }
       ]
     }

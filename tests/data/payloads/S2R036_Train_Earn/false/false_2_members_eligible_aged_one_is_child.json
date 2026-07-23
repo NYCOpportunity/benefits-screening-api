@@ -50,7 +50,7 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 133333333333333333,
+          "amount": 133333333333,
           "type": "Wages",
           "frequency": "Monthly"
         }

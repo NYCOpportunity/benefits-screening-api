@@ -1,6 +1,7 @@
 {
   "household": [
     {
+      "cashOnHand": 0.0,
       "livingPreferNotToSay": true,
       "livingRenting": false,
       "livingOwner": false,
@@ -11,8 +12,31 @@
   ],
   "person": [
     {
-      "age": 18,
+      "age": 20,
       "householdMemberType": "HeadOfHousehold",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": true,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 100000.0,
+          "type": "Wages",
+          "frequency": "Yearly"
+        }
+      ]
+    },
+    {
+      "age": 65,
+      "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
       "studentFulltime": false,
@@ -27,14 +51,14 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 6390.0,
+          "amount": 80.0,
           "type": "Wages",
-          "frequency": "Monthly"
+          "frequency": "Yearly"
         }
       ]
     },
     {
-      "age": 55,
+      "age": 65,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
@@ -50,7 +74,7 @@
       "livingRentalOnLease": false
     },
     {
-      "age": 2,
+      "age": 65,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
@@ -66,7 +90,39 @@
       "livingRentalOnLease": false
     },
     {
-      "age": 3,
+      "age": 65,
+      "householdMemberType": "Other",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false
+    },
+    {
+      "age": 65,
+      "householdMemberType": "Other",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false
+    },
+    {
+      "age": 65,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,

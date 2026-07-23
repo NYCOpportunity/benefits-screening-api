@@ -1,6 +1,7 @@
 {
   "household": [
     {
+      "cashOnHand": 0.0,
       "livingPreferNotToSay": true,
       "livingRenting": false,
       "livingOwner": false,
@@ -11,7 +12,7 @@
   ],
   "person": [
     {
-      "age": 30,
+      "age": 19,
       "householdMemberType": "HeadOfHousehold",
       "student": false,
       "pregnant": false,
@@ -27,32 +28,9 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 1.0,
+          "amount": 31920.0,
           "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
-    },
-    {
-      "age": 30,
-      "householdMemberType": "Other",
-      "student": false,
-      "pregnant": false,
-      "studentFulltime": false,
-      "blind": false,
-      "disabled": false,
-      "veteran": false,
-      "unemployed": false,
-      "unemployedWorkedLast18Months": false,
-      "benefitsMedicaid": false,
-      "benefitsMedicaidDisability": false,
-      "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
+          "frequency": "Yearly"
         }
       ]
     }

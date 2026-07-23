@@ -1,6 +1,7 @@
 {
   "household": [
     {
+      "cashOnHand": 0.0,
       "livingPreferNotToSay": true,
       "livingRenting": false,
       "livingOwner": false,
@@ -11,13 +12,13 @@
   ],
   "person": [
     {
-      "age": 30,
+      "age": 20,
       "householdMemberType": "HeadOfHousehold",
       "student": false,
       "pregnant": false,
       "studentFulltime": false,
       "blind": false,
-      "disabled": true,
+      "disabled": false,
       "veteran": false,
       "unemployed": false,
       "unemployedWorkedLast18Months": false,
@@ -27,14 +28,14 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 8620.0,
+          "amount": 111433.0,
           "type": "Wages",
-          "frequency": "Monthly"
+          "frequency": "Yearly"
         }
       ]
     },
     {
-      "age": 30,
+      "age": 20,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
@@ -52,12 +53,12 @@
         {
           "amount": 1.0,
           "type": "Wages",
-          "frequency": "Monthly"
+          "frequency": "Yearly"
         }
       ]
     },
     {
-      "age": 30,
+      "age": 20,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
@@ -75,12 +76,12 @@
         {
           "amount": 1.0,
           "type": "Wages",
-          "frequency": "Monthly"
+          "frequency": "Yearly"
         }
       ]
     },
     {
-      "age": 30,
+      "age": 20,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
@@ -98,12 +99,12 @@
         {
           "amount": 1.0,
           "type": "Wages",
-          "frequency": "Monthly"
+          "frequency": "Yearly"
         }
       ]
     },
     {
-      "age": 30,
+      "age": 20,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
@@ -121,12 +122,12 @@
         {
           "amount": 1.0,
           "type": "Wages",
-          "frequency": "Monthly"
+          "frequency": "Yearly"
         }
       ]
     },
     {
-      "age": 30,
+      "age": 20,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
@@ -144,12 +145,12 @@
         {
           "amount": 1.0,
           "type": "Wages",
-          "frequency": "Monthly"
+          "frequency": "Yearly"
         }
       ]
     },
     {
-      "age": 40,
+      "age": 20,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
@@ -167,7 +168,30 @@
         {
           "amount": 1.0,
           "type": "Wages",
-          "frequency": "Monthly"
+          "frequency": "Yearly"
+        }
+      ]
+    },
+    {
+      "age": 20,
+      "householdMemberType": "Other",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Yearly"
         }
       ]
     }

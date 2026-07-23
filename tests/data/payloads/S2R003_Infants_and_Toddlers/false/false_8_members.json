@@ -27,7 +27,7 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 11411.0,
+          "amount": 11412.0,
           "type": "Wages",
           "frequency": "Monthly"
         }
@@ -47,14 +47,7 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
+      "livingRentalOnLease": false
     },
     {
       "age": 3,
@@ -70,14 +63,7 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
+      "livingRentalOnLease": false
     },
     {
       "age": 10,
@@ -93,14 +79,7 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
+      "livingRentalOnLease": false
     },
     {
       "age": 10,
@@ -155,7 +134,14 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
     },
     {
       "age": 0,
@@ -171,7 +157,14 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
     }
   ],
   "withholdPayload": true

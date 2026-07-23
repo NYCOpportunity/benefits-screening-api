@@ -34,7 +34,7 @@
       ]
     },
     {
-      "age": 18,
+      "age": 20,
       "householdMemberType": "Child",
       "student": true,
       "pregnant": false,
@@ -126,7 +126,7 @@
       ]
     },
     {
-      "age": 18,
+      "age": 20,
       "householdMemberType": "Other",
       "student": true,
       "pregnant": false,

@@ -11,7 +11,7 @@
   ],
   "person": [
     {
-      "age": 30,
+      "age": 59,
       "householdMemberType": "HeadOfHousehold",
       "student": false,
       "pregnant": false,
@@ -27,14 +27,14 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 4344.0,
+          "amount": 5611.0,
           "type": "Wages",
           "frequency": "Monthly"
         }
       ]
     },
     {
-      "age": 6,
+      "age": 7,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
@@ -47,14 +47,23 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
+      "livingRentalOnLease": false
+    },
+    {
+      "age": 32,
+      "householdMemberType": "Other",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": true,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false
     }
   ],
   "withholdPayload": true
