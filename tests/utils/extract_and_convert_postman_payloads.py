@@ -1,3 +1,4 @@
+import argparse
 import json
 import re
 from pathlib import Path
@@ -6,9 +7,10 @@ from typing import Dict, List, Any, Optional
 
 class PostmanPayloadConverter:
     
-    def __init__(self, postman_file_path: str):
+    def __init__(self, postman_file_path: str, folder_filter: Optional[str] = None):
         self.postman_file_path = Path(postman_file_path)
         self.data_dir = Path(__file__).parent.parent / "data" / "payloads"
+        self.folder_filter = folder_filter
         
     def load_postman_collection(self) -> Dict:
         with open(self.postman_file_path, 'r') as f:
@@ -189,14 +191,25 @@ class PostmanPayloadConverter:
         name = re.sub(r'[^\w\s/-]', '', name)
         name = re.sub(r'[-\s]+', '_', name)
         return name
+
+    def payload_filepath(self, postman_path: str) -> Path:
+        """Map a Postman path like 'S2R058 - Essential Plan/true/true - 1 member'
+        to tests/data/payloads/S2R058_Essential_Plan/true/true_1_member.json."""
+        parts = postman_path.split('/')
+        if len(parts) < 2:
+            return self.data_dir / f"{self.sanitize_filename(postman_path)}.json"
+
+        program_dir = self.sanitize_filename(parts[0])
+        relative_parts = [self.sanitize_filename(part) for part in parts[1:]]
+        filename = f"{relative_parts[-1]}.json"
+        subdirs = relative_parts[:-1]
+        return self.data_dir / program_dir / Path(*subdirs) / filename
     
     def save_payloads(self, payloads: List[Dict]) -> List[str]:
         saved_files = []
         
-        for i, payload_info in enumerate(payloads, 1):
-            sanitized_name = self.sanitize_filename(payload_info['name'])
-            filename = f"{sanitized_name}.json"
-            filepath = self.data_dir / filename
+        for payload_info in payloads:
+            filepath = self.payload_filepath(payload_info['name'])
 
             # Ensure output directory exists
             filepath.parent.mkdir(parents=True, exist_ok=True)
@@ -205,7 +218,7 @@ class PostmanPayloadConverter:
                 json.dump(payload_info['payload'], f, indent=2)
             
             saved_files.append(str(filepath))
-            print(f"Saved: {filename}")
+            print(f"Saved: {filepath.relative_to(self.data_dir)}")
             print(f"  From: {payload_info['name']}")
             
         return saved_files
@@ -216,6 +229,18 @@ class PostmanPayloadConverter:
         
         print("\nSearching for payloads to convert...")
         items = collection.get('item', [])
+
+        if self.folder_filter:
+            items = [item for item in items if item.get('name') == self.folder_filter]
+            if not items:
+                print(f"\nFolder not found in Postman collection: {self.folder_filter}")
+                return {
+                    'total_found': 0,
+                    'payloads': [],
+                    'saved_files': []
+                }
+            print(f"Filtering to folder: {self.folder_filter}")
+
         found_payloads = self.traverse_items(items)
         
         print(f"\nFound and converted {len(found_payloads)} payloads")
@@ -252,13 +277,29 @@ class PostmanPayloadConverter:
 
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="Extract and convert Drools Postman payloads to API test format."
+    )
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument(
+        "--folder",
+        help='Postman folder to extract (e.g. "S2R058 - Essential Plan")',
+    )
+    group.add_argument(
+        "--all",
+        action="store_true",
+        help="Extract payloads from the entire Postman collection",
+    )
+    args = parser.parse_args()
+
     postman_file = Path(__file__).parent.parent / "data" / "_drools_engine_testing_postman_collection.json"
     
     if not postman_file.exists():
         print(f"Error: Postman collection not found at {postman_file}")
         return
     
-    converter = PostmanPayloadConverter(str(postman_file))
+    folder_filter = None if args.all else args.folder
+    converter = PostmanPayloadConverter(str(postman_file), folder_filter=folder_filter)
     results = converter.extract_and_convert()
     
     print("\n" + "="*60)
