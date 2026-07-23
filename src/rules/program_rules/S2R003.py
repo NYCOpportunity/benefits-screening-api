@@ -34,16 +34,20 @@ class InfantsToddlers(BaseRule):
             if person.household_member_type == HouseholdMemberType.FOSTER_CHILD:
                 return True
             
-            # Check if HoH or spouse has SSI or Cash Assistance
+            # Pathway 2: Person under 3 with HoH/spouse receiving SSI or Cash Assistance
             if cls._head_or_spouse_has_benefits(persons):
                 return True
             
             # Pathway 3: Child/stepchild with household income check
             if person.household_member_type in [HouseholdMemberType.CHILD, HouseholdMemberType.STEP_CHILD]:
-                household_size = len(persons) + request.members_pregnant
-                income_threshold = cls._get_household_income_threshold(household_size)
+                adults_children_income = request.income_adults_children_total_monthly
                 
-                if request.income_adults_children_total_monthly <= income_threshold:
+                # Calculate count of persons included in the income calculation for threshold lookup
+                adults_children_count = cls._count_adults_children(request)
+                
+                income_threshold = cls._get_income_threshold(adults_children_count)
+                
+                if income_threshold > 0 and adults_children_income <= income_threshold:
                     return True
             
             # Pathway 4: Other children with individual income check
@@ -65,8 +69,29 @@ class InfantsToddlers(BaseRule):
         return False
     
     @classmethod
-    def _get_household_income_threshold(cls, household_size: int) -> float:
-        """Get income threshold based on household size"""
+    def _count_adults_children(cls, request) -> int:
+        """
+        Count persons included in adults_children_total_monthly calculation.
+        Matches Drools rule: (headOfHousehold == true || headOfHouseholdRelation == "Spouse" || age < 18)
+        """
+        count = 0
+        persons = request.person
+        
+        for person in persons:
+            is_hoh = person.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD
+            is_spouse = person.household_member_type == HouseholdMemberType.SPOUSE
+            is_under_18 = person.age < 18
+            
+            if is_hoh or is_spouse or is_under_18:
+                count += 1
+        
+        return count
+    
+    @classmethod
+    def _get_income_threshold(cls, adults_children_count: int) -> float:
+        """
+        Get income threshold based on count of adults and children in the household.
+        """
         thresholds = {
             2: 5624.0,
             3: 6948.0,
@@ -78,11 +103,11 @@ class InfantsToddlers(BaseRule):
         }
         
         # For households larger than 8, use the 8-member threshold
-        if household_size > 8:
+        if adults_children_count > 8:
             return thresholds[8]
         
         # For single member households, no threshold defined in rules
-        if household_size < 2:
+        if adults_children_count < 2:
             return 0.0
         
-        return thresholds.get(household_size, thresholds[2])
+        return thresholds.get(adults_children_count, thresholds[2])

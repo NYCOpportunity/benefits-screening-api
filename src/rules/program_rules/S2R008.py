@@ -29,14 +29,14 @@ class HeadStart(BaseRule):
         
         # Income thresholds by household size
         income_thresholds = {
-            1: 15060,
-            2: 20440,
-            3: 25820,
-            4: 31200,
-            5: 36580,
-            6: 41960,
-            7: 47340,
-            8: 52720
+            1: 15650,
+            2: 21500,
+            3: 26650,
+            4: 32150,
+            5: 37650,
+            6: 43150,
+            7: 48650,
+            8: 54150
         }
         
         # Check income eligibility (only if eligible child present)

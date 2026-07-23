@@ -32,14 +32,14 @@ class CommoditySupplementalFoodProgram(BaseRule):
         
         # Income thresholds by household size
         income_thresholds = {
-            1: 19578,
-            2: 26572,
-            3: 33566,
-            4: 40560,
-            5: 47554,
-            6: 54548,
-            7: 61542,
-            8: 68536
+            1: 23475,
+            2: 31725,
+            3: 39975,
+            4: 48225,
+            5: 56475,
+            6: 64725,
+            7: 72975,
+            8: 81225
         }
         
         # Check income eligibility

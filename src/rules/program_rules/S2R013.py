@@ -36,14 +36,14 @@ class Section8Housing(BaseRule):
         
         # Income thresholds by household size
         income_thresholds = {
-            1: 54350,
-            2: 62150,
-            3: 69900,
-            4: 77650,
-            5: 83850,
-            6: 90050,
-            7: 96300,
-            8: 102500
+            1: 56700,
+            2: 64800,
+            3: 72900,
+            4: 81000,
+            5: 87500,
+            6: 94000,
+            7: 100450,
+            8: 106950
         }
         
         # Check income eligibility

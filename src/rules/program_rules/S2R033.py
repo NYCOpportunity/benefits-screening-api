@@ -17,28 +17,13 @@ class CoolingAssistanceBenefit(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one person who is:
-           - Age 6 or under
-           - Age 60 or over
-           - Disabled
-           - Blind
-        3. Either:
+        Either:
            - Household receives Cash Assistance, OR
            - Single-person household receives SSI, OR
            - Household monthly income below thresholds based on household size
         """
         persons = request.person
         household_size = len(persons)
-        
-        # Check for vulnerable person
-        has_vulnerable_person = any(
-            p.age <= 6 or p.age >= 60 or p.disabled or p.blind
-            for p in persons
-        )
-        
-        if not has_vulnerable_person:
-            return False
         
         # Check Cash Assistance
         if request.income_household_has_cash_assistance:
@@ -50,14 +35,14 @@ class CoolingAssistanceBenefit(BaseRule):
         
         # Income thresholds by household size
         income_thresholds = {
-            1: 3035,
-            2: 3970,
-            3: 4904,
-            4: 5838,
-            5: 6772,
-            6: 7706,
-            7: 7881,
-            8: 8056
+            1: 3473,
+            2: 4542,
+            3: 5611,
+            4: 6680,
+            5: 7749,
+            6: 8818,
+            7: 9018,
+            8: 9218
         }
         
         # Check income eligibility

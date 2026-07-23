@@ -21,7 +21,7 @@ class CashAssistance(BaseRule):
         2. Whether any person is ≤18 or pregnant (higher thresholds)
         """
         persons = request.person
-        household_size = len(persons) + request.members_pregnant
+        household_size = len(persons)
         
         # Check if any person is ≤18 or pregnant
         has_child_or_pregnant = any(p.age <= 18 or p.pregnant for p in persons)

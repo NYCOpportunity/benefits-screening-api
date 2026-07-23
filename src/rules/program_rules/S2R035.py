@@ -29,6 +29,7 @@ class PublicHousing(BaseRule):
             HouseholdMemberType.SPOUSE,
             HouseholdMemberType.CHILD,
             HouseholdMemberType.FOSTER_CHILD,
+            HouseholdMemberType.GRANDCHILD,
             HouseholdMemberType.PARENT,
             HouseholdMemberType.GRANDPARENT,
             HouseholdMemberType.FOSTER_PARENT,
@@ -62,13 +63,13 @@ class PublicHousing(BaseRule):
             if not has_minor_spouse_partner:
                 # Family income thresholds by household size (minimum 2 for family)
                 family_income_thresholds = {
-                    2: 99550,
-                    3: 111950,
-                    4: 124400,
-                    5: 134350,
-                    6: 144300,
-                    7: 154250,
-                    8: 164200
+                    2: 103700,
+                    3: 116650,
+                    4: 129600,
+                    5: 140000,
+                    6: 150350,
+                    7: 160750,
+                    8: 171100
                 }
                 
                 if household_size in family_income_thresholds:
@@ -80,7 +81,7 @@ class PublicHousing(BaseRule):
             # Check individual income for any person
             for i, person in enumerate(persons):
                 person_yearly_income = request.income_person_yearly.get(i, 0.0)
-                if person_yearly_income <= 87100:
+                if person_yearly_income <= 90750:
                     return True
         
         return False

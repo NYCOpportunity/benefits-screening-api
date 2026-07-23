@@ -17,46 +17,37 @@ class HomeEnergyAssistanceProgram(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. At least one person who is:
-           - Age 6 or under
-           - Age 60 or over
-           - Disabled
-           - Blind
-        2. Either:
-           - Household receives Cash Assistance, OR
+        Either:
+           - Household receives Cash Assistance (any household size), OR
+           - Household receives SSI (single-member households only), OR
            - Adults' total monthly income below thresholds based on household size
         """
         persons = request.person
         household_size = len(persons)
         
-        # Check for vulnerable person
-        has_vulnerable_person = any(
-            p.age <= 6 or p.age >= 60 or p.disabled or p.blind
-            for p in persons
-        )
+        # Check SSI for single-member households
+        if household_size == 1 and request.income_household_has_ssi:
+            return True
         
-        if not has_vulnerable_person:
-            return False
-        
-        # Check Cash Assistance
+        # Check Cash Assistance (any household size)
         if request.income_household_has_cash_assistance:
             return True
         
         # Income thresholds by household size
         income_thresholds = {
-            1: 3322,
-            2: 4345,
-            3: 5367,
-            4: 6390,
-            5: 7412,
-            6: 8434,
-            7: 8626,
-            8: 8818
+            1: 3473,
+            2: 4542,
+            3: 5611,
+            4: 6680,
+            5: 7749,
+            6: 8818,
+            7: 9018,
+            8: 9218
         }
         
         # Check income eligibility
         if household_size in income_thresholds:
-            if request.income_adults_total_monthly <= income_thresholds[household_size]:
+            if request.income_household_total_monthly <= income_thresholds[household_size]:
                 return True
         
         return False

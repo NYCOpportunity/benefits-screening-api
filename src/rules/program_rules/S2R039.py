@@ -28,18 +28,18 @@ class NYCFreeTaxPrep(BaseRule):
         
         # Check single-person household
         if household_size == 1:
-            if request.income_household_total_yearly <= 59000:
+            if request.income_household_total_yearly <= 65000:
                 return True
         
         # Check multi-person household with child/stepchild as head
         if household_size > 1:
             # Find if any person is a child/stepchild relation to head of household
             has_child_relation = any(
-                p.household_member_type in [HouseholdMemberType.CHILD, HouseholdMemberType.STEP_CHILD]
+                p.household_member_type in [HouseholdMemberType.CHILD, HouseholdMemberType.STEP_CHILD, HouseholdMemberType.FOSTER_CHILD]
                 for p in persons
             )
             
-            if has_child_relation and request.income_household_total_yearly <= 85000:
+            if has_child_relation and request.income_household_total_yearly <= 93000:
                 return True
         
         return False

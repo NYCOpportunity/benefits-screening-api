@@ -59,7 +59,8 @@ class TrainEarn(BaseRule):
         for youth in eligible_youth:
             if youth.pregnant:
                 return True
-            # Check if youth is a parent (has children in household)
+            if youth.household_member_type == HouseholdMemberType.PARENT:
+                return True
             if youth.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD:
                 if any(p.household_member_type in [HouseholdMemberType.CHILD, HouseholdMemberType.STEP_CHILD] for p in persons):
                     return True
