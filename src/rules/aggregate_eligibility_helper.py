@@ -35,6 +35,14 @@ CHILD_TYPES = [
     HouseholdMemberType.STEP_CHILD,
 ]
 
+EITC_CHILD_TYPES = [
+    HouseholdMemberType.CHILD,
+    HouseholdMemberType.STEP_CHILD,
+    HouseholdMemberType.FOSTER_CHILD,
+    HouseholdMemberType.GRANDCHILD,
+    HouseholdMemberType.SISTER_BROTHER,
+]
+
 # Income type groupings for specific calculations
 ISY_EXCLUDED_INCOME_TYPES = [
     IncomeType.CHILD_SUPPORT,
@@ -52,29 +60,23 @@ EARNED_INCOME_TYPES = [
 CASH_ASSISTANCE_INCOME_TYPES = [
     IncomeType.ALIMONY,
     IncomeType.BOARDER,
-    IncomeType.CASH_ASSISTANCE,
     IncomeType.CHILD_SUPPORT,
-    IncomeType.GIFTS,
     IncomeType.INVESTMENT,
-    IncomeType.PENSION,
-    IncomeType.RENTAL,
     IncomeType.SELF_EMPLOYMENT,
     IncomeType.SS_DEPENDENT,
     IncomeType.SS_DISABILITY,
     IncomeType.SS_RETIREMENT,
     IncomeType.SS_SURVIVOR,
-    IncomeType.SSI,
     IncomeType.UNEMPLOYMENT,
     IncomeType.VETERAN,
     IncomeType.WAGES,
     IncomeType.WORKERS_COMP,
+    IncomeType.NYS_DISABILITY
 ]
 
 BENEFIT_INCOME_TYPES = [
     IncomeType.VETERAN,
     IncomeType.SSI,
-    IncomeType.SS_RETIREMENT,
-    IncomeType.SS_DISABILITY,
     IncomeType.SS_SURVIVOR,
 ]
 
@@ -136,15 +138,37 @@ def _compute_household_composition(
     result["members_plus_pregnant"] = total_members + result["members_pregnant"]
     
     # EITC eligible children
+    hoh = next((p for p in persons if p.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD), None)
+    spouse = next((p for p in persons if p.household_member_type == HouseholdMemberType.SPOUSE), None)
+    hoh_age = hoh.age if hoh else None
+    spouse_age = spouse.age if spouse else None
+
     eitc_children = 0
     for p in persons:
-        if p.household_member_type in CHILD_TYPES:
-            if p.age < 19 or (p.age < 24 and p.student) or p.blind or p.disabled:
-                eitc_children += 1
+        if p.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD:
+            continue
+        if p.household_member_type not in EITC_CHILD_TYPES:
+            continue
+
+        younger_than_parent = (
+            (hoh_age is not None and p.age < hoh_age)
+            or (spouse_age is not None and p.age < spouse_age)
+        )
+
+        age_student_condition = (
+            ((p.age < 19) or (p.student_fulltime and p.age < 24))
+            and younger_than_parent
+        )
+
+        blind_disabled_condition = p.blind or p.disabled
+
+        if age_student_condition or blind_disabled_condition:
+            eitc_children += 1
+
     result["children_student_blind_disabled_eitc"] = eitc_children
     
-    result["child_care_voucher_household_members"] = (
-        total_members - result["foster_children"]
+    result["child_care_voucher_household_members"] = sum(
+        1 for p in persons if (p.household_member_type in [HouseholdMemberType.HEAD_OF_HOUSEHOLD,  HouseholdMemberType.SPOUSE,  HouseholdMemberType.DOMESTIC_PARTNER, HouseholdMemberType.BOYFRIEND_GIRLFRIEND]) or (p.age < 18) or (p.age <= 19 and (p.blind or p.disabled))
     )
     
     result["household_all_adults"] = all(p.age >= 18 for p in persons)
@@ -346,7 +370,11 @@ def _compute_household_income(
     # Adults and children income
     adults_children_monthly = 0.0
     for i, person in enumerate(persons):
-        if person.household_member_type in NUCLEAR_FAMILY_TYPES:
+        is_hoh = person.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD
+        is_spouse = person.household_member_type == HouseholdMemberType.SPOUSE
+        is_under_18 = person.age < 18
+        
+        if is_hoh or is_spouse or is_under_18:
             adults_children_monthly += person_income["income_person_monthly"].get(
                 i, 0.0
             )
@@ -355,7 +383,7 @@ def _compute_household_income(
     # Child care voucher income
     ccv_monthly = 0.0
     for i, person in enumerate(persons):
-        if person.household_member_type != HouseholdMemberType.FOSTER_CHILD:
+        if person.household_member_type in [HouseholdMemberType.HEAD_OF_HOUSEHOLD,  HouseholdMemberType.SPOUSE,  HouseholdMemberType.DOMESTIC_PARTNER, HouseholdMemberType.BOYFRIEND_GIRLFRIEND]:
             ccv_monthly += person_income["income_person_monthly"].get(i, 0.0)
     result["income_child_care_voucher_total_monthly"] = ccv_monthly
     
