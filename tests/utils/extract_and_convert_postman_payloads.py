@@ -63,7 +63,11 @@ class PostmanPayloadConverter:
         
         if 'applicant' in old_person or 'headOfHousehold' in old_person:
             is_hoh = old_person.get('applicant') == True or old_person.get('headOfHousehold') == True
-            person['householdMemberType'] = 'HeadOfHousehold' if is_hoh else old_person["headOfHouseholdRelation"]
+            if is_hoh:
+                person['householdMemberType'] = 'HeadOfHousehold'
+            else:
+                relation = old_person.get('headOfHouseholdRelation', '')
+                person['householdMemberType'] = relation.strip() if relation and relation.strip() else 'Other'
         
         boolean_fields = [
             'student', 'pregnant', 'studentFulltime', 'blind', 'disabled',
