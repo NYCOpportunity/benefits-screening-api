@@ -13,41 +13,35 @@ class CoolingAssistanceBenefit(BaseRule):
     program = "S2R033"
     description = "Cooling Assistance Benefit (HRA) - Help with cooling costs for vulnerable households"
 
+    INCOME_THRESHOLDS = {
+        1: 3473,
+        2: 4542,
+        3: 5611,
+        4: 6680,
+        5: 7749,
+        6: 8818,
+        7: 9018,
+        8: 9218,
+    }
+
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires:
-        Either:
-           - Household receives Cash Assistance, OR
-           - Single-person household receives SSI, OR
-           - Household monthly income below thresholds based on household size
+        Eligibility requires any of:
+        1. Household receives Cash Assistance (any household size)
+        2. Household receives SSI (single-member households only)
+        3. Total monthly household income at or below size-based thresholds
         """
-        persons = request.person
-        household_size = len(persons)
-        
-        # Check Cash Assistance
+        household_size = len(request.person)
+
         if request.income_household_has_cash_assistance:
             return True
-        
-        # Check single-person household with SSI
+
         if household_size == 1 and request.income_household_has_ssi:
             return True
-        
-        # Income thresholds by household size
-        income_thresholds = {
-            1: 3473,
-            2: 4542,
-            3: 5611,
-            4: 6680,
-            5: 7749,
-            6: 8818,
-            7: 9018,
-            8: 9218
-        }
-        
-        # Check income eligibility
-        if household_size in income_thresholds:
-            if request.income_household_total_monthly <= income_thresholds[household_size]:
-                return True
-        
+
+        threshold = cls.INCOME_THRESHOLDS.get(household_size)
+        if threshold is not None:
+            return request.income_household_total_monthly <= threshold
+
         return False

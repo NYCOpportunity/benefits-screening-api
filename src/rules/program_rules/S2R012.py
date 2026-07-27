@@ -17,9 +17,8 @@ class SchoolTaxRelief(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. Household owns their home
-        3. Total yearly income of all owners <= $500,000
+        1. Household owns their home
+        2. Total yearly income of all owners <= $500,000
         """
         household = request.household[0]
         

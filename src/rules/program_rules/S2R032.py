@@ -16,9 +16,7 @@ class IDNYC(BaseRule):
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one person aged 10 or older
+        Eligibility requires at least one person aged 10 or older
         """
         persons = request.person
         

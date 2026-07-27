@@ -39,7 +39,7 @@
       ]
     },
     {
-      "age": 1,
+      "age": 6,
       "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
@@ -52,7 +52,14 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
     }
   ],
   "withholdPayload": true

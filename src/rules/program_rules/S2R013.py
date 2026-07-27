@@ -17,9 +17,8 @@ class Section8Housing(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. Head of household is 18 or older
-        3. Household income below thresholds based on household size
+        1. Head of household is 18 or older
+        2. Household income below thresholds based on household size
         """
         persons = request.person
         household_size = len(persons)
@@ -36,14 +35,14 @@ class Section8Housing(BaseRule):
         
         # Income thresholds by household size
         income_thresholds = {
-            1: 56700,
-            2: 64800,
-            3: 72900,
-            4: 81000,
-            5: 87500,
-            6: 94000,
-            7: 100450,
-            8: 106950
+            1: 59400,
+            2: 67850,
+            3: 76350,
+            4: 84800,
+            5: 91600,
+            6: 98400,
+            7: 105200,
+            8: 111950
         }
         
         # Check income eligibility

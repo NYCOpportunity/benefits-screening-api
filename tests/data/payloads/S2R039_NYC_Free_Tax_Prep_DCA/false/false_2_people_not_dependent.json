@@ -27,7 +27,7 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 65000.0,
+          "amount": 68000.0,
           "type": "Wages",
           "frequency": "Yearly"
         }

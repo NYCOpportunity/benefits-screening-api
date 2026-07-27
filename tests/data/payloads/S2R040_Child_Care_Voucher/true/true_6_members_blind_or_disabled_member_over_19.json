@@ -1,0 +1,199 @@
+{
+  "household": [
+    {
+      "livingPreferNotToSay": true,
+      "livingRenting": false,
+      "livingOwner": false,
+      "livingStayingWithFriend": false,
+      "livingHotel": false,
+      "livingShelter": false
+    }
+  ],
+  "person": [
+    {
+      "age": 40,
+      "householdMemberType": "HeadOfHousehold",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 12813.18,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
+    },
+    {
+      "age": 18,
+      "householdMemberType": "Child",
+      "student": true,
+      "pregnant": false,
+      "studentFulltime": true,
+      "blind": true,
+      "disabled": true,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
+    },
+    {
+      "age": 15,
+      "householdMemberType": "StepChild",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
+    },
+    {
+      "age": 40,
+      "householdMemberType": "Spouse",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
+    },
+    {
+      "age": 14,
+      "householdMemberType": "Other",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
+    },
+    {
+      "age": 17,
+      "householdMemberType": "Other",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
+    },
+    {
+      "age": 20,
+      "householdMemberType": "Child",
+      "student": true,
+      "pregnant": false,
+      "studentFulltime": true,
+      "blind": true,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1000000.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
+    },
+    {
+      "age": 18,
+      "householdMemberType": "SisterBrother",
+      "student": false,
+      "pregnant": false,
+      "studentFulltime": false,
+      "blind": false,
+      "disabled": false,
+      "veteran": false,
+      "unemployed": false,
+      "unemployedWorkedLast18Months": false,
+      "benefitsMedicaid": false,
+      "benefitsMedicaidDisability": false,
+      "livingOwnerOnDeed": false,
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1000000.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
+    }
+  ],
+  "withholdPayload": true
+}

@@ -27,7 +27,7 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 6948.0,
+          "amount": 7604.0,
           "type": "Wages",
           "frequency": "Monthly"
         }
@@ -35,7 +35,7 @@
     },
     {
       "age": 2,
-      "householdMemberType": "StepChild",
+      "householdMemberType": "Other",
       "student": false,
       "pregnant": false,
       "studentFulltime": false,

@@ -17,7 +17,7 @@ class LearnEarn(BaseRule):
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires NYC residence and at least one youth aged 14-21 who meets ANY of:
+        Eligibility requires at least one youth aged 14-21 who meets ANY of:
         1. Lives in a shelter
         2. Is in foster care
         3. Is disabled or blind

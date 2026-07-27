@@ -17,9 +17,8 @@ class FairFares(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one person aged 18-64
-        3. Household yearly income below thresholds based on household size
+        1. At least one person aged 18-64
+        2. Household yearly income below thresholds based on household size
         """
         persons = request.person
         household_size = len(persons)

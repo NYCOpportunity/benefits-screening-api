@@ -27,7 +27,7 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 11412.0,
+          "amount": 12490.0,
           "type": "Wages",
           "frequency": "Monthly"
         }
@@ -47,7 +47,14 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
     },
     {
       "age": 3,
@@ -63,7 +70,14 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
     },
     {
       "age": 10,
@@ -79,7 +93,14 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false
+      "livingRentalOnLease": false,
+      "incomes": [
+        {
+          "amount": 1.0,
+          "type": "Wages",
+          "frequency": "Monthly"
+        }
+      ]
     },
     {
       "age": 10,
@@ -134,14 +155,7 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
+      "livingRentalOnLease": false
     },
     {
       "age": 0,
@@ -157,14 +171,7 @@
       "benefitsMedicaid": false,
       "benefitsMedicaidDisability": false,
       "livingOwnerOnDeed": false,
-      "livingRentalOnLease": false,
-      "incomes": [
-        {
-          "amount": 1.0,
-          "type": "Wages",
-          "frequency": "Monthly"
-        }
-      ]
+      "livingRentalOnLease": false
     }
   ],
   "withholdPayload": true

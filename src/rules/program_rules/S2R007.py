@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from src.rules.base_rule import BaseRule
 from src.rules.registry import register_rule
-from src.models.enums import IncomeType, HouseholdMemberType
+from src.models.enums import IncomeType
 
 
 @register_rule

@@ -18,9 +18,8 @@ class NYCHAResidentEconomicEmpowermentSustainability(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. Household is renting from NYCHA
-        3. At least one person aged 18 or older
+        1. Household is renting from NYCHA
+        2. At least one person aged 18 or older
         """
         household = request.household[0]
         persons = request.person

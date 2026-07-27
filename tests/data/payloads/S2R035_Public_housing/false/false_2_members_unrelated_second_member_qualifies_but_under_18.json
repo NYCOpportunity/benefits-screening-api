@@ -11,7 +11,7 @@
   ],
   "person": [
     {
-      "age": 30,
+      "age": 17,
       "householdMemberType": "HeadOfHousehold",
       "student": false,
       "pregnant": false,
@@ -27,7 +27,7 @@
       "livingRentalOnLease": false,
       "incomes": [
         {
-          "amount": 90751.0,
+          "amount": 95001.0,
           "type": "Wages",
           "frequency": "Yearly"
         }

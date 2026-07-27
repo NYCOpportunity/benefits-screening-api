@@ -17,7 +17,7 @@ class TrainEarn(BaseRule):
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires NYC residence and unemployed youth aged 16-24 not in school who meet ANY of:
+        Eligibility requires unemployed youth aged 16-24 not in school who meet ANY of:
         1. Lives in a shelter
         2. Is in foster care
         3. Is disabled or blind

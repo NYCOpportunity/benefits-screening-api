@@ -17,9 +17,7 @@ class NYCNYConnects(BaseRule):
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one person who is:
+        Eligibility requires at least one person who is:
            - Blind, OR
            - Disabled, OR
            - Has Medicaid disability benefits, OR

@@ -17,8 +17,7 @@ class PreKForAll(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one child aged 3 or 4
+        1. At least one child aged 3 or 4
         """
         persons = request.person
         
