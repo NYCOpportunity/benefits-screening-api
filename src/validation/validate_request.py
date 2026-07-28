@@ -27,15 +27,3 @@ def validate_request(request: Dict) -> Tuple[bool, EligibilityRequest, Union[str
         return False, None, error_messages
     except Exception as e:
         return False, None, [f"Unexpected validation error: {str(e)}"]
-
-
-
-# if __name__ == "__main__":
-
-#     # note: jsonFile will come from the AWS gateway as a JSONn
-#     jsonFile = 'tests/data/eligibility-program-test-payload.json'
-#     with open(jsonFile, 'r') as f:
-#         data = json.load(f)
-#     is_valid, result = validate_request(data)
-#     print(is_valid)
-#     print(result)

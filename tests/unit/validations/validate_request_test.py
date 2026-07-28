@@ -3,8 +3,8 @@ from pathlib import Path
 
 from src.validation.validate_request import validate_request
 
-current_dir = current_dir = Path(__file__).parent
-data_payloads_dir = file_path = current_dir.parent.parent / "data" / "payloads"
+current_dir = Path(__file__).parent
+data_payloads_dir = current_dir.parent.parent / "data" / "payloads"
 
 def test_valid_payload():
     file_path = data_payloads_dir / "eligibility-program-test-payload.json"
