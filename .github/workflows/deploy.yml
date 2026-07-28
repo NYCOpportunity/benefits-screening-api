@@ -3,6 +3,20 @@ name: Deploy Lambda Function
 on:
   push:
     branches: [ prod, stg ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        required: true
+        type: choice
+        options:
+          - stg
+          - prod
+      dry_run:
+        description: Build package only (skip AWS deploy)
+        required: false
+        type: boolean
+        default: true
 
 env:
   AWS_REGION: us-east-1
@@ -16,8 +30,10 @@ permissions:
 jobs:
   deploy-production:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/prod' && github.event_name == 'push'
-    
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/prod') ||
+      (github.event_name == 'workflow_dispatch' && inputs.environment == 'prod')
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -36,6 +52,7 @@ jobs:
       run: uv sync --no-dev
 
     - name: Configure AWS credentials
+      if: github.event_name == 'push' || inputs.dry_run == false
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -44,31 +61,26 @@ jobs:
 
     - name: Create deployment package
       run: |
-        # Create a clean directory for the package
         mkdir -p package
-        
-        # Export dependencies to package directory
         uv export --no-dev --format requirements-txt > requirements.txt
         pip install -r requirements.txt -t package/
-        
-        # Copy your source code WITH folder structure preserved
         cp -r src package/
-        
-        # Create zip file
         cd package
         zip -r ../lambda-deployment.zip . -x "*.pyc" "*__pycache__*" "*.git*" "*.github*" "tests/*" "test_*"
         cd ..
 
     - name: Deploy to Production Lambda
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda update-function-code \
-          --function-name benefits-screening-api-prod \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }} \
           --zip-file fileb://lambda-deployment.zip
 
     - name: Update Production Lambda configuration
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda update-function-configuration \
-          --function-name benefits-screening-api-prod \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }} \
           --handler src.main.main \
           --environment Variables="{
             ENVIRONMENT=production,
@@ -79,14 +91,17 @@ jobs:
           --runtime python3.13
 
     - name: Wait for function update
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda wait function-updated \
-          --function-name benefits-screening-api-prod
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }}
 
   deploy-staging:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/stg' && github.event_name == 'push'
-    
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/stg') ||
+      (github.event_name == 'workflow_dispatch' && inputs.environment == 'stg')
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -105,6 +120,7 @@ jobs:
       run: uv sync --no-dev
 
     - name: Configure AWS credentials
+      if: github.event_name == 'push' || inputs.dry_run == false
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -116,24 +132,23 @@ jobs:
         mkdir -p package
         uv export --no-dev --format requirements-txt > requirements.txt
         pip install -r requirements.txt -t package/
-        
-        # Copy your source code WITH folder structure preserved
         cp -r src package/
-        
         cd package
         zip -r ../lambda-deployment.zip . -x "*.pyc" "*__pycache__*" "*.git*" "*.github*" "tests/*" "test_*"
         cd ..
 
     - name: Deploy to Staging Lambda
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda update-function-code \
-          --function-name Benefits-Screening-API-stg \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }} \
           --zip-file fileb://lambda-deployment.zip
 
     - name: Update Staging Lambda configuration
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda update-function-configuration \
-          --function-name Benefits-Screening-API-stg \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }} \
           --handler src.main.main \
           --environment Variables="{
             ENVIRONMENT=staging,
@@ -144,6 +159,7 @@ jobs:
           --runtime python3.13
 
     - name: Wait for function update
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda wait function-updated \
-          --function-name Benefits-Screening-API-stg
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }}
