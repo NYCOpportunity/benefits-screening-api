@@ -28,11 +28,11 @@ class HeadStart(BaseRule):
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility follows the Head Start policy decision tree:
-        1. Household member must be age 5 or younger
-        2. Cash Assistance or SSI
-        3. Gross yearly income within household-size limits
-        4. Foster child of Head of Household (when income exceeds limits)
+        Eligibility follows:
+        1. Child age 5 or younger and one of the following:
+            a. Household has Cash Assistance or SSI household income OR
+            b. Household's yearly income is within household-size limits OR
+            c. Foster child of Head of Household (when income exceeds limits)
         """
         persons = request.person
         household_size = len(persons)
@@ -48,13 +48,9 @@ class HeadStart(BaseRule):
 
         return cls._has_foster_child_of_head(persons, request)
 
-    # --- Step 1 ---
-
     @classmethod
     def _has_child_age_five_or_younger(cls, persons) -> bool:
         return any(person.age <= 5 for person in persons)
-
-    # --- Step 2 ---
 
     @classmethod
     def _has_cash_assistance_or_ssi(cls, request) -> bool:
@@ -63,16 +59,12 @@ class HeadStart(BaseRule):
             or request.income_household_has_ssi
         )
 
-    # --- Step 3 ---
-
     @classmethod
     def _income_within_limits(cls, request, household_size: int) -> bool:
         threshold = cls.INCOME_THRESHOLDS.get(household_size)
         if threshold is None:
             return False
         return request.income_household_total_yearly <= threshold
-
-    # --- Step 4 ---
 
     @classmethod
     def _has_foster_child_of_head(cls, persons, request) -> bool:
