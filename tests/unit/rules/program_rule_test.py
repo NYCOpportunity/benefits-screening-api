@@ -1,3 +1,11 @@
+"""
+To run all program rule tests:
+uv run pytest tests/unit/rules/program_rule_test.py
+
+To run tests for a single program, e.g. S2R062 (filter by program code directory):
+uv run pytest tests/unit/rules/program_rule_test.py -k S2R062
+"""
+
 import json
 import pathlib
 import pytest
