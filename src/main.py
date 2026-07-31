@@ -13,12 +13,7 @@ def main(event, context):
         else:
             request_data = event.get('body', {})
         
-        '''
-        implementation note: this is a quick fix so that no frontend changes are needed. 
-
-        #ensures backwards compatability between the legacy Drools format and the new API format. 
-        '''
-
+        # Ensures backwards compatability between the legacy Drools format and the new API format. 
         if 'commands' in request_data:
             converted_data = convert_drools_to_api_format(request_data)
             if converted_data:

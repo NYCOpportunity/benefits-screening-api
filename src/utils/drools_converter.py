@@ -81,7 +81,7 @@ def _convert_household(old_household: Dict) -> Dict:
         if cash is not None:
             household['cashOnHand'] = cash
     
-    if 'livingRentalType' in old_household:
+    if old_household.get('livingRentalType'):
         household['livingRentalType'] = old_household['livingRentalType']
     
     boolean_fields = [
@@ -107,8 +107,17 @@ def _convert_person(old_person: Dict) -> Dict:
     
     # Determine household member type
     if 'applicant' in old_person or 'headOfHousehold' in old_person:
-        is_hoh = old_person.get('applicant') == 'true' or old_person.get('headOfHousehold') == 'true'
-        person['householdMemberType'] = 'HeadOfHousehold' if is_hoh else 'HouseholdMember'
+        
+        is_hoh = (
+            _convert_boolean_string(old_person.get('applicant'))
+            or _convert_boolean_string(old_person.get('headOfHousehold'))
+        )
+        if is_hoh:
+            person['householdMemberType'] = 'HeadOfHousehold'
+        else:
+            relation = old_person.get('headOfHouseholdRelation', '')
+            person['householdMemberType'] = relation.strip() if relation and relation.strip() else 'Other'
+        
     
     boolean_fields = [
         'student', 'pregnant', 'studentFulltime', 'blind', 'disabled',
