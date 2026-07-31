@@ -4,7 +4,7 @@ from src.rules.calculate_eligibility import calculate_eligibility
 from src.models.schemas import AggregateEligibilityRequest
 from src.utils.drools_converter import convert_drools_to_api_format
 
-# aws gateway handler
+
 def main(event, context):
     try:
         # Parse request body
