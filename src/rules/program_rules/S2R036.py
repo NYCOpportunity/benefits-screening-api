@@ -62,7 +62,10 @@ class TrainEarn(BaseRule):
             if youth.household_member_type == HouseholdMemberType.PARENT:
                 return True
             if youth.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD:
-                if any(p.household_member_type in [HouseholdMemberType.CHILD, HouseholdMemberType.STEP_CHILD] for p in persons):
+                if any(
+                    p.household_member_type == HouseholdMemberType.CHILD
+                    for p in persons
+                ):
                     return True
         
         # Check condition 5: Cash Assistance or SSI
