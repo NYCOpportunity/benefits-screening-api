@@ -76,6 +76,12 @@ jobs:
           --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }} \
           --zip-file fileb://lambda-deployment.zip
 
+    - name: Wait for code update
+      if: github.event_name == 'push' || inputs.dry_run == false
+      run: |
+        aws lambda wait function-updated \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }}
+
     - name: Update Production Lambda configuration
       if: github.event_name == 'push' || inputs.dry_run == false
       run: |
@@ -90,7 +96,7 @@ jobs:
           --memory-size 512 \
           --runtime python3.13
 
-    - name: Wait for function update
+    - name: Wait for configuration update
       if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda wait function-updated \
@@ -144,6 +150,12 @@ jobs:
           --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }} \
           --zip-file fileb://lambda-deployment.zip
 
+    - name: Wait for code update
+      if: github.event_name == 'push' || inputs.dry_run == false
+      run: |
+        aws lambda wait function-updated \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }}
+
     - name: Update Staging Lambda configuration
       if: github.event_name == 'push' || inputs.dry_run == false
       run: |
@@ -158,7 +170,7 @@ jobs:
           --memory-size 256 \
           --runtime python3.13
 
-    - name: Wait for function update
+    - name: Wait for configuration update
       if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda wait function-updated \
