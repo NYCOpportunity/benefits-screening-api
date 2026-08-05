@@ -17,7 +17,7 @@ class TrainEarn(BaseRule):
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires NYC residence and unemployed youth aged 16-24 not in school who meet ANY of:
+        Eligibility requires unemployed youth aged 16-24 not in school who meet ANY of:
         1. Lives in a shelter
         2. Is in foster care
         3. Is disabled or blind
@@ -59,9 +59,13 @@ class TrainEarn(BaseRule):
         for youth in eligible_youth:
             if youth.pregnant:
                 return True
-            # Check if youth is a parent (has children in household)
+            if youth.household_member_type == HouseholdMemberType.PARENT:
+                return True
             if youth.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD:
-                if any(p.household_member_type in [HouseholdMemberType.CHILD, HouseholdMemberType.STEP_CHILD] for p in persons):
+                if any(
+                    p.household_member_type == HouseholdMemberType.CHILD
+                    for p in persons
+                ):
                     return True
         
         # Check condition 5: Cash Assistance or SSI

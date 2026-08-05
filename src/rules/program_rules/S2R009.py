@@ -17,8 +17,7 @@ class ComprehensiveAfterSchoolSystem(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one person aged 5-21 who is a student
+        1. At least one person aged 5-21 who is a student
         """
         persons = request.person
         

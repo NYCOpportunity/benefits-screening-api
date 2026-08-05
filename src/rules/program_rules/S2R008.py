@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from src.rules.base_rule import BaseRule
 from src.rules.registry import register_rule
+from src.models.enums import HouseholdMemberType
 
 
 @register_rule
@@ -13,43 +14,62 @@ class HeadStart(BaseRule):
     program = "S2R008"
     description = "Head Start (DOE) - Free early childhood education for children aged 3-4"
 
+    INCOME_THRESHOLDS = {
+        1: 15960,
+        2: 21640,
+        3: 27320,
+        4: 33000,
+        5: 38680,
+        6: 44360,
+        7: 50040,
+        8: 55720,
+    }
+
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires NYC residence and any of:
-        1. Child aged 3-4 with household income below thresholds based on household size
-        2. Household receives Cash Assistance or SSI
-        3. Household has foster children
+        Eligibility follows:
+        1. Child age 5 or younger and one of the following:
+            a. Household has Cash Assistance or SSI household income OR
+            b. Household's yearly income is within household-size limits OR
+            c. Foster child of Head of Household (when income exceeds limits)
         """
         persons = request.person
         household_size = len(persons)
-        
-        # Check for child aged 3-4
-        has_eligible_child = any(2 < p.age < 5 for p in persons)
-        
-        # Income thresholds by household size
-        income_thresholds = {
-            1: 15060,
-            2: 20440,
-            3: 25820,
-            4: 31200,
-            5: 36580,
-            6: 41960,
-            7: 47340,
-            8: 52720
-        }
-        
-        # Check income eligibility (only if eligible child present)
-        if has_eligible_child and household_size in income_thresholds:
-            if request.income_household_total_yearly <= income_thresholds[household_size]:
-                return True
-        
-        # Check Cash Assistance or SSI
-        if request.income_household_has_cash_assistance or request.income_household_has_ssi:
+
+        if not cls._has_child_age_five_or_younger(persons):
+            return False
+
+        if cls._has_cash_assistance_or_ssi(request):
             return True
-        
-        # Check foster children
-        if request.foster_children > 0:
+
+        if cls._income_within_limits(request, household_size):
             return True
-        
-        return False
+
+        return cls._has_foster_child_of_head(persons, request)
+
+    @classmethod
+    def _has_child_age_five_or_younger(cls, persons) -> bool:
+        return any(person.age <= 5 for person in persons)
+
+    @classmethod
+    def _has_cash_assistance_or_ssi(cls, request) -> bool:
+        return (
+            request.income_household_has_cash_assistance
+            or request.income_household_has_ssi
+        )
+
+    @classmethod
+    def _income_within_limits(cls, request, household_size: int) -> bool:
+        threshold = cls.INCOME_THRESHOLDS.get(household_size)
+        if threshold is None:
+            return False
+        return request.income_household_total_yearly <= threshold
+
+    @classmethod
+    def _has_foster_child_of_head(cls, persons, request) -> bool:
+        has_head_of_household = any(
+            person.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD
+            for person in persons
+        )
+        return has_head_of_household and request.foster_children > 0

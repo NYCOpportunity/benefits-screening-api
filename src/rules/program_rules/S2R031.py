@@ -17,9 +17,8 @@ class NYCCare(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one person without Medicaid benefits
-        3. Household monthly income below thresholds based on household size
+        1. At least one person without Medicaid benefits
+        2. Household monthly income below thresholds based on household size
         """
         persons = request.person
         household_size = len(persons)
@@ -35,14 +34,14 @@ class NYCCare(BaseRule):
         
         # Income thresholds by household size
         income_thresholds = {
-            1: 2799,
-            2: 3799,
-            3: 4799,
-            4: 5598,
-            5: 6798,
-            6: 7798,
-            7: 8798,
-            8: 9798
+            1: 2909,
+            2: 3931,
+            3: 4953,
+            4: 5975,
+            5: 6997,
+            6: 8019,
+            7: 9041,
+            8: 10063
         }
         
         # Check income eligibility

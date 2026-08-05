@@ -14,73 +14,123 @@ class PublicHousing(BaseRule):
     program = "S2R035"
     description = "Public Housing (NYCHA) - Affordable housing for low and moderate income residents"
 
+    FAMILY_RELATIONS = {
+        HouseholdMemberType.SPOUSE,
+        HouseholdMemberType.CHILD,
+        HouseholdMemberType.FOSTER_CHILD,
+        HouseholdMemberType.PARENT,
+        HouseholdMemberType.GRANDPARENT,
+        HouseholdMemberType.GRANDCHILD,
+        HouseholdMemberType.FOSTER_PARENT,
+        HouseholdMemberType.SISTER_BROTHER,
+        HouseholdMemberType.DOMESTIC_PARTNER,
+        HouseholdMemberType.STEP_CHILD,
+        HouseholdMemberType.STEP_PARENT,
+        HouseholdMemberType.STEP_SISTER_STEP_BROTHER,
+    }
+
+    UNRELATED_TO_HEAD_OF_HOUSEHOLD = {
+        HouseholdMemberType.UNRELATED,
+        HouseholdMemberType.OTHER,
+        HouseholdMemberType.BOYFRIEND_GIRLFRIEND,
+    }
+
+    HOUSEHOLD_INCOME_THRESHOLDS = {
+        1: 95000,
+        2: 108600,
+        3: 122150,
+        4: 135700,
+        5: 146600,
+        6: 157450,
+        7: 168300,
+        8: 179150,
+    }
+
     @classmethod
     def evaluate(cls, request) -> bool:
-        """
-        Eligibility requires NYC residence and either:
-        1. Family household (2+ people with specific relationships) with income below thresholds
-        2. Individual or unrelated adults with individual income below $87,100
-        """
         persons = request.person
         household_size = len(persons)
-        
-        # Define family relationship types
-        family_relations = [
-            HouseholdMemberType.SPOUSE,
-            HouseholdMemberType.CHILD,
-            HouseholdMemberType.FOSTER_CHILD,
-            HouseholdMemberType.PARENT,
-            HouseholdMemberType.GRANDPARENT,
-            HouseholdMemberType.FOSTER_PARENT,
-            HouseholdMemberType.SISTER_BROTHER,
-            HouseholdMemberType.DOMESTIC_PARTNER,
-            HouseholdMemberType.STEP_CHILD,
-            HouseholdMemberType.STEP_PARENT,
-            HouseholdMemberType.STEP_SISTER_STEP_BROTHER
-        ]
-        
-        # Check if household has family relationships
-        has_family_relations = any(
-            p.household_member_type in family_relations
-            for p in persons
+
+        head_of_household = cls._get_head_of_household(persons)
+
+        # Step 1: Head of household must be 18 or older.
+        if not head_of_household or head_of_household.age < 18:
+            return False
+
+        # Step 2: Spouse or domestic partner must be 18 or older, if present.
+        if cls._has_minor_spouse_or_partner(persons):
+            return False
+
+        # Step 3: Households larger than 1 use family relationships to choose a path.
+        if household_size > 1:
+            if cls._has_family_relationship(persons):
+                # Step 4: Household gross annual income by household size.
+                return cls._meets_household_income_threshold(
+                    request.income_household_total_yearly, household_size
+                )
+
+            # Step 5: Two or more unrelated adults check income individually.
+            return cls._meets_individual_unrelated_adult_income(request, persons)
+
+        # Single-person households use the household income threshold for size 1.
+        return cls._meets_household_income_threshold(
+            request.income_household_total_yearly, household_size
         )
-        
-        # Find head of household
-        head_of_household = next(
-            (p for p in persons if p.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD),
-            None
+
+    @classmethod
+    def _get_head_of_household(cls, persons):
+        return next(
+            (
+                person
+                for person in persons
+                if person.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD
+            ),
+            None,
         )
-        
-        # Check eligibility for family households
-        if has_family_relations and head_of_household and head_of_household.age >= 18:
-            # Check no minor spouses/partners
-            has_minor_spouse_partner = any(
-                p.age < 18 and p.household_member_type in [HouseholdMemberType.SPOUSE, HouseholdMemberType.DOMESTIC_PARTNER]
-                for p in persons
-            )
-            
-            if not has_minor_spouse_partner:
-                # Family income thresholds by household size (minimum 2 for family)
-                family_income_thresholds = {
-                    2: 99550,
-                    3: 111950,
-                    4: 124400,
-                    5: 134350,
-                    6: 144300,
-                    7: 154250,
-                    8: 164200
-                }
-                
-                if household_size in family_income_thresholds:
-                    if request.income_household_total_yearly <= family_income_thresholds[household_size]:
-                        return True
-        
-        # Check eligibility for individual/unrelated adults
-        if request.household_all_adults and not has_family_relations:
-            # Check individual income for any person
-            for i, person in enumerate(persons):
-                person_yearly_income = request.income_person_yearly.get(i, 0.0)
-                if person_yearly_income <= 87100:
-                    return True
-        
+
+    @classmethod
+    def _has_minor_spouse_or_partner(cls, persons) -> bool:
+        return any(
+            person.age < 18
+            and person.household_member_type
+            in {HouseholdMemberType.SPOUSE, HouseholdMemberType.DOMESTIC_PARTNER}
+            for person in persons
+        )
+
+    @classmethod
+    def _has_family_relationship(cls, persons) -> bool:
+        return any(
+            person.household_member_type in cls.FAMILY_RELATIONS for person in persons
+        )
+
+    @classmethod
+    def _meets_household_income_threshold(
+        cls, household_yearly_income: float, household_size: int
+    ) -> bool:
+        threshold = cls.HOUSEHOLD_INCOME_THRESHOLDS.get(household_size)
+        if threshold is None:
+            return False
+        return household_yearly_income <= threshold
+
+    @classmethod
+    def _meets_individual_unrelated_adult_income(cls, request, persons) -> bool:
+        adult_count = sum(1 for person in persons if person.age >= 18)
+        if adult_count < 2:
+            return False
+
+        for person in persons:
+            if person.household_member_type == HouseholdMemberType.HEAD_OF_HOUSEHOLD:
+                continue
+            if person.household_member_type not in cls.UNRELATED_TO_HEAD_OF_HOUSEHOLD:
+                return False
+
+        for index, person in enumerate(persons):
+            if person.age < 18:
+                continue
+            if (
+                request.income_person_yearly.get(index, 0.0)
+                <= cls.HOUSEHOLD_INCOME_THRESHOLDS.get(1)
+            ):
+                return True
+
         return False

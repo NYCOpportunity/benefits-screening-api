@@ -16,9 +16,7 @@ class SummerYouthEmploymentProgram(BaseRule):
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one person aged 14-24
+        Eligibility requires at least one person aged 14-24
         """
         persons = request.person
         

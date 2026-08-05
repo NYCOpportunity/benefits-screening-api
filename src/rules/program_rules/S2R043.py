@@ -45,14 +45,14 @@ class Lifeline(BaseRule):
         
         # Check condition 4: Income thresholds
         income_thresholds = {
-            1: 20331,
-            2: 27594,
-            3: 34857,
-            4: 42120,
-            5: 49383,
-            6: 56646,
-            7: 63909,
-            8: 71172
+            1: 21128,
+            2: 28553,
+            3: 35978,
+            4: 43403,
+            5: 50828,
+            6: 58253,
+            7: 65678,
+            8: 73103
         }
         
         if household_size in income_thresholds:

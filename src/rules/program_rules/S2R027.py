@@ -17,9 +17,8 @@ class CommoditySupplementalFoodProgram(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one person aged 60 or older
-        3. Household income below thresholds based on household size
+        1. At least one person aged 60 or older
+        2. Household income below thresholds based on household size
         """
         persons = request.person
         household_size = len(persons)
@@ -32,14 +31,14 @@ class CommoditySupplementalFoodProgram(BaseRule):
         
         # Income thresholds by household size
         income_thresholds = {
-            1: 19578,
-            2: 26572,
-            3: 33566,
-            4: 40560,
-            5: 47554,
-            6: 54548,
-            7: 61542,
-            8: 68536
+            1: 23940,
+            2: 32460,
+            3: 40980,
+            4: 49500,
+            5: 58020,
+            6: 66540,
+            7: 75060,
+            8: 83580,
         }
         
         # Check income eligibility

@@ -17,10 +17,9 @@ class SeniorCitizenHomeownersExemption(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. Household owns their home
-        3. Total yearly income of all owners <= $58,399
-        4. At least one owner is 65 or older
+        1. Household owns their home
+        2. Total yearly income of all owners <= $58,399
+        3. At least one owner is 65 or older
         """
         household = request.household[0]
         persons = request.person

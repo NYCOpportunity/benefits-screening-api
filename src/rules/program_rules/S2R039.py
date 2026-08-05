@@ -14,32 +14,37 @@ class NYCFreeTaxPrep(BaseRule):
     program = "S2R039"
     description = "NYC Free Tax Prep (DCA) - Free tax preparation services for low-income households"
 
+    DEPENDENT_CHILD_TYPES = {
+        HouseholdMemberType.CHILD,
+        HouseholdMemberType.STEP_CHILD,
+        HouseholdMemberType.FOSTER_CHILD,
+    }
+
+    GENERAL_INCOME_LIMIT = 68000
+    HOUSEHOLD_WITH_DEPENDENT_INCOME_LIMIT = 97000
+
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. Either:
-           - Single-person household with income <= $59,000, OR
-           - Multi-person household where a child/stepchild is head of household with income <= $85,000
+        Eligibility requires either:
+        1. Household yearly income at or below $68,000, or
+        2. Multi-person household with a child, stepchild, or foster child
+           and household yearly income at or below $97,000
         """
+        yearly_income = request.income_household_total_yearly
+
+        if yearly_income <= cls.GENERAL_INCOME_LIMIT:
+            return True
+
         persons = request.person
-        household_size = len(persons)
-        
-        # Check single-person household
-        if household_size == 1:
-            if request.income_household_total_yearly <= 59000:
-                return True
-        
-        # Check multi-person household with child/stepchild as head
-        if household_size > 1:
-            # Find if any person is a child/stepchild relation to head of household
-            has_child_relation = any(
-                p.household_member_type in [HouseholdMemberType.CHILD, HouseholdMemberType.STEP_CHILD]
-                for p in persons
-            )
-            
-            if has_child_relation and request.income_household_total_yearly <= 85000:
-                return True
-        
+        if len(persons) > 1 and cls._has_dependent_child(persons):
+            return yearly_income <= cls.HOUSEHOLD_WITH_DEPENDENT_INCOME_LIMIT
+
         return False
+
+    @classmethod
+    def _has_dependent_child(cls, persons) -> bool:
+        return any(
+            person.household_member_type in cls.DEPENDENT_CHILD_TYPES
+            for person in persons
+        )

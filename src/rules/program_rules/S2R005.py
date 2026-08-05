@@ -20,7 +20,7 @@ class DisabilityRentIncreaseExemption(BaseRule):
         Eligibility requires:
         1. Household is renting specific types (Rent Controlled, HDFC, Mitchell Lama, Section 213)
         2. Head of household is 18+ and on the lease
-        3. Head of household has qualifying income types
+        3. Head of household has SSI, SSDisability, Veteran, or DisabilityMedicaid income
         4. Total yearly household income ≤ $50,000
         """
         household = request.household[0]
@@ -54,7 +54,7 @@ class DisabilityRentIncreaseExemption(BaseRule):
         if head_of_household.age < 18 or not head_of_household.living_rental_on_lease:
             return False
         
-        # Check if head has qualifying income types
+        # Check if head has qualifying income types (IncomeHeadHasS2R005Income in Drools)
         if not cls._head_has_qualifying_income(head_of_household):
             return False
         
@@ -66,29 +66,15 @@ class DisabilityRentIncreaseExemption(BaseRule):
     
     @classmethod
     def _head_has_qualifying_income(cls, head_of_household) -> bool:
-        """Check if head of household has S2R005 qualifying income types"""
-        # Based on Drools rules, qualifying income types include:
-        # wages, self-employment, pension, SS benefits, unemployment, workers comp, etc.
-        # Excludes: cash assistance, SSI
-        
+        """Match IncomeHeadHasS2R005Income in IncomeAggregates.drl."""
         qualifying_income_types = [
-            IncomeType.WAGES,
-            IncomeType.SELF_EMPLOYMENT,
-            IncomeType.PENSION,
-            IncomeType.SS_RETIREMENT,
+            IncomeType.SSI,
             IncomeType.SS_DISABILITY,
-            IncomeType.SS_SURVIVOR,
-            IncomeType.UNEMPLOYMENT,
-            IncomeType.WORKERS_COMP,
             IncomeType.VETERAN,
-            IncomeType.RENTAL,
-            IncomeType.INVESTMENT,
-            IncomeType.ALIMONY,
-            IncomeType.CHILD_SUPPORT,
+            IncomeType.DISABILITY_MEDICAID,
         ]
-        
-        for income in head_of_household.incomes:
-            if income.type in qualifying_income_types:
-                return True
-        
-        return False
+
+        return any(
+            income.type in qualifying_income_types
+            for income in head_of_household.incomes
+        )

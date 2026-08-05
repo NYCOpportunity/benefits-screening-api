@@ -54,9 +54,8 @@ class SeniorCitizenRentIncreaseExemption(BaseRule):
         # Check if head of household is 62+ and on lease
         if head_of_household.age < 62 or not head_of_household.living_rental_on_lease:
             return False
-        
-        # Check income threshold
-        if request.income_household_total_yearly - request.income_household_total_monthly_less_gifts * 12 > 50000:
+
+        if request.income_household_total_monthly_less_gifts * 12 > 50000:
             return False
         
         return True

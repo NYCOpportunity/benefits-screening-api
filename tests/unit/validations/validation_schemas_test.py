@@ -10,7 +10,7 @@ This test suite validates:
 All string fields automatically strip whitespace due to str_strip_whitespace=True.
 """
 import json
-
+from pathlib import Path
 
 from src.models.schemas import EligibilityRequest, Income
 from src.models.enums import IncomeType, Frequency
@@ -20,7 +20,9 @@ from pydantic import ValidationError
 
 def test_valid_payload():
     """Test that a valid payload passes validation."""
-    with open('tests/data/eligibility-program-test-payload.json') as f:
+    current_dir = Path(__file__).parent
+    file_path = current_dir.parent.parent / "data" / "payloads" / "eligibility-program-test-payload.json"
+    with open(file_path) as f:
         data = json.load(f)
     
     # Should not raise an exception

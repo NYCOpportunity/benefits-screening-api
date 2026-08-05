@@ -16,36 +16,39 @@ class NurseFamilyPartnership(BaseRule):
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one pregnant person
-        3. Household monthly income below thresholds based on household size + pregnant members
+        Eligibility requires at least one pregnant person and either:
+        1. That pregnant person receives Medicaid or disability-related Medicaid, or
+        2. Household yearly income at or below thresholds based on members plus pregnant
         """
         persons = request.person
-        
-        # Check for pregnant person
+
+        for person in persons:
+            if person.pregnant and (
+                person.benefits_medicaid or person.benefits_medicaid_disability
+            ):
+                return True
+
         has_pregnant = any(p.pregnant for p in persons)
-        
         if not has_pregnant:
             return False
-        
-        # Use the pre-computed members_plus_pregnant aggregate
+
         members_plus_pregnant = request.members_plus_pregnant
-        
-        # Income thresholds by household size including pregnant members
         income_thresholds = {
-            2: 2960,
-            3: 3733,
-            4: 4606,
-            5: 5280,
-            6: 6053,
-            7: 6826,
-            8: 7599
+            1: 34900,
+            2: 47165,
+            3: 59430,
+            4: 71695,
+            5: 83960,
+            6: 96225,
+            7: 108490,
+            8: 120755,
+            9: 133020,
         }
-        
-        # Check income eligibility
+
         if members_plus_pregnant in income_thresholds:
-            if request.income_household_total_monthly <= income_thresholds[members_plus_pregnant]:
-                return True
-        
+            return (
+                request.income_household_total_yearly
+                <= income_thresholds[members_plus_pregnant]
+            )
+
         return False

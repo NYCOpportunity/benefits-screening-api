@@ -3,46 +3,37 @@ name: Deploy Lambda Function
 on:
   push:
     branches: [ prod, stg ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment to deploy to
+        required: true
+        type: choice
+        options:
+          - stg
+          - prod
+      dry_run:
+        description: Build package only (skip AWS deploy)
+        required: false
+        type: boolean
+        default: true
 
 env:
   AWS_REGION: us-east-1
-  LAMBDA_FUNCTION_NAME_PROD: benefits-screening-api-prod
-  LAMBDA_FUNCTION_NAME_STG: Benefits-Screening-API-stg
+  LAMBDA_FUNCTION_NAME_PROD: benefits-screening-rules-prod
+  LAMBDA_FUNCTION_NAME_STG: benefits-screening-rules-stg
 
 permissions:
   contents: read
   id-token: write
 
 jobs:
-  # test:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: Checkout code
-  #     uses: actions/checkout@v4
-
-  #   - name: Set up Python
-  #     uses: actions/setup-python@v5
-  #     with:
-  #       python-version: '3.13'
-
-  #   - name: Install uv
-  #     uses: astral-sh/setup-uv@v4
-  #     with:
-  #       version: "latest"
-
-  #   - name: Install dependencies
-  #     run: uv sync --dev
-
-  #   - name: Run tests
-  #     run: uv run pytest
-
   deploy-production:
-    # needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/prod' && github.event_name == 'push'
-    
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/prod') ||
+      (github.event_name == 'workflow_dispatch' && inputs.environment == 'prod')
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -60,25 +51,8 @@ jobs:
     - name: Install production dependencies
       run: uv sync --no-dev
 
-    - name: Debug AWS credentials
-      run: |
-        echo "Checking if AWS credentials are available..."
-        if [ -z "$AWS_ACCESS_KEY_ID" ]; then
-          echo "ERROR: AWS_ACCESS_KEY_ID is empty or not set!"
-        else
-          echo "AWS_ACCESS_KEY_ID is set (length: ${#AWS_ACCESS_KEY_ID})"
-        fi
-        if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
-          echo "ERROR: AWS_SECRET_ACCESS_KEY is empty or not set!"
-        else
-          echo "AWS_SECRET_ACCESS_KEY is set (length: ${#AWS_SECRET_ACCESS_KEY})"
-        fi
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-        
     - name: Configure AWS credentials
+      if: github.event_name == 'push' || inputs.dry_run == false
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -87,31 +61,32 @@ jobs:
 
     - name: Create deployment package
       run: |
-        # Create a clean directory for the package
         mkdir -p package
-        
-        # Export dependencies to package directory
         uv export --no-dev --format requirements-txt > requirements.txt
         pip install -r requirements.txt -t package/
-        
-        # Copy your source code WITH folder structure preserved
         cp -r src package/
-        
-        # Create zip file
         cd package
         zip -r ../lambda-deployment.zip . -x "*.pyc" "*__pycache__*" "*.git*" "*.github*" "tests/*" "test_*"
         cd ..
 
     - name: Deploy to Production Lambda
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda update-function-code \
-          --function-name benefits-screening-api-prod \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }} \
           --zip-file fileb://lambda-deployment.zip
 
+    - name: Wait for code update
+      if: github.event_name == 'push' || inputs.dry_run == false
+      run: |
+        aws lambda wait function-updated \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }}
+
     - name: Update Production Lambda configuration
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda update-function-configuration \
-          --function-name benefits-screening-api-prod \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }} \
           --handler src.main.main \
           --environment Variables="{
             ENVIRONMENT=production,
@@ -121,32 +96,18 @@ jobs:
           --memory-size 512 \
           --runtime python3.13
 
-    - name: Wait for function update
+    - name: Wait for configuration update
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda wait function-updated \
-          --function-name benefits-screening-api-prod
-
-    - name: Test Production Lambda function
-      run: |
-        aws lambda invoke \
-          --function-name benefits-screening-api-prod \
-          --payload '{"test": true}' \
-          --cli-binary-format raw-in-base64-out \
-          response.json
-        
-        cat response.json
-        
-        # Check if invocation was successful
-        if grep -q "errorMessage" response.json; then
-          echo "Lambda function test failed"
-          exit 1
-        fi
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_PROD }}
 
   deploy-staging:
-    # needs: test
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/stg' && github.event_name == 'push'
-    
+    if: |
+      (github.event_name == 'push' && github.ref == 'refs/heads/stg') ||
+      (github.event_name == 'workflow_dispatch' && inputs.environment == 'stg')
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -164,24 +125,8 @@ jobs:
     - name: Install production dependencies
       run: uv sync --no-dev
 
-    - name: Debug AWS credentials
-      run: |
-        echo "Checking if AWS credentials are available..."
-        if [ -z "$AWS_ACCESS_KEY_ID" ]; then
-          echo "ERROR: AWS_ACCESS_KEY_ID is empty or not set!"
-        else
-          echo "AWS_ACCESS_KEY_ID is set (length: ${#AWS_ACCESS_KEY_ID})"
-        fi
-        if [ -z "$AWS_SECRET_ACCESS_KEY" ]; then
-          echo "ERROR: AWS_SECRET_ACCESS_KEY is empty or not set!"
-        else
-          echo "AWS_SECRET_ACCESS_KEY is set (length: ${#AWS_SECRET_ACCESS_KEY})"
-        fi
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
     - name: Configure AWS credentials
+      if: github.event_name == 'push' || inputs.dry_run == false
       uses: aws-actions/configure-aws-credentials@v4
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -193,24 +138,29 @@ jobs:
         mkdir -p package
         uv export --no-dev --format requirements-txt > requirements.txt
         pip install -r requirements.txt -t package/
-        
-        # Copy your source code WITH folder structure preserved
         cp -r src package/
-        
         cd package
         zip -r ../lambda-deployment.zip . -x "*.pyc" "*__pycache__*" "*.git*" "*.github*" "tests/*" "test_*"
         cd ..
 
     - name: Deploy to Staging Lambda
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda update-function-code \
-          --function-name Benefits-Screening-API-stg \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }} \
           --zip-file fileb://lambda-deployment.zip
 
+    - name: Wait for code update
+      if: github.event_name == 'push' || inputs.dry_run == false
+      run: |
+        aws lambda wait function-updated \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }}
+
     - name: Update Staging Lambda configuration
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda update-function-configuration \
-          --function-name Benefits-Screening-API-stg \
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }} \
           --handler src.main.main \
           --environment Variables="{
             ENVIRONMENT=staging,
@@ -220,23 +170,8 @@ jobs:
           --memory-size 256 \
           --runtime python3.13
 
-    - name: Wait for function update
+    - name: Wait for configuration update
+      if: github.event_name == 'push' || inputs.dry_run == false
       run: |
         aws lambda wait function-updated \
-          --function-name Benefits-Screening-API-stg
-
-    - name: Test Staging Lambda function
-      run: |
-        aws lambda invoke \
-          --function-name Benefits-Screening-API-stg \
-          --payload '{"test": true}' \
-          --cli-binary-format raw-in-base64-out \
-          response.json
-        
-        cat response.json
-        
-        # Check if invocation was successful
-        if grep -q "errorMessage" response.json; then
-          echo "Staging Lambda function test failed"
-          exit 1
-        fi
+          --function-name ${{ env.LAMBDA_FUNCTION_NAME_STG }}

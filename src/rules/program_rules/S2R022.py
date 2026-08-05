@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from src.rules.base_rule import BaseRule
 from src.rules.registry import register_rule
+from src.models.enums import IncomeType
 
 
 @register_rule
@@ -17,9 +18,10 @@ class WomenInfantsChildren(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. At least one person who is pregnant or under age 5
-        3. Household income below thresholds based on household size
+        1. At least one person who is pregnant or under age 5
+        2. Either:
+           a. Household income below thresholds based on household size
+           b. At least one person has Medicaid, Disability Medicaid, or Cash Assistance (medicaid, disability medicaid, or cash assistance)
         """
         persons = request.person
         household_size = len(persons)
@@ -33,21 +35,41 @@ class WomenInfantsChildren(BaseRule):
         if not has_eligible_person:
             return False
         
-        # Income thresholds by household size
+        # Rule 1: Check Medicaid/Disability Medicaid/Cash Assistance eligibility
+        if cls._has_medicaid_or_cash_assistance(persons):
+            return True
+        
+        # Rule 2: Check income eligibility
         income_thresholds = {
-            1: 27861,
-            2: 37814,
-            3: 47767,
-            4: 57720,
-            5: 67673,
-            6: 77626,
-            7: 87579,
-            8: 97532
+            1: 29526,
+            2: 40034,
+            3: 50542,
+            4: 61050,
+            5: 71558,
+            6: 82066,
+            7: 92574,
+            8: 103082,
         }
         
-        # Check income eligibility
         if household_size in income_thresholds:
             if request.income_household_total_yearly <= income_thresholds[household_size]:
                 return True
+        
+        return False
+    
+    @classmethod
+    def _has_medicaid_or_cash_assistance(cls, persons) -> bool:
+        """
+        Check if any person has Medicaid, Disability Medicaid, or Cash Assistance.
+        """
+        for person in persons:
+            # Check for Medicaid or Disability Medicaid benefits
+            if person.benefits_medicaid or person.benefits_medicaid_disability:
+                return True
+            
+            # Check for Cash Assistance income
+            for income in person.incomes:
+                if income.type == IncomeType.CASH_ASSISTANCE:
+                    return True
         
         return False

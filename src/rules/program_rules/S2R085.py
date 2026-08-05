@@ -16,9 +16,7 @@ class ThreeKForAll(BaseRule):
     @classmethod
     def evaluate(cls, request) -> bool:
         """
-        Eligibility requires:
-        1. Household is in NYC
-        2. At least one person is exactly 3 years old
+        Eligibility requires at least one person is exactly 3 years old
         """
         persons = request.person
         

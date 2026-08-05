@@ -1,15 +1,22 @@
 import json
+from pathlib import Path
+
 from src.validation.validate_request import validate_request
 
+current_dir = Path(__file__).parent
+data_payloads_dir = current_dir.parent.parent / "data" / "payloads"
+
 def test_valid_payload():
-    with open('tests/data/eligibility-program-test-payload.json') as f:
+    file_path = data_payloads_dir / "eligibility-program-test-payload.json"
+    with open(file_path) as f:
         data = json.load(f)
     is_valid, _, result = validate_request(data)
     assert is_valid is True
     assert result == "Validation successful"
 
 def test_invalid_payload():
-    with open('tests/data/invalid-eligibility-payload.json') as f:
+    file_path = data_payloads_dir / "invalid-eligibility-payload.json"
+    with open(file_path) as f:
         data = json.load(f)
     is_valid, _, result = validate_request(data)
     assert is_valid is False

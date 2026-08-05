@@ -17,9 +17,8 @@ class VeteransPropertyTaxExemption(BaseRule):
     def evaluate(cls, request) -> bool:
         """
         Eligibility requires:
-        1. NYC residence (assumed for all requests)
-        2. Household owns their home
-        3. At least one veteran is on the deed
+        1. Household owns their home
+        2. At least one veteran is on the deed
         """
         household = request.household[0]
         persons = request.person
