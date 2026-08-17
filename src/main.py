@@ -10,9 +10,8 @@ from src.rules.calculate_eligibility import calculate_eligibility
 from src.models.schemas import AggregateEligibilityRequest
 from src.utils.drools_converter import convert_drools_to_api_format
 
-_log_level = getattr(logging, os.environ.get('LOG_LEVEL', 'INFO').upper(), logging.INFO)
-logging.basicConfig(level=_log_level, format='%(levelname)s %(message)s')
-logger = logging.getLogger(__name__)
+logger = logging.getLogger()
+logger.setLevel("INFO")
 
 
 def _success(status_code: int, body: Dict) -> Dict:
