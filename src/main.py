@@ -1,5 +1,7 @@
 import json
-from typing import Dict, List
+import logging
+import os
+from typing import Any, Dict, List, Optional
 
 from pydantic import ValidationError
 
@@ -8,6 +10,10 @@ from src.rules.calculate_eligibility import calculate_eligibility
 from src.models.schemas import AggregateEligibilityRequest
 from src.utils.drools_converter import convert_drools_to_api_format
 
+_log_level = getattr(logging, os.environ.get('LOG_LEVEL', 'INFO').upper(), logging.INFO)
+logging.basicConfig(level=_log_level, format='%(levelname)s %(message)s')
+logger = logging.getLogger(__name__)
+
 
 def _success(status_code: int, body: Dict) -> Dict:
     return {'statusCode': status_code, **body}
@@ -15,6 +21,14 @@ def _success(status_code: int, body: Dict) -> Dict:
 
 def _error(status_code: int, errors: List[str]) -> Dict:
     return {'statusCode': status_code, 'errors': errors}
+
+
+def _request_id(context: Any) -> Optional[str]:
+    return getattr(context, 'aws_request_id', None) if context else None
+
+
+def _log_bad_request(context: Any, reason: str) -> None:
+    logger.info('bad request request_id=%s reason=%s', _request_id(context), reason)
 
 
 def main(event, context):
@@ -28,15 +42,18 @@ def main(event, context):
 
         if isinstance(request_data, list):
             if len(request_data) != 1:
+                _log_bad_request(context, 'invalid_submission_array_length')
                 return _error(400, ['Request body must be a single eligibility submission'])
             request_data = request_data[0]
 
         if not isinstance(request_data, dict):
+            _log_bad_request(context, 'request_body_not_object')
             return _error(400, ['Request body must be a JSON object'])
 
         if 'commands' in request_data:
             converted_data = convert_drools_to_api_format(request_data)
             if not converted_data:
+                _log_bad_request(context, 'drools_conversion_failed')
                 return _error(400, ['Failed to convert legacy rules engine payload'])
             request_data = converted_data
 
@@ -51,9 +68,16 @@ def main(event, context):
         )
         eligibility_programs = calculate_eligibility(aggregate_eligibility_request)
 
+        logger.info(
+            'eligibility success request_id=%s programs=%s codes=%s',
+            _request_id(context),
+            len(eligibility_programs),
+            eligibility_programs,
+        )
         return _success(200, {'eligiblePrograms': eligibility_programs})
 
     except json.JSONDecodeError:
+        _log_bad_request(context, 'invalid_json')
         return _error(400, ['Invalid JSON in request body'])
     except Exception as e:
         print('internal server error:', e)
