@@ -12,7 +12,7 @@ import pytest
 
 from src.models.schemas import AggregateEligibilityRequest
 from src.rules.registry import get_rules
-from src.validation.validate_request import validate_request
+from src.validation.parse_request import parse_request
 
 PAYLOADS_DIR = pathlib.Path(__file__).parents[2] / "data" / "payloads"
 
@@ -57,8 +57,7 @@ def test_all_program_rules(program_code, cls, json_file, expected):
     with open(json_file) as f:
         payload = json.load(f)
 
-    is_valid, eligibility_request, error_messages = validate_request(payload)
-    assert is_valid, f"Sample data validation failed: {error_messages}"
+    eligibility_request = parse_request(payload)
 
     aggregate_eligibility_request = AggregateEligibilityRequest.from_eligibility_request(
         eligibility_request

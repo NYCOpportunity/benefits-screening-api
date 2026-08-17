@@ -1,7 +1,9 @@
 import json
 from typing import Dict, List
 
-from src.validation.validate_request import validate_request
+from pydantic import ValidationError
+
+from src.validation.parse_request import INVALID_PAYLOAD_MESSAGE, parse_request
 from src.rules.calculate_eligibility import calculate_eligibility
 from src.models.schemas import AggregateEligibilityRequest
 from src.utils.drools_converter import convert_drools_to_api_format
@@ -38,10 +40,11 @@ def main(event, context):
                 return _error(400, ['Failed to convert legacy rules engine payload'])
             request_data = converted_data
 
-        is_valid, eligibility_request, error_messages = validate_request(request_data)
-
-        if not is_valid:
-            return _error(400, error_messages)
+        try:
+            eligibility_request = parse_request(request_data)
+        except ValidationError as error:
+            print('invalid eligibility request payload:', error)
+            return _error(400, [INVALID_PAYLOAD_MESSAGE])
 
         aggregate_eligibility_request = AggregateEligibilityRequest.from_eligibility_request(
             eligibility_request

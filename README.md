@@ -19,7 +19,7 @@ benefits-screening-api/
 │   ├── utils/
 │   │   └── drools_converter.py                # Backwards compatibility for Drools JSON
 │   ├── validation/
-│   │   └── validate_request.py                # Validates JSON format
+│   │   └── parse_request.py                 # Parse JSON into typed request models
 │   └── main.py                                # Application entry point
 ├── tests/
 │   ├── data/
@@ -42,9 +42,9 @@ benefits-screening-api/
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│  Receive JSON   │───▶│ validate_request│───▶│ calculate_      │───▶│   get_rules()   │───▶│ Evaluate Rules  │───▶│   Return 200    │
-│    Payload      │    │   (validate_    │    │  eligibility    │    │  (registry.py)  │    │ (program_rules/)│    │ Eligible Program│
-│   (main.py)     │    │   request.py)   │    │ (calculate_     │    │                 │    │                 │    │      List       │
+│  Receive JSON   │───▶│  parse_request  │───▶│ calculate_      │───▶│   get_rules()   │───▶│ Evaluate Rules  │───▶│   Return 200    │
+│    Payload      │    │ (parse_request  │    │  eligibility    │    │  (registry.py)  │    │ (program_rules/)│    │ Eligible Program│
+│   (main.py)     │    │      .py)       │    │ (calculate_     │    │                 │    │                 │    │      List       │
 └─────────┬───────┘    └─────────────────┘    │ eligibility.py) │    └─────────────────┘    └─────────────────┘    └─────────────────┘
           │  ▲                                └─────────────────┘
           │  │  (if legacy
