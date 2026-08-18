@@ -3,15 +3,12 @@ Defines the Pydantic models (schemas) used to parse and type-cast
 eligibility request data for rule evaluation.
 """
 from typing import Annotated, List, Optional
-from decimal import Decimal
 
 from pydantic import (
-    AfterValidator,
     BaseModel,
     BeforeValidator,
     ConfigDict,
     Field,
-    StringConstraints,
     field_validator,
 )
 
@@ -38,51 +35,16 @@ def empty_str_amount_to_zero(v):
     return v
 
 
-def validate_amount_decimals(v: float) -> float:
-    """Ensure amount has no more than 2 decimal places."""
-    if isinstance(v, (int, float)):
-        # Convert to Decimal to check decimal places
-        decimal_value = Decimal(str(v))
-        if decimal_value.as_tuple().exponent < -2:
-            # alternatively, we could just round to 2 decimals. 
-            raise ValueError('Amount cannot have more than 2 decimal places')
-        
-
-    return v
-
-
-def validate_cash_on_hand_decimals(v: float) -> float:
-    """Ensure cash_on_hand has no more than 2 decimal places."""
-    if isinstance(v, (int, float)):
-        decimal_value = Decimal(str(v))
-        if decimal_value.as_tuple().exponent < -2:
-            raise ValueError('Cash on hand cannot have more than 2 decimal places')
-    return v
-
-
 # Type aliases for commonly used constraints
 OptionalBool = Annotated[Optional[bool], BeforeValidator(empty_str_to_none)]
 
 AmountFloat = Annotated[
     float,
     BeforeValidator(empty_str_amount_to_zero),
-    Field(ge=0.0, le=999999999999.99),
-    AfterValidator(validate_amount_decimals),
+    Field(ge=0.0),
 ]
 
-
-CashOnHandFloat = Annotated[
-    float,
-    Field(ge=0.0, le=9999999.99),
-    AfterValidator(validate_cash_on_hand_decimals),
-]
-
-CaseIdStr = Annotated[
-    str,
-    StringConstraints(pattern=r"^[a-zA-Z0-9/.-]*$", max_length=64)
-]
-
-AgeInt = Annotated[int, Field(ge=0, le=150)]
+AgeInt = Annotated[int, Field(ge=0)]
 
 
 class Income(BaseModel):
@@ -132,8 +94,8 @@ class Household(BaseModel):
         str_strip_whitespace=True
     )
 
-    case_id: Optional[CaseIdStr] = Field(None, alias='caseId')
-    cash_on_hand: Optional[CashOnHandFloat] = Field(None, alias='cashOnHand')
+    case_id: Optional[str] = Field(None, alias='caseId')
+    cash_on_hand: Optional[float] = Field(None, ge=0.0, alias='cashOnHand')
     living_rental_type: Optional[LivingRentalType] = Field(None, alias='livingRentalType')
     living_renting: OptionalBool = Field(False, alias='livingRenting')
     living_owner: OptionalBool = Field(False, alias='livingOwner')
@@ -142,7 +104,7 @@ class Household(BaseModel):
     living_shelter: OptionalBool = Field(False, alias='livingShelter')
     living_prefer_not_to_say: OptionalBool = Field(False, alias='livingPreferNotToSay')
 
-    @field_validator('cash_on_hand', 'living_rental_type', mode='before')
+    @field_validator('case_id', 'cash_on_hand', 'living_rental_type', mode='before')
     @classmethod
     def empty_string_fields_to_none(cls, v):
         return empty_str_to_none(v)
