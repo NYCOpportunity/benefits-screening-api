@@ -13,7 +13,6 @@ class LivingRentalType(str, Enum):
     RENT_REGULATED_HOTEL = "RentRegulatedHotel"
     SECTION_213 = "Section213"
     LIMITED_DIVIDEND_DEVELOPMENT = "LimitedDividendDevelopment"
-
     MITCHELL_LAMA = "MitchellLama"
     REDEVELOPMENT_COMPANY = "RedevelopmentCompany"
     HDFC = "HDFC"
