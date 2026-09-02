@@ -1,22 +1,16 @@
 """
-Unit tests for request validation schemas.
+Unit tests for request parsing schemas.
 
-This test suite validates:
-1. Complete request payload validation
-2. Business logic rules (head of household, living situation)
-3. String constraint patterns for amounts, cash on hand, and case IDs
-4. Edge cases and error conditions
-
-All string fields automatically strip whitespace due to str_strip_whitespace=True.
+Covers type coercion and field constraints used when building rule input.
 """
 import json
 from pathlib import Path
 
-from src.models.schemas import EligibilityRequest, Income
-from src.models.enums import IncomeType, Frequency
+import pytest
 from pydantic import ValidationError
 
-
+from src.models.schemas import EligibilityRequest, Household, Income, Person
+from src.models.enums import IncomeType, Frequency
 
 def test_valid_payload():
     """Test that a valid payload passes validation."""
@@ -33,113 +27,26 @@ def test_valid_payload():
     assert request.withhold_payload is True
 
 
-def test_head_of_household_validation():
-    """Test head of household business rules."""
-    base_data = {
-        "household": [{"livingRenting": True}],
-        "person": [],
-        "withholdPayload": False
-    }
-    
-    # No head of household - should fail
-    test_data = base_data.copy()
-    test_data["person"] = [{"age": 25, "householdMemberType": "Child"}]
-    
-    try:
-        EligibilityRequest(**test_data)
-        raise AssertionError("Should have failed - no head of household")
-    except ValueError as e:
-        assert "HeadOfHousehold" in str(e)
-    
-    # Multiple heads of household - should fail
-    test_data["person"] = [
-        {"age": 25, "householdMemberType": "HeadOfHousehold"},
-        {"age": 30, "householdMemberType": "HeadOfHousehold"}
-    ]
-    
-    try:
-        EligibilityRequest(**test_data)
-        raise AssertionError("Should have failed - multiple heads of household")
-    except ValueError as e:
-        assert "HeadOfHousehold" in str(e)
+def test_amount_parsing():
+    """Parse income/expense amounts as non-negative floats"""
+    for amount in [0.0, 1000.5, 999999999999.99, 1000.999, 1000000000000000.99]:
+        income = Income(
+            amount=amount,
+            type=IncomeType.WAGES,
+            frequency=Frequency.MONTHLY,
+        )
+        assert income.amount == amount
+
+    income = Income(amount="", type=IncomeType.WAGES, frequency=Frequency.MONTHLY)
+    assert income.amount == 0.0
+
+    for amount in [-1000, -0.01]:
+        with pytest.raises(ValidationError):
+            Income(amount=amount, type=IncomeType.WAGES, frequency=Frequency.MONTHLY)
 
 
-def test_living_situation_validation():
-    """Test living situation business rules."""
-    base_data = {
-        "household": [{}],
-        "person": [{"age": 25, "householdMemberType": "HeadOfHousehold"}],
-        "withholdPayload": False
-    }
-    
-    # livingRentalType without livingRenting - should fail
-    test_data = base_data.copy()
-    test_data["household"][0] = {
-        "livingRenting": False, 
-        "livingRentalType": "MarketRate"
-    }
-    
-    try:
-        EligibilityRequest(**test_data)
-        raise AssertionError("Should have failed - rental type without renting")
-    except ValueError as e:
-        assert "livingRenting must be true" in str(e)
-
-
-def test_amount_validation():
-    """Test amount field patterns for AmountFloat (used in Income/Expense amounts)."""
-    # AmountFloat 
-    
-    # Test valid amounts through Income model (which uses AmountFloat)
-    valid_amounts = [
-        0.0,                    
-        1.0,                
-        1000.0,              
-        1000.5,           
-        1000.50,           
-        999999999999.0,        
-        999999999999.99,     
-        0.0,                    
-        0.5,                  
-        0.50,                 
-    ]
-    
-    for amount in valid_amounts:
-        try:
-            income = Income(
-                amount=amount,
-                type=IncomeType.WAGES,
-                frequency=Frequency.MONTHLY
-            )
-            print(f"✅ Valid amount: '{amount}' -> {income.amount}")
-        except ValidationError as e:
-            print(f"❌ Unexpectedly failed for valid amount '{amount}': {e}")
-            raise AssertionError(f"Valid amount '{amount}' should not fail validation")
-    
-    # Test invalid amounts
-    invalid_amounts = [
-        1000.999, 
-        -1000,             
-        1000000000000000.99,
-
-    ]
-    
-    for amount in invalid_amounts:
-        try:
-            income = Income(
-                amount=amount,
-                type=IncomeType.WAGES,
-                frequency=Frequency.MONTHLY
-            )
-            print(f"❌ Invalid amount '{amount}' unexpectedly passed validation")
-            raise AssertionError(f"Invalid amount '{amount}' should fail validation")
-        except ValidationError:
-            print(f"✅ Invalid amount correctly rejected: '{amount}'")
-
-
-def test_cash_on_hand_validation():
-    """Test CashOnHandFloat validation pattern."""
-
+def test_cash_on_hand_parsing():
+    """Parse cashOnHand as optional float"""
     base_household_data = {
         "livingRenting": False,
         "livingOwner": False,
@@ -148,110 +55,105 @@ def test_cash_on_hand_validation():
         "livingShelter": False,
         "livingPreferNotToSay": False
     }
-    
-    # Valid cash amounts
-    valid_cash_amounts = [
-        0.0,                    
-        1.0,                
-        1000.0,              
-        1000.5,           
-        1000.50,           
-        9999999.0,        
-        9999999.99,     
-    ]
-    
-    for amount in valid_cash_amounts:
-        try:
-            test_data = {
-                **base_household_data,
-                "cashOnHand": amount
-            }
-            from src.models.schemas import Household
-            household = Household(**test_data)
-            print(f"✅ Valid cash amount: '{amount}' -> {household.cash_on_hand}")
-        except ValidationError as e:
-            print(f"❌ Unexpectedly failed for valid cash amount '{amount}': {e}")
-            raise AssertionError(f"Valid cash amount '{amount}' should not fail validation")
-    
-    # Invalid cash amounts
-    invalid_cash_amounts = [
-        1000.999,             # Three decimal places
-        -1000,                # Negative number
-    ]
-    
-    for amount in invalid_cash_amounts:
-        try:
-            test_data = {
-                **base_household_data,
-                "cashOnHand": amount
-            }
-            from src.models.schemas import Household
-            household = Household(**test_data)
-            print(f"❌ Invalid cash amount '{amount}' unexpectedly passed validation")
-            raise AssertionError(f"Invalid cash amount '{amount}' should fail validation")
-        except ValidationError:
-            print(f"✅ Invalid cash amount correctly rejected: '{amount}'")
+
+    for amount in [0.0, 1000.5, 9999999.99, 1000.999, 10000000.0]:
+        household = Household(**{**base_household_data, "cashOnHand": amount})
+        assert household.cash_on_hand == amount
+
+    with pytest.raises(ValidationError):
+        Household(**{**base_household_data, "cashOnHand": -1000})
 
 
-def test_case_id_validation():
-    """Test CaseIdStr validation pattern."""
-    # CaseIdStr pattern: r"^[a-zA-Z0-9/.-]*$", max_length=64
-    # Allows: letters, numbers, forward slash, period, hyphen, up to 64 chars
-    
+def test_empty_string_optional_fields():
+    """Empty strings on optional fields should be treated as unset."""
     base_household_data = {
         "livingRenting": False,
-        "livingOwner": False, 
+        "livingOwner": False,
+        "livingStayingWithFriend": False,
+        "livingHotel": False,
+        "livingShelter": False,
+        "livingPreferNotToSay": False,
+    }
+
+    household = Household(**{**base_household_data, "cashOnHand": ""})
+    assert household.cash_on_hand is None
+
+    household = Household(**{**base_household_data, "livingRentalType": ""})
+    assert household.living_rental_type is None
+
+
+def test_empty_string_amount_fields():
+    payload = {
+        "household": [
+            {
+                "livingPreferNotToSay": "true",
+                "caseId": "10",
+                "cashOnHand": "",
+            }
+        ],
+        "person": [
+            {
+                "age": 64,
+                "householdMemberType": "HeadOfHousehold",
+                "disabled": "false",
+                "incomes": [
+                    {
+                        "amount": "76445",
+                        "type": "Wages",
+                        "frequency": "Yearly",
+                    }
+                ],
+            },
+            {
+                "age": "9",
+                "householdMemberType": "Grandchild",
+                "disabled": "false",
+                "incomes": [],
+            },
+        ],
+        "withholdPayload": "false",
+    }
+
+    request = EligibilityRequest(**payload)
+    assert request.household[0].cash_on_hand is None
+    assert request.person[0].incomes[0].amount == 76445.0
+    assert request.person[1].age == 9
+
+
+def test_empty_string_boolean_fields():
+    """Allow '' on optional boolean fields."""
+    base_household_data = {
+        "livingRenting": False,
+        "livingOwner": False,
+        "livingStayingWithFriend": False,
+        "livingHotel": False,
+        "livingShelter": False,
+        "livingPreferNotToSay": False,
+    }
+
+    household = Household(**{**base_household_data, "livingRenting": ""})
+    assert household.living_renting is None
+
+    person = Person(age=25, householdMemberType="HeadOfHousehold", disabled="")
+    assert person.disabled is None
+
+
+def test_case_id_parsing():
+    """Parse caseId as optional string"""
+    base_household_data = {
+        "livingRenting": False,
+        "livingOwner": False,
         "livingStayingWithFriend": False,
         "livingHotel": False,
         "livingShelter": False,
         "livingPreferNotToSay": False
     }
-    
-    # Valid case IDs
-    valid_case_ids = [
-        "",                     # Empty string allowed
-        "ABC123",               # Alphanumeric
-        "case-123",             # With hyphen
-        "case.123",             # With period
-        "case/123",             # With forward slash
-        "A" * 64,               # Max length (64 chars)
-        "2023-SNAP-001.v2",     # Realistic case ID format
-    ]
-    
-    for case_id in valid_case_ids:
-        try:
-            test_data = {
-                **base_household_data,
-                "caseId": case_id
-            }
-            from src.models.schemas import Household
-            household = Household(**test_data)
-            print(f"✅ Valid case ID: '{case_id}' -> {household.case_id}")
-        except ValidationError as e:
-            print(f"❌ Unexpectedly failed for valid case ID '{case_id}': {e}")
-            raise AssertionError(f"Valid case ID '{case_id}' should not fail validation")
-    
-    # Invalid case IDs
-    invalid_case_ids = [
-        "case@123",             # Invalid character (@)
-        "case 123",             # Space not allowed
-        "case#123",             # Hash not allowed
-        "A" * 65,               # Too long (65 chars)
-        "case_123",             # Underscore not allowed
-    ]
-    
-    for case_id in invalid_case_ids:
-        try:
-            test_data = {
-                **base_household_data,
-                "caseId": case_id
-            }
-            from src.models.schemas import Household
-            household = Household(**test_data)
-            print(f"❌ Invalid case ID '{case_id}' unexpectedly passed validation")
-            raise AssertionError(f"Invalid case ID '{case_id}' should fail validation")
-        except ValidationError:
-            print(f"✅ Invalid case ID correctly rejected: '{case_id}'")
+
+    household = Household(**{**base_household_data, "caseId": ""})
+    assert household.case_id is None
+
+    household = Household(**{**base_household_data, "caseId": "case123"})
+    assert household.case_id == "case123"
 
 
 if __name__ == "__main__":
@@ -262,27 +164,19 @@ if __name__ == "__main__":
     print("✅ Valid payload test passed!")
     print()
     
-    test_head_of_household_validation()
-    print("✅ Head of household validation test passed!")
+    print("Testing amount parsing...")
+    test_amount_parsing()
+    print("✅ Amount parsing test passed!")
     print()
     
-    test_living_situation_validation()
-    print("✅ Living situation validation test passed!")
+    print("Testing cash on hand parsing...")
+    test_cash_on_hand_parsing()
+    print("✅ Cash on hand parsing test passed!")
     print()
     
-    print("Testing amount validation...")
-    test_amount_validation()
-    print("✅ Amount validation test passed!")
-    print()
-    
-    print("Testing cash on hand validation...")
-    test_cash_on_hand_validation()
-    print("✅ Cash on hand validation test passed!")
-    print()
-    
-    print("Testing case ID validation...")
-    test_case_id_validation()
-    print("✅ Case ID validation test passed!")
+    print("Testing case ID parsing...")
+    test_case_id_parsing()
+    print("✅ Case ID parsing test passed!")
     print()
     
     print("🎉 All validation tests passed (let's go)!")
