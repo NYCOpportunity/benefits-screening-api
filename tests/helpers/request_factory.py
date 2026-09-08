@@ -36,6 +36,17 @@ def make_eligibility_request(
     return EligibilityRequest(household=[household], person=persons)
 
 
+def make_computed_aggregate_request(
+    *,
+    persons: list[Person] | None = None,
+    household: Household | None = None,
+) -> AggregateEligibilityRequest:
+    """Build an AggregateEligibilityRequest with aggregates computed from persons."""
+    return AggregateEligibilityRequest.from_eligibility_request(
+        make_eligibility_request(persons=persons, household=household)
+    )
+
+
 def make_aggregate_request(
     *,
     persons: list[Person] | None = None,
@@ -43,6 +54,11 @@ def make_aggregate_request(
     income_household_total_yearly: float = 0.0,
     income_household_total_monthly: float = 0.0,
     income_household_has_benefit: bool = False,
+    income_household_has_cash_assistance: bool = False,
+    income_household_has_ssi: bool = False,
+    income_household_wage_self_employment_monthly: float = 0.0,
+    expense_household_child_support_monthly: float = 0.0,
+    **aggregate_overrides,
 ) -> AggregateEligibilityRequest:
     """Build a minimal AggregateEligibilityRequest for unit tests."""
     if persons is None:
@@ -57,4 +73,9 @@ def make_aggregate_request(
         income_household_total_yearly=income_household_total_yearly,
         income_household_total_monthly=income_household_total_monthly,
         income_household_has_benefit=income_household_has_benefit,
+        income_household_has_cash_assistance=income_household_has_cash_assistance,
+        income_household_has_ssi=income_household_has_ssi,
+        income_household_wage_self_employment_monthly=income_household_wage_self_employment_monthly,
+        expense_household_child_support_monthly=expense_household_child_support_monthly,
+        **aggregate_overrides,
     )
